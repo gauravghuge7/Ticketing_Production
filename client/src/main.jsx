@@ -10,23 +10,6 @@ import { Provider } from 'react-redux';
 
 
 
-// const router = createBrowserRouter(
-//   createRoutesFromElements(
-//     <Route path="/" element={<Outlet />}>
-//       <Route path="/admin/dashboard" element={Admindashboard} />
-//       <Route path="/company/dashboard" element={<CompanyDashboard />} />
-//       <Route path="/employee/dashboard" element={<Employeedashboard   />} />
-
-
-
-//       <Route path='/' element={<Home />} />
-      
-//     </Route>
-//   )
-// )
-
-
-
 
 
 createRoot(document.getElementById('root')).render(
