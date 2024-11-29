@@ -15,51 +15,58 @@ app.use(express.urlencoded({extended: true}))
 
 app.use(cookieParser());
 
+const allowedOrigins = [
+  "*",
+  '*'
+];
+
 app.use(cors({
+  origin: function (origin, callback) {
+      // Allow requests with no origin (like mobile apps or curl requests)
+      if (!origin) return callback(null, true);
 
-  origin: "*",
-  methods: "GET,HEAD,PUT,PATCH,POST,DELETE",
-  preflightContinue: true,
-  optionsSuccessStatus: 204,
-
+      if (allowedOrigins.includes(origin)) {
+          callback(null, true);
+      } else {
+          callback(new Error('Not allowed by CORS'));
+      }
+  },
   credentials: true,
+  methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS", "PATCH", "HEAD", "CONNECT"],
+
   allowedHeaders: [
-    "Origin",
-    "X-Requested-With",
-    "Content-Type",
-    "Accept",
-    "Authorization",
-    "Access-Control-Allow-Credentials",
-    "Access-Control-Allow-Headers",
-    "Access-Control-Allow-Methods",
-    "Access-Control-Allow-Origin",
-    "Access-Control-Expose-Headers",
-    "Access-Control-Max-Age",
-    "Access-Control-Request-Headers",
-    "Access-Control-Request-Method",
+      "Content-Type",
+      "Authorization",
+      "Accept",
+      "Origin",
+      "X-Requested-With",
+      "Access-Control-Request-Method",
+      "Access-Control-Request-Headers",
+      "Access-Control-Allow-Origin",
+      "Access-Control-Allow-Credentials",
+      "Access-Control-Allow-Methods",
+      "Access-Control-Allow-Headers",
+      "content" // Add custom header 'content' or any other you're using
   ],
   exposedHeaders: [
-    "Access-Control-Allow-Origin",
-    "Access-Control-Allow-Headers",
-    "Access-Control-Allow-Methods",
-    "Access-Control-Expose-Headers",
-    "Access-Control-Max-Age",
-    "Access-Control-Request-Headers",
-    "Access-Control-Request-Method",
+      "Content-Type",
+      "Authorization",
+      "Access-Control-Allow-Origin",
+      "Access-Control-Allow-Credentials",
+      "Access-Control-Allow-Methods",
+      "Access-Control-Allow-Headers"
   ],
-  maxAge: 86400,
-  methods: "GET,HEAD,PUT,PATCH,POST,DELETE",
 
 
+
+  preflightContinue: false,
+  optionsSuccessStatus: 200
 }));
 
 
-/*  
-    preflight requests allow to all access to the server
-
-**/
-
+// Handle preflight requests for all routes
 app.options('*', cors());
+
 
 app.use(morgan("dev"))
 
