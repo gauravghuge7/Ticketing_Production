@@ -14,10 +14,52 @@ app.use(express.urlencoded({extended: true}))
 // read cookies from the request
 
 app.use(cookieParser());
+
 app.use(cors({
-  origin: process.env.CLIENT_URL,
-  credentials: true
+
+  origin: "*",
+  methods: "GET,HEAD,PUT,PATCH,POST,DELETE",
+  preflightContinue: true,
+  optionsSuccessStatus: 204,
+
+  credentials: true,
+  allowedHeaders: [
+    "Origin",
+    "X-Requested-With",
+    "Content-Type",
+    "Accept",
+    "Authorization",
+    "Access-Control-Allow-Credentials",
+    "Access-Control-Allow-Headers",
+    "Access-Control-Allow-Methods",
+    "Access-Control-Allow-Origin",
+    "Access-Control-Expose-Headers",
+    "Access-Control-Max-Age",
+    "Access-Control-Request-Headers",
+    "Access-Control-Request-Method",
+  ],
+  exposedHeaders: [
+    "Access-Control-Allow-Origin",
+    "Access-Control-Allow-Headers",
+    "Access-Control-Allow-Methods",
+    "Access-Control-Expose-Headers",
+    "Access-Control-Max-Age",
+    "Access-Control-Request-Headers",
+    "Access-Control-Request-Method",
+  ],
+  maxAge: 86400,
+  methods: "GET,HEAD,PUT,PATCH,POST,DELETE",
+
+
 }));
+
+
+/*  
+    preflight requests allow to all access to the server
+
+**/
+
+app.options('*', cors());
 
 app.use(morgan("dev"))
 
