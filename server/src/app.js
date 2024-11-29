@@ -59,7 +59,7 @@ app.use(cors({
 
 
 
-  preflightContinue: false,
+  preflightContinue: true,
   optionsSuccessStatus: 200
 }));
 
