@@ -65,7 +65,13 @@ app.use(cors({
 
 
 // Handle preflight requests for all routes
-app.options('*', cors());
+app.options('*', (req, res) => {
+  return res.status(200).json({
+    success: true,
+    message: "Preflight request is successful",
+    
+  })
+});
 
 
 app.use(morgan("dev"))
