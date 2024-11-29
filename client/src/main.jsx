@@ -7,6 +7,10 @@ import { BrowserRouter } from 'react-router-dom'
 import 'bootstrap/dist/css/bootstrap.min.css';
 import { store } from './Redux/Store.js';
 import { Provider } from 'react-redux';
+import axios from 'axios';
+
+axios.defaults.baseURL = "https://ticketing-production-9166.up.railway.app";
+axios.defaults.withCredentials = true;
 
 
 
