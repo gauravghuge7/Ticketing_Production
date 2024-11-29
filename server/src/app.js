@@ -16,62 +16,51 @@ app.use(express.urlencoded({extended: true}))
 app.use(cookieParser());
 
 const allowedOrigins = [
-  "*",
-  '*'
+  'https://ticketing-mbzuw7vo8-akash-dauds-projects.vercel.app'
 ];
+
 
 app.use(cors({
   origin: function (origin, callback) {
-      // Allow requests with no origin (like mobile apps or curl requests)
-      if (!origin) return callback(null, true);
+    // Allow requests with no origin (like mobile apps or curl requests)
+    if (!origin) return callback(null, true);
 
-      if (allowedOrigins.includes(origin)) {
-          callback(null, true);
-      } else {
-          callback(new Error('Not allowed by CORS'));
-      }
+    if (allowedOrigins.includes(origin)) {
+      callback(null, true);
+    } else {
+      callback(new Error('Not allowed by CORS'));
+    }
   },
-  credentials: true,
-  methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS", "PATCH", "HEAD", "CONNECT"],
-
+  credentials: true, // Allow cookies
+  methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS", "PATCH", "HEAD"],
   allowedHeaders: [
-      "Content-Type",
-      "Authorization",
-      "Accept",
-      "Origin",
-      "X-Requested-With",
-      "Access-Control-Request-Method",
-      "Access-Control-Request-Headers",
-      "Access-Control-Allow-Origin",
-      "Access-Control-Allow-Credentials",
-      "Access-Control-Allow-Methods",
-      "Access-Control-Allow-Headers",
-      "content" // Add custom header 'content' or any other you're using
+    "Content-Type",
+    "Authorization",
+    "Accept",
+    "Origin",
+    "X-Requested-With",
+    "Access-Control-Allow-Origin",
+    "Access-Control-Allow-Credentials",
+    "Access-Control-Allow-Methods",
+    "Access-Control-Allow-Headers"
   ],
   exposedHeaders: [
-      "Content-Type",
-      "Authorization",
-      "Access-Control-Allow-Origin",
-      "Access-Control-Allow-Credentials",
-      "Access-Control-Allow-Methods",
-      "Access-Control-Allow-Headers"
+    "Content-Type",
+    "Authorization",
+    "Access-Control-Allow-Origin",
+    "Access-Control-Allow-Credentials",
+    "Access-Control-Allow-Methods",
+    "Access-Control-Allow-Headers"
   ],
-
-
-
-  preflightContinue: true,
-  optionsSuccessStatus: 200
+  preflightContinue: false,
+  optionsSuccessStatus: 204
 }));
 
 
+
 // Handle preflight requests for all routes
-app.options('*', (req, res) => {
-  return res.status(200).json({
-    success: true,
-    message: "Preflight request is successful",
-    
-  })
-});
+app.options('*', cors()); // Automatically handles preflight requests
+
 
 
 app.use(morgan("dev"))
