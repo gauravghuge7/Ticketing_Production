@@ -11,6 +11,7 @@ import axios from 'axios';
 
 axios.defaults.baseURL = "https://ticketing-production-9166.up.railway.app";
 axios.defaults.withCredentials = true;
+axios.defaults.proxy = true;
 
 
 
