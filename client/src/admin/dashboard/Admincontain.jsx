@@ -2,8 +2,11 @@ import React from 'react';
 import { Card, Container, Row, Col } from 'react-bootstrap';
 import { FaUserPlus, FaUsers, FaBuilding, FaProjectDiagram } from 'react-icons/fa';
 import { useSelector } from 'react-redux';
+import { useNavigate } from 'react-router-dom';
 
-const Admincontain = () => {
+const AdminContain = () => {
+  const navigate = useNavigate();
+
   const employee = useSelector((state) => state.employeeReducer?.employee);
   const teams = useSelector((state) => state.teamReducer?.team);
   const client = useSelector((state) => state.clientReducer?.client.clientList);
@@ -39,12 +42,16 @@ const Admincontain = () => {
     color: '#777',
   };
 
+  const handleCardClick = (route) => {
+    navigate(route);
+  };
+
   return (
     <Container fluid className="p-4">
       <Row className="justify-content-center">
         <Col md={3} className="mb-4">
           <Card
-            style={{ ...cardStyle, backgroundColor: '#e3f2fd' }} // Light blue for Employees
+            style={{ ...cardStyle, backgroundColor: '#e3f2fd' }}
             onMouseEnter={(e) => {
               e.currentTarget.style.boxShadow = hoverStyle.boxShadow;
               e.currentTarget.style.transform = hoverStyle.transform;
@@ -53,6 +60,7 @@ const Admincontain = () => {
               e.currentTarget.style.boxShadow = cardStyle.boxShadow;
               e.currentTarget.style.transform = 'translateY(0)';
             }}
+            onClick={() => handleCardClick('/employees')} // Navigate to Employees page
           >
             <div className="card-header text-center" style={headerStyle}>Employees</div>
             <Card.Body>
@@ -67,7 +75,7 @@ const Admincontain = () => {
 
         <Col md={3} className="mb-4">
           <Card
-            style={{ ...cardStyle, backgroundColor: '#e8f5e9' }} // Light green for Teams
+            style={{ ...cardStyle, backgroundColor: '#e8f5e9' }}
             onMouseEnter={(e) => {
               e.currentTarget.style.boxShadow = hoverStyle.boxShadow;
               e.currentTarget.style.transform = hoverStyle.transform;
@@ -76,6 +84,7 @@ const Admincontain = () => {
               e.currentTarget.style.boxShadow = cardStyle.boxShadow;
               e.currentTarget.style.transform = 'translateY(0)';
             }}
+            onClick={() => handleCardClick('/teams')} // Navigate to Teams page
           >
             <div className="card-header text-center" style={headerStyle}>Teams</div>
             <Card.Body>
@@ -90,7 +99,7 @@ const Admincontain = () => {
 
         <Col md={3} className="mb-4">
           <Card
-            style={{ ...cardStyle, backgroundColor: '#fff3e0' }} // Light orange for Clients
+            style={{ ...cardStyle, backgroundColor: '#fff3e0' }}
             onMouseEnter={(e) => {
               e.currentTarget.style.boxShadow = hoverStyle.boxShadow;
               e.currentTarget.style.transform = hoverStyle.transform;
@@ -99,6 +108,7 @@ const Admincontain = () => {
               e.currentTarget.style.boxShadow = cardStyle.boxShadow;
               e.currentTarget.style.transform = 'translateY(0)';
             }}
+            onClick={() => handleCardClick('/clients')} // Navigate to Clients page
           >
             <div className="card-header text-center" style={headerStyle}>Clients</div>
             <Card.Body>
@@ -110,10 +120,10 @@ const Admincontain = () => {
             </Card.Body>
           </Card>
         </Col>
-      
+
         <Col md={3} className="mb-4">
           <Card
-            style={{ ...cardStyle, backgroundColor: '#e0f7fa' }} // Light teal for Projects
+            style={{ ...cardStyle, backgroundColor: '#e0f7fa' }}
             onMouseEnter={(e) => {
               e.currentTarget.style.boxShadow = hoverStyle.boxShadow;
               e.currentTarget.style.transform = hoverStyle.transform;
@@ -121,7 +131,9 @@ const Admincontain = () => {
             onMouseLeave={(e) => {
               e.currentTarget.style.boxShadow = cardStyle.boxShadow;
               e.currentTarget.style.transform = 'translateY(0)';
-            }}>
+            }}
+            onClick={() => handleCardClick('/projects')} // Navigate to Projects page
+          >
             <div className="card-header text-center" style={headerStyle}>Projects</div>
             <Card.Body>
               <div className="d-flex justify-content-center mb-3">
@@ -133,35 +145,8 @@ const Admincontain = () => {
           </Card>
         </Col>
       </Row>
-   
-
     </Container>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
   );
 };
 
-export default Admincontain;
+export default AdminContain;

@@ -16,7 +16,8 @@ app.use(express.urlencoded({extended: true}))
 app.use(cookieParser());
 
 const allowedOrigins = [
-  'https://ticketing-mbzuw7vo8-akash-dauds-projects.vercel.app'
+  'https://ticketing-mbzuw7vo8-akash-dauds-projects.vercel.app/',
+  "https://ticketing-30791llv6-akash-dauds-projects.vercel.app/",
 ];
 
 
