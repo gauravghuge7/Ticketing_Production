@@ -15,11 +15,7 @@ app.use(express.urlencoded({extended: true}))
 
 app.use(cookieParser());
 
-const allowedOrigins = [
-  'https://ticketing-mbzuw7vo8-akash-dauds-projects.vercel.app/',
-  "https://ticketing-30791llv6-akash-dauds-projects.vercel.app/",
-];
-
+const allowedOrigins = process.env.CLIENT_URL;
 
 app.use(cors({
   origin: function (origin, callback) {
