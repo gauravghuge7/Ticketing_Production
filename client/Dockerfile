@@ -13,7 +13,7 @@ RUN npm install
 # Copy the rest of the application source code
 COPY . .
 
-# Build the Vite application for production
+# Build the Vite application for production 
 RUN npm run build
 
 # Stage 2: Run the application
