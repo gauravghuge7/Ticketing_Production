@@ -9,7 +9,7 @@ import { store } from './Redux/Store.js';
 import { Provider } from 'react-redux';
 import axios from 'axios';
 
-axios.defaults.baseURL = "https://ticketing-production-9166.up.railway.app";
+axios.defaults.baseURL = "http://localhost:5173/";
 axios.defaults.withCredentials = true;
 axios.defaults.proxy = true;
 

@@ -53,7 +53,7 @@ const Employeenavbar = () => {
         <Navbar.Brand href="#home" style={{ marginLeft:-80, padding: 0 }}>
           {/* Replace with your logo */}
           <img
-            src="../../../accets/02logo.png"
+            src="../../../accets/GBIS.png"
             width="190"
             height="150"
             className="d-inline-block align-top"
