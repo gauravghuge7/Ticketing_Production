@@ -77,7 +77,7 @@ useEffect(() => {
           {/* Logo */}
           <Navbar.Brand href="#" className="mb-3">
             <img
-              src="../../assets/02logo.png"
+              src="../../../accets/02logo.png"
               alt="Logo"
               style={{ width: "70%", height: "auto" }}
             />
