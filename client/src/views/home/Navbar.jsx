@@ -7,7 +7,7 @@ const Navbar = () => {
     <nav style={styles.navbar}>
       <div style={styles.logoContainer}>
         <img
-          src="../../../public/accets/GBIS.png" // Update this path if necessary
+          src="../../../accets/02logo.png" // Update this path if necessary
           alt="Logo"
           style={styles.logo}
         />
