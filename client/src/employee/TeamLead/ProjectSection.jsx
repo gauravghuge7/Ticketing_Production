@@ -382,7 +382,8 @@ const ProjectSection = ({ setConditionalComponent, projectId }) => {
                 <tr key={index}>
                   <td className="border px-4 py-2">{index + 1}</td>
                   <td className="border px-4 py-2">{task.ticket ? "Client Ticket" : "Team Lead Task"}</td>
-                  <td className="border px-4 py-2">{task.ticket ? task.ticketId : task._id}</td>
+                  <td  className="border px-4 py-2">{ task.ticket ? task.ticket.ticketId : task.ticketId}</td>
+
                   <td className="border px-4 py-2">{task.ticket ? task.ticket.ticketName : task.taskName}</td>
                   <td className="border px-4 py-2">{task.ticket ? task.ticket.priority : task.priority}</td>
                   <td className="border px-4 py-2">{task.ticket ? task.ticket.saptype : task.saptype}</td>
