@@ -1,26 +1,17 @@
-
-
-/**
-
-generate the ticket id for the project 
-*/
-
+let ticketCounter = 1;
 
 const generateTicketId = async (email) => {
-
    try {
-      const stringData = email.substring(0, email.indexOf("@"));
-      const number = Math.floor(Math.random() * 10000);
-      const ticketId = stringData + number;
+      const ticketId = `GBIS${String(ticketCounter).padStart(7, '0')}`;
+      ticketCounter += 1;
 
-
-      console.log("ticketId generated => ", ticketId)
+      console.log("ticketId generated => ", ticketId);
       
       return ticketId;
    } 
    catch (error) {
-      console.log(error)
-      throw new ApiError(500, error.message)
+      console.log(error);
+      throw new ApiError(500, error.message);
    }
 }
 
