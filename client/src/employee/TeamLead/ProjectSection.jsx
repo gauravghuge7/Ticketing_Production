@@ -214,7 +214,7 @@ const ProjectSection = ({ setConditionalComponent, projectId }) => {
              
                   <th>Assigned By Email</th>
                   <th>Assigned By Name</th>
-                  <th>Assigned To</th>
+                  {/* <th>Assigned To</th> */}
                   <th>Status</th>
              
                   <th>Description</th>
@@ -225,7 +225,8 @@ const ProjectSection = ({ setConditionalComponent, projectId }) => {
                 {tickets.map((ticket, index) => (
                   <tr key={index}>
                     <td>{index + 1}</td>
-                    <td>{ticket._id}</td>
+                    <td>{ticket.ticketId}</td>
+
                     <td>{ticket?.ticketName}</td>
                    
                     <td>{ticket.priority}</td>
@@ -233,7 +234,7 @@ const ProjectSection = ({ setConditionalComponent, projectId }) => {
                     
                     <td>{ticket.assignedByEmail}</td>
                     <td>{ticket.assignedByName}</td>
-                    <td>{ticket.assignedByNumber}</td>
+                    {/* <td>{ticket.assignedByNumber}</td> */}
                     <td>{ticket.status}</td>
                    
                     <td>{ticket?.ticketDescription}</td>
