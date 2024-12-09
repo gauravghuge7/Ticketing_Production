@@ -55,10 +55,9 @@ const Employeenavbar = () => {
           <img
             src="../../../accets/GBIS.png"
             width="190"
-            height="150"
             className="d-inline-block align-top"
             alt="Logo"
-       
+            style={{ margin: 0, padding: 0 }}
           />
         </Navbar.Brand>
 
