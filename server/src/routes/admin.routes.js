@@ -10,8 +10,8 @@ import { getAdmin, loginAdmin, logoutAdmin, registerAdmin } from '../controller/
 import { getTotalEmployeeDetails } from '../controller/Admin/employee.controller.js';
 
 import { getAllClients } from '../controller/Admin/client.controller.js';
-import { createTeams, getAllTeams } from '../controller/Admin/team.controller.js';
-import { createProject, getAllProjects } from '../controller/Admin/project.controller.js';
+import { createTeams, deleteTeam, getAllTeams, updateTeam } from '../controller/Admin/team.controller.js';
+import { createProject, deleteProject, getAllProjects } from '../controller/Admin/project.controller.js';
 import { deleteEmployee, editEmployee } from '../controller/Employee/employee.manage.controller.js';
 import { deleteClient, editClient } from '../controller/Client/client.manage.controller.js';
 
@@ -114,6 +114,30 @@ adminRouter.route(`/deleteClient/:_id`).delete(
 
 
 
+adminRouter.route("/updateTeam/:teamId").put(
+    verifyAdmin,
+    upload.none(),
+    updateTeam
+)
+
+/**
+    lete the team
+*/
+
+adminRouter.route("/deleteTeam/:teamId").delete(
+    verifyAdmin,
+    deleteTeam
+)
+
+
+/**
+    delete the project
+*/
+
+adminRouter.route("/deleteProject/:projectId").delete(
+    verifyAdmin,
+    deleteProject
+)
 
 
 

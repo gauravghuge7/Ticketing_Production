@@ -192,9 +192,85 @@ const getAllTeams = async(req, res) => {
 }
 
 
+const updateTeam = asyncHandler(async (req, res) => {
+
+    try {
+
+        console.log(req.body);
+
+        const { teamId } = req.params;
+        const { selectedTeam } = req.body;
+
+        
+
+        const team = await Team.findById(teamId);
+
+        if(!team) {
+            throw new ApiError(400, "Team does not exist");
+        }
+
+        // update the team
+
+        const updatedTeam = await Team.findOneAndUpdate(
+            {_id: teamId},
+            {
+                teamName: selectedTeam?.teamName,
+                teamLead: selectedTeam?.teamLead,
+                projectId: selectedTeam?.projectId,
+                employee: selectedTeam?.employee,
+                teamId: selectedTeam?.teamId,
+            }
+        )
+
+        return res
+            .status(200)
+            .json(
+                new ApiResponse(200, "Team updated successfully", updatedTeam)
+            )
+        
+    } 
+    catch (error) {
+        console.log(" Error => ", error.message)
+        throw new ApiError(400, error.message);
+    }
+    finally {
+        console.log("function executed successfully")
+    }
+})
+
+
+const deleteTeam = asyncHandler(async (req, res) => {
+    try {
+
+        const { teamId } = req.params;
+
+        const team = await Team.findByIdAndDelete(teamId);
+
+        if(!team) {
+            throw new ApiError(400, "Team does not exist");
+        }
+
+        return res
+            .status(200)
+            .json(
+                new ApiResponse(200, "Team deleted successfully", team)
+            )
+        
+    } 
+    catch (error) {
+        console.log(" Error => ", error.message)
+        throw new ApiError(400, error.message);
+    }
+    finally {
+        console.log("function executed successfully")
+    }
+})
+
 
 export {
     createTeams,
     getAllTeams,
+    updateTeam,
+    deleteTeam
 }
 

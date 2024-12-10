@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import  { useEffect, useState } from 'react';
 import { Container, Row, Col, Table, Button, InputGroup, FormControl, Modal, Form } from 'react-bootstrap';
 import { useDispatch } from 'react-redux';
 import { message } from "react-message-popup";
@@ -19,6 +19,7 @@ const TeamList = ({ setValue }) => {
             const response = await axios.get('/api/admin/getAllTeams');
             if (response.data.success) {
                 setTeams(response.data.data.team);
+                console.log("teams => ", response.data.data.team);
                 // message.success('Teams fetched successfully');
             }
         } catch (error) {
@@ -61,11 +62,7 @@ const TeamList = ({ setValue }) => {
         try {
             const response = await axios.put(`/api/admin/updateTeam/${selectedTeam._id}`, selectedTeam);
             if (response.data.success) {
-                setTeams((prevTeams) =>
-                    prevTeams.map((team) =>
-                        team._id === selectedTeam._id ? selectedTeam : team
-                    )
-                );
+            
                 message.success('Team updated successfully');
                 setShowEditModal(false);
             }
@@ -74,10 +71,22 @@ const TeamList = ({ setValue }) => {
         }
     };
 
-    const handleDelete = (id) => {
+    const handleDelete = async(id) => {
         // Implement delete functionality (optional)
         console.log(`Delete team with id: ${id}`);
+
+        try {
+            const response = await axios.delete(`/api/admin/deleteTeam/${id}`);
+            if (response.data.success) {
+                message.success('Team deleted successfully');
+        
+            }
+        } catch (error) {
+            message.error(error.message);
+        }
     };
+
+
 
     return (
         <Container
@@ -216,7 +225,8 @@ const TeamList = ({ setValue }) => {
                     <Modal.Title>Edit Team</Modal.Title>
                 </Modal.Header>
                 <Modal.Body>
-                    {selectedTeam && (
+                    {
+                        selectedTeam && (
                         <Form>
                             <Form.Group controlId="formTeamName">
                                 <Form.Label>Team Name</Form.Label>
@@ -238,12 +248,30 @@ const TeamList = ({ setValue }) => {
                             </Form.Group>
                             <Form.Group controlId="formTeamMembers">
                                 <Form.Label>Team Members</Form.Label>
-                                <Form.Control
-                                    type="text"
-                                    placeholder="Enter team members (comma separated)"
-                                    value={selectedTeam.employee.join(", ")}
-                                    onChange={(e) => setSelectedTeam({ ...selectedTeam, employee: e.target.value.split(",") })}
-                                />
+                                <br/>
+                                <div style={{ maxHeight: '200px', overflowY: 'auto', borderRadius: '10px', boxShadow: '0 2px 4px rgba(0, 0, 0, 0.1)' }}>
+                                    {
+                                        selectedTeam?.employeesEmail?.map((employee, index) => (
+                                            <div key={index}>
+                                                <input 
+                                                    type="checkbox" 
+                                                    className='mr-2'
+                                                    value={employee}
+                                                    name='employee'
+                                                    onChange={(e) => {
+                                                        setSelectedTeam({ ...selectedTeam, employee: e.target.value})
+                                                        console.log("selectedTeam => ", employee);
+                                                    }}
+                                                    style={{ borderRadius: '10px', boxShadow: '0 2px 4px rgba(0, 0, 0, 0.1)' }}
+                                                />
+                                                <label id='employee'>{employee}</label>
+                                            </div>
+                                        ))
+                                    }
+                                </div>
+
+
+                        
                             </Form.Group>
                         </Form>
                     )}

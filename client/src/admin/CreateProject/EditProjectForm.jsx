@@ -3,7 +3,7 @@ import JoditEditor from 'jodit-react';
 import { Form, Button, Container, Row, Col, Card } from 'react-bootstrap';
 import axios from 'axios';  // Import axios for making API calls
 
-const TaskForm = () => {
+const EditTaskForm = () => {
     const editor = useRef(null);
     const [content, setContent] = useState('');
 
