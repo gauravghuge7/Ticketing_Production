@@ -187,7 +187,7 @@ const getAllProjects = asyncHandler(async(req, res) => {
          .json(
             new ApiResponse(
                   200, 
-                  // "Total projects fetched successfully", 
+                  "Total projects fetched successfully", 
                   {
                      project
                   }
