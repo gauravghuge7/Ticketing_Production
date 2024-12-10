@@ -3,6 +3,7 @@ import { Container, Row, Col, Table, Button, InputGroup, FormControl, Modal, For
 import { useDispatch } from 'react-redux';
 import { message } from "react-message-popup";
 import axios from "axios";
+import { set } from 'mongoose';
 
 const TeamList = ({ setValue }) => {
     const [teams, setTeams] = useState([]);
@@ -44,41 +45,60 @@ const TeamList = ({ setValue }) => {
         }
     };
 
+
     const prevPage = () => {
         if (currentPage > 1) {
             setCurrentPage(currentPage - 1);
         }
     };
+      
 
-    const handleEdit = (team) => {
+    const handleDelete = async () => {
+        try {
+            const response = await axios.delete(`/api/admin/deleteTeam/${team.teamId}`);
+            if (response.data.success) {
+                message.success(response.data.message);
+                setTeams(teams.filter(team => team.teamId !== team.teamId));
+                alert("Team deleted successfully!");
+              
+            }
+        }
+        catch (error) {
+            message.error(error.message);   
+            
+        }           
+
+         
+
+
+     const handleEditTeam =  (team) => {
         setSelectedTeam(team);
         setShowEditModal(true);
-    };
+      };    
 
-    const handleEditSubmit = async () => {
-        if (!selectedTeam) return;
+      const handleEditSubmit = async () => {    
 
-        try {
-            const response = await axios.put(`/api/admin/updateTeam/${selectedTeam._id}`, selectedTeam);
-            if (response.data.success) {
-                setTeams((prevTeams) =>
-                    prevTeams.map((team) =>
-                        team._id === selectedTeam._id ? selectedTeam : team
-                    )
-                );
-                message.success('Team updated successfully');
-                setShowEditModal(false);
+        if (!selectedTeam) return;  
+
+            console.log("Submitting edit for:", selectedTeam);
+            try {
+                const response = await axios.put(`/api/admin/editTeam/${selectedTeam._id}`, selectedTeam);
+                console.log("API Response:", response.data);
+                if (response.data.success) {
+                    message.success(response.data.message);
+                    fetchTeams();
+                }
+            } catch (error) {
+                message.error(error.message);
             }
-        } catch (error) {
-            message.error(error.message);
-        }
-    };
+        };          
 
-    const handleDelete = (id) => {
-        // Implement delete functionality (optional)
-        console.log(`Delete team with id: ${id}`);
-    };
 
+
+
+
+    
+   
     return (
         <Container
             style={{
@@ -210,53 +230,7 @@ const TeamList = ({ setValue }) => {
                 </Col>
             </Row>
 
-            {/* Edit Modal */}
-            <Modal show={showEditModal} onHide={() => setShowEditModal(false)}>
-                <Modal.Header closeButton>
-                    <Modal.Title>Edit Team</Modal.Title>
-                </Modal.Header>
-                <Modal.Body>
-                    {selectedTeam && (
-                        <Form>
-                            <Form.Group controlId="formTeamName">
-                                <Form.Label>Team Name</Form.Label>
-                                <Form.Control
-                                    type="text"
-                                    placeholder="Enter team name"
-                                    value={selectedTeam.teamName}
-                                    onChange={(e) => setSelectedTeam({ ...selectedTeam, teamName: e.target.value })}
-                                />
-                            </Form.Group>
-                            <Form.Group controlId="formTeamLead">
-                                <Form.Label>Team Lead</Form.Label>
-                                <Form.Control
-                                    type="text"
-                                    placeholder="Enter team lead"
-                                    value={selectedTeam.teamLead}
-                                    onChange={(e) => setSelectedTeam({ ...selectedTeam, teamLead: e.target.value })}
-                                />
-                            </Form.Group>
-                            <Form.Group controlId="formTeamMembers">
-                                <Form.Label>Team Members</Form.Label>
-                                <Form.Control
-                                    type="text"
-                                    placeholder="Enter team members (comma separated)"
-                                    value={selectedTeam.employee.join(", ")}
-                                    onChange={(e) => setSelectedTeam({ ...selectedTeam, employee: e.target.value.split(",") })}
-                                />
-                            </Form.Group>
-                        </Form>
-                    )}
-                </Modal.Body>
-                <Modal.Footer>
-                    <Button variant="secondary" onClick={() => setShowEditModal(false)}>
-                        Close
-                    </Button>
-                    <Button variant="primary" onClick={handleEditSubmit}>
-                        Save Changes
-                    </Button>
-                </Modal.Footer>
-            </Modal>
+           
         </Container>
     );
 };

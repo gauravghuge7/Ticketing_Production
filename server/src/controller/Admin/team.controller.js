@@ -191,10 +191,88 @@ const getAllTeams = async(req, res) => {
 
 }
 
+const editTeam = asyncHandler(async (req, res) => {
+    
+    try {
 
+        const {teamId, teamName, teamLead, projectId, employee} = req.body;
+
+        if(!teamId || !teamName || !teamLead || !projectId || !employee) {
+            throw new ApiError(400, "Please provide all the required fields");
+        }
+
+        // check if the team already exists
+        
+        const existedTeam = await Team.findOne({ teamId })
+        
+        if(!existedTeam) {
+            throw new ApiError(400, "Team does not exist");
+        }
+
+        // update the entry in the database 
+        
+        const team = await Team.findByIdAndUpdate(teamId, {
+            teamName,
+            teamLead,
+            projectId,
+            employee
+        })
+        
+        return res  
+            .status(200)
+            .json(
+                new ApiResponse(200, "Team updated successfully", team)
+            )
+    
+    } 
+    catch (error) {
+        console.log(" Error => ", error.message)
+        throw new ApiError(400, error.message);
+    }
+
+})
+
+
+const deleteTeam = asyncHandler(async (req, res) => {
+    
+    try {
+
+        const {teamId} = req.params;
+
+        if(!teamId) {
+            throw new ApiError(400, "Please provide the team id");
+        }
+
+        // find the entry in the database
+        
+        const team = await Team.findById(teamId)
+        
+        if(!team) {
+            throw new ApiError(400, "Team does not exist");
+        }
+        
+        // delete the entry in the database 
+        
+        await Team.findByIdAndDelete(teamId);
+        
+        return res  
+            .status(200)
+            .json(
+                new ApiResponse(200, "Team deleted successfully", team)
+            )
+    
+    } 
+    catch (error) {
+        console.log(" Error => ", error.message)
+        throw new ApiError(400, error.message);
+    }
+
+})  
 
 export {
     createTeams,
     getAllTeams,
+    editTeam,
+    deleteTeam
 }
 
