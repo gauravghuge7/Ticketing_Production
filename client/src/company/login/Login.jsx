@@ -30,7 +30,7 @@ const Login = () => {
       console.log(response.data);
 
       if(response.data.success === true){
-        message.success("Client Logged In Successfully");
+        // message.success("Client Logged In Successfully");
         window.location.href = "/company/dashboard";
         
       }
