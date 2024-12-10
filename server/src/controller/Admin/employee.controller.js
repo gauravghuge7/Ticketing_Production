@@ -85,7 +85,7 @@ const getTotalEmployeeDetails = async (req, res) => {
             .json(
                 new ApiResponse(
                     200, 
-                    "Total employee details fetched successfully",
+                    // "Total employee details fetched successfully",
                     employeeList
                 )
             )

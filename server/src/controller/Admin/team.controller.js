@@ -173,7 +173,7 @@ const getAllTeams = async(req, res) => {
        .json(
            new ApiResponse(
                200, 
-               "Total teams fetched successfully", 
+            //    "Total teams fetched successfully", 
                {
                    team
                }

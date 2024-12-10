@@ -58,7 +58,7 @@ function Admindashboard() {
       if(response.data.success === true) {
 
       dispatch(addTeam(response.data.data.team));
-      // message.success('Team fetched successfully');
+      // message.success('Team fetched ');
       }
   
     } 

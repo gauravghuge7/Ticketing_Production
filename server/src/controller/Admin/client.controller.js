@@ -24,7 +24,7 @@ const getAllClients = async(req, res) => {
         .json(
             new ApiResponse(
                 200, 
-                "client list fetched successfully", 
+                // "client list fetched successfully", 
                 {
                     clientList,
                     passwordToken
