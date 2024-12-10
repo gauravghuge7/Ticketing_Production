@@ -112,17 +112,6 @@ adminRouter.route(`/deleteClient/:_id`).delete(
 
 )
 
-adminRouter.route(`/deleteTeam/:teamId`).delete(
-    verifyAdmin,
-    deleteTeam
-)
-
-adminRouter.route(`/editTeam/:teamId`).put(
-    verifyAdmin,
-    upload.none(),
-    editTeam
-)
-
 
 
 
