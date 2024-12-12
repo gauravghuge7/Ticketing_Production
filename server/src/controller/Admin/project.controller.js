@@ -205,6 +205,44 @@ const getAllProjects = asyncHandler(async(req, res) => {
 })
 
 
+const deleteProject = asyncHandler(async(req, res) => {
+   try {
+      const {_id} = req.user;
+
+      if(!_id) {
+         throw new ApiError(400, "Please provide the admin email");
+      }
+
+      const { projectId } = req.params;
+
+      if(!projectId) {
+         throw new ApiError(400, "Please provide the project id");
+      }
+
+      const project = await Project.findByIdAndDelete(projectId);
+      
+      if(!project) {
+         throw new ApiError(400, "Project not found");
+      }
+
+      return res
+         .status(200)
+         .json(
+            new ApiResponse(
+                  200, 
+                  "Project deleted successfully", 
+                  {
+                     project
+                  }
+            )
+         )
+      } 
+   catch (error) {
+      console.log(" Error => ", error.message)
+      throw new ApiError(400, error.message);
+   }
+
+})
 
 
 
@@ -212,6 +250,6 @@ const getAllProjects = asyncHandler(async(req, res) => {
 
 export {
    createProject,
-   getAllProjects
+   getAllProjects,
+   deleteProject
 }
-  

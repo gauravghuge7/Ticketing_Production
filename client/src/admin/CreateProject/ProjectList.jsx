@@ -15,58 +15,34 @@ const ProjectList = () => {
 
 
 
-  const handleEdit = async (id) => {
-    try {
-      const response = await axios.put(`/api/admin/editProject/${id}`, projectData);
-      if (response.status === 200) {
-        message.success('Project updated successfully');
-        getAllProjects();
-      } else {
-        message.error('Failed to update project');
-      }
-    } catch (error) {
-      console.error('Error updating project:', error);
-      message.error('Failed to update project');
-    }
-  };
+    const handleEdit = async (id) => {
+        try {
+            const response = await axios.put(`/api/admin/editProject/${id}`, projectData);
+            if (response.status === 200) {
+            message.success('Project updated successfully');
+            getAllProjects();
+            } else {
+            message.error('Failed to update project');
+            }
+        } catch (error) {
+            console.error('Error updating project:', error);
+            message.error('Failed to update project');
+        }
+    };
 
-  const handleDelete = async (id) => {
-    try {
-      const response = await axios.delete(`/api/admin/deleteProject/${id}`);
-      if (response.status === 200) {
-        message.success('Project deleted successfully');
-        getAllProjects();
-      } else {
-        message.error('Failed to delete project');
-      }
-    } catch (error) {
-      console.error('Error deleting project:', error);
-      message.error('Failed to delete project');
-    }
-  };
+    const handleDelete = async (id) => {
+        try {
+            console.log(id);
+            const response = await axios.delete(`/api/admin/deleteProject/${id}`);
+            
+            console.log(response);
+
+        } catch (error) {
+            console.error('Error deleting project:', error);
+            message.error('Failed to delete project');
+        }
+    };
     
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
@@ -174,7 +150,7 @@ const ProjectList = () => {
                     <tr>
                         <th>#</th>
                         <th>Project Name</th>
-                       
+                    
                         <th>Spokesperson Email</th>
                         <th>Spokesperson Name</th>
                         <th>Spokesperson Number</th>
@@ -190,7 +166,7 @@ const ProjectList = () => {
                         <tr key={index}>
                             <td>{indexOfFirstProject + index + 1}</td>
                             <td>{data.projectName}</td>
-                          
+
                             <td>{data.spokePersonEmail}</td>
                             <td>{data.spokePersonName}</td>
                             <td>{data.spokePersonNumber}</td>
@@ -205,22 +181,16 @@ const ProjectList = () => {
                                 </a>
                             </td>
                             <td>
-    <div style={{ display: 'flex', alignItems: 'center' }}>
-        <Button style={{ background: "transparent", border: "none" }} onClick={() => handleEdit(projectData._id)}>
-            <i className="bi bi-pencil-square" style={{ fontSize: "16px", color: "blue", cursor: "pointer" }}></i>
-        </Button>
-        <Button style={{ background: "transparent", border: "none" }} onClick={() => handleDelete(projectData._id)}>
-            <i className="bi bi-trash-fill" style={{ fontSize: "16px", color: "red", cursor: "pointer" }}></i>
-        </Button>
-    </div>
-</td>
+                    <div style={{ display: 'flex', alignItems: 'center' }}>
+                        <Button style={{ background: "transparent", border: "none" }} onClick={() => handleEdit(data._id)}>
+                            <i className="bi bi-pencil-square" style={{ fontSize: "16px", color: "blue", cursor: "pointer" }}></i>
+                        </Button>
+                        <Button style={{ background: "transparent", border: "none" }} onClick={() => handleDelete(data._id)}>
+                            <i className="bi bi-trash-fill" style={{ fontSize: "16px", color: "red", cursor: "pointer" }}></i>
+                        </Button>
+                    </div>
+                </td>
 
-
-                            {/* <td>
-                                <Button style={{ background: "transparent", border: "none" }} onClick={handleAddTask}>
-                                    <i className="bi bi-plus-square-fill" style={{ fontSize: "16px", color: "#007BFF" }}></i>
-                                </Button>
-                            </td> */}
                         </tr>
                     ))}
                 </tbody>
