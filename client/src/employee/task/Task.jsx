@@ -66,6 +66,7 @@ const TaskList = ({ setConditionalComponent }) => {
   const filteredTasks = tasks.filter(task =>
     task.taskName?.toLowerCase().includes(searchTerm.toLowerCase()) || 
     task.companyName?.toLowerCase().includes(searchTerm.toLowerCase())
+ 
   );
 
   const displayedTasks = filteredTasks.slice(
@@ -130,6 +131,7 @@ const TaskList = ({ setConditionalComponent }) => {
             >
               <tr>
                 <th>#</th>
+                <th>Ticket Type</th>
                 <th>Ticket ID</th>
                 <th>Ticket Name</th>
                 <th>Priority</th>
@@ -147,7 +149,9 @@ const TaskList = ({ setConditionalComponent }) => {
               {displayedTasks.map((task, index) => (
                 <tr key={index} style={{ textAlign: "center" }}>
                   <td>{index + 1 + currentPage * tasksPerPage}</td>
-                  <td>{task.taskId || task.ticket?.ticketID || task.taskId}</td>
+                  <td>{task.ticket ? "Client Ticket" : "Team Lead Task"}</td>  
+                  <td>{task.ticket ? task.ticket.ticketId : "-"}</td>
+                  {/* <td>{task.taskId || task.ticket?.ticketID || task.taskId}</td> */}
                   <td>{task.taskName || task.ticket?.ticketName}</td>
                   <td>{task.priority || task.ticket?.priority}</td>
                   <td>{task.saptype || task.ticket?.saptype}</td>

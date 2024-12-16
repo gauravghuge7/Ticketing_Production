@@ -9,13 +9,9 @@ import { store } from './Redux/Store.js';
 import { Provider } from 'react-redux';
 import axios from 'axios';
 
-
-
-
 axios.defaults.baseURL = import.meta.env.VITE_SERVER_URL;
 // axios.defaults.baseURL = "https://ticketing-production-9166.up.railway.app";
-// axios.defaults.ba
-seURL ="http://localhost:4000";axios.defaults.withCredentials = true;
+axios.defaults.withCredentials = true;
 axios.defaults.proxy = true;
 
 

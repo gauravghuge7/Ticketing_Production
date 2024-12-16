@@ -382,16 +382,16 @@ const ProjectSection = ({ setConditionalComponent, projectId }) => {
                 <tr key={index}>
                   <td className="border px-4 py-2">{index + 1}</td>
                   <td className="border px-4 py-2">{task.ticket ? "Client Ticket" : "Team Lead Task"}</td>
-                  <td  className="border px-4 py-2">{ task.ticket ? task.ticket.ticketId : task.ticketId}</td>
+                  <td  className="border px-4 py-2">{ task.ticket ? task.ticket.ticketId : "-"}</td>
 
                   <td className="border px-4 py-2">{task.ticket ? task.ticket.ticketName : task.taskName}</td>
                   <td className="border px-4 py-2">{task.ticket ? task.ticket.priority : task.priority}</td>
-                  <td className="border px-4 py-2">{task.ticket ? task.ticket.saptype : task.saptype}</td>
+                  <td className="border px-4 py-2">{task.ticket ? task.ticket.saptype : "-"}</td>
                   <td className="border px-4 py-2">{new Date(task.dueDate).toLocaleDateString()}</td>
                   <td className="border px-4 py-2">{task.ticket ? task.ticket.status : task.status}</td>
-                  <td className="border px-4 py-2">{task.ticket ? task.ticket.assignedTo : task.assignedTo}</td>
-                  <td className="border px-4 py-2">{task.ticket ? task.ticket.assignedByEmail : task.assignedByEmail}</td>
-                  <td className="border px-4 py-2">{task.ticket ? task.ticket.assignedByName : task.assignedByName}</td>
+                  <td className="border px-4 py-2">{task.ticket ? task.ticket.assignedTo : "-"}</td>
+                  <td className="border px-4 py-2">{task.ticket ? task.ticket.assignedByEmail : "-"}</td>
+                  <td className="border px-4 py-2">{task.ticket ? task.ticket.assignedByName : "-"}</td>
                   <td className="border px-4 py-2">{task.ticket ? task.ticket.ticketDescription : task.description}</td>
                   <td className="border px-4 py-2">
                     <a href={task?.taskDocument || task?.ticket?.ticketDocument } target="_blank" rel="noreferrer">

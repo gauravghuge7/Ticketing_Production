@@ -10,6 +10,7 @@ const AdminContain = () => {
   const employee = useSelector((state) => state.employeeReducer?.employee);
   const teams = useSelector((state) => state.teamReducer?.team);
   const client = useSelector((state) => state.clientReducer?.client.clientList);
+  const project = useSelector((state) => state.projectReducer?.project);
 
   const cardStyle = {
     borderRadius: '12px',
@@ -139,7 +140,7 @@ const AdminContain = () => {
               <div className="d-flex justify-content-center mb-3">
                 <FaProjectDiagram size={40} className="text-info mb-2" />
               </div>
-              <h5 className="card-title text-center" style={titleStyle}>10</h5>
+              <h5 className="card-title text-center" style={titleStyle}>{project?.length}</h5>
               <p className="card-text text-center" style={textStyle}>Total number of projects.</p>
             </Card.Body>
           </Card>

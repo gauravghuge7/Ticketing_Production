@@ -61,6 +61,16 @@ clientRouter.route("/createTicket").post( //verify client
    createTicket
 )
 
+clientRouter.route("/deleteTask/:taskId").delete( //verify client   
+   verifyClient,
+   fetchTasks
+)  
+
+clientRouter.route("/editTask/:taskId").put( //verify client   
+   verifyClient,
+   fetchTasks
+)     
+
 
 
 export default clientRouter;

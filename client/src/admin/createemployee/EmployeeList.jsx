@@ -14,7 +14,7 @@ const EmployeeList = ({ setValue }) => {
 
   const data = useSelector((state) => state.employeeReducer.employee);
 
-  useEffect(() => {
+  useEffect(() => { 
     setEmployees(data);
   }, [data]);
 

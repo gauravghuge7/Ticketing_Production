@@ -1,6 +1,6 @@
 import React from 'react';
 import Componynavabar from '../navbar/Componynavabar';
-import MyCalendar from './MyCalendar';
+
 import Clock from './Clock';
 
 const Watch = () => {
@@ -51,7 +51,7 @@ const Watch = () => {
 
                         <div className="col-md-12 d-flex  align-items-space-between ">
                
-                   <div className='col-md-12  me-2'> <MyCalendar /></div>
+                   {/* <div className='col-md-12  me-2'> <MyCalendar /></div> */}
                    {/* <div className='col-md-3 d-flex justify-content-center align-items-center'> <Clock /></div> */}
                 </div>
                     </div>

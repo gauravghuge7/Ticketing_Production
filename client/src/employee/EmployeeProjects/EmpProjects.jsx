@@ -330,7 +330,7 @@ const EmpProjects = () => {
               {currentTasks.map((task, index) => (
                 <tr key={index} style={{ textAlign: "center" }}>
                   <td>{index + 1}</td>
-                  <td>{task.ticket ? "Client Ticket" : "Team Lead Task"}</td>
+                  <td>{task.ticket ? "Client Ticket" : "Team Lead Task"}</td>  
                   <td>{task.ticket ? task.ticket.ticketId : "-"}</td>
                   <td>{task.ticket ? task.ticket.ticketName : task.taskName}</td>
                   <td>{task.ticket ? task.ticket.saptype : ""}</td>

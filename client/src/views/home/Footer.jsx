@@ -11,11 +11,11 @@ const Footer = () => {
           </div>
 
           {/* Right Section - Company Link */}
-          <div style={styles.rightSection}>
+          {/* <div style={styles.rightSection}>
             <a href="https://gbisinc.com" style={styles.companyLink}>
               Global Business Infotech Solutions
             </a>
-          </div>
+          </div> */}
         </div>
       </div>
     </footer>

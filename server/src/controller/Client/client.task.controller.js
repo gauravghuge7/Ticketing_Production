@@ -7,6 +7,7 @@ import { ApiResponse } from "../../utils/ApiResponse.js";
 import { asyncHandler } from "../../utils/asyncHandler.js";
 import { uploadOnCloudinary } from "../../helper/cloudinary.js";
 import { generateTicketId } from "../../helper/generateTicketId.js";
+import { sendEmail, ticketForwardTemplate } from "../../helper/sendEmail.js";
 
 
 const fetchTasks = asyncHandler (async (req,res) => {
@@ -84,6 +85,7 @@ const createTicket = asyncHandler(async (req, res) => {
 
         const response = await uploadOnCloudinary(req.file.path);
 
+        const projectName = await Project.findById(project ).then(project => project.projectName)
 
         // create a entry in the database
         const ticket = await Ticket.create({
@@ -103,9 +105,61 @@ const createTicket = asyncHandler(async (req, res) => {
 
 
         })
+
+        const teamDetail = await Project.aggregate([
+            {
+                $match: new mongoose.Types.ObjectId(project)
+            },
+            {
+                $lookup: {
+                    from: "teams",
+                    localField: "team",
+                    foreignField: "_id",
+                    as: "team",
+                    pipeline: [
+                        {
+                            $lookup: {
+                                from: "employees",
+                                foreignField: "_id",
+                                localField: "employee"
+                            }
+                        },
+                        {
+                            $addFields: {
+                                "teamLeadEmail": {
+                                    $arrayElemAt: [
+                                        "$team.employee.email",
+                                        0
+                                    ]
+                                }
+                            }
+                        }
+                    ]
+                }
+            },
+            {
+                $project: {
+                    teamLeadEmail: 1,
+                    teamName: 1,
+                    projectName: 1,
+                    projectId: 1,
+                    employee: 1,
+                    teamLead: 1,
+                    _id: 0
+                }
+            }
+        
+        ])
     
+        // const html = await ticketForwardTemplate(email, ticket.ticketId, projectName, teamName)
+
+        // const subject = `New Ticket from ${projectName} project`
+
+        // console.log("teamDetail => ", teamDetail);
+        // const sendMail = await sendEmail(teamDetail[0].teamLeadEmail, subject, html);
+
         return res
-            .status(200)
+        .status(200)
             .json(
                 new ApiResponse(200, "Ticket created successfully", ticket)
             )

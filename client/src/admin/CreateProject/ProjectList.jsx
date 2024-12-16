@@ -3,6 +3,8 @@ import EditProjectForm from './EditProjectForm';
 import axios from 'axios';
 import { message } from 'react-message-popup';
 import { Button, InputGroup, FormControl, Row, Col } from 'react-bootstrap';
+import { use } from 'react';
+import { useSelector } from 'react-redux';
 
 
 
@@ -13,6 +15,12 @@ const ProjectList = () => {
     const [searchTerm, setSearchTerm] = useState('');
 
 
+    // const data = useSelector((state) => state.projectReducer.project);
+
+      
+    // useEffect(() => {
+    //     setProjectData(data);
+    // }, [data]);
 
 
     const handleEdit = async (id) => {
@@ -173,14 +181,14 @@ const ProjectList = () => {
                             <td>{data.team?.map((teamMember) => teamMember.teamLead).join(', ')}</td>
                             <td>{data.description}</td>
                             <td>
-                                <a href={data.descriptionDocument} target="_blank" rel="noreferrer">    
-                                    <Button style={{ background: "transparent", border: "none" }}>
-                                            <i className="bi bi-eye-fill" style={{ fontSize: "16px", color: "#007BFF" }}></i>   
+                                <a href={data.descriptionDocument} target="_blank" rel="noreferrer" style={{ color: "#007BFF" }}>
+                                    <Button style={{ background: "transparent", border: "none", color: "#007BFF" }}>
+                                            <i className="bi bi-eye-fill" style={{ fontSize: "16px" }}></i>
                                             
-                                    </Button>
-                                </a>
-                            </td>
-                            <td>
+                                        </Button>
+                                    </a>
+                                </td>
+                                <td>
                     <div style={{ display: 'flex', alignItems: 'center' }}>
                         <Button style={{ background: "transparent", border: "none" }} onClick={() => handleEdit(data._id)}>
                             <i className="bi bi-pencil-square" style={{ fontSize: "16px", color: "blue", cursor: "pointer" }}></i>

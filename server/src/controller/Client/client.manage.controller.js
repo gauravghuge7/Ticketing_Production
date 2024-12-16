@@ -97,8 +97,103 @@ const deleteClient = asyncHandler(async(req, res) => {
 
 } )
 
+const deleteTask = asyncHandler(async(req, res) => {
+    
+    try {
+        
+            console.log("req.query => ", req.query);
+            console.log("req.params => ", req.params);
+            
+            const {_id} = req.params;
+            
+            if(!_id) {
+                throw new ApiError(400, "Please provide the task id");
+            }
+            
+            // find the entry in the database
+            
+            const task = await Client.findById(_id);
+            
+            if(!task) {
+                throw new ApiError(400, "Task does not exist");
+            }
+            
+            // delete the entry in the database 
+            
+            await Client.findByIdAndDelete(_id);
+            
+            return res.status(200).json(                                           // 
+                new ApiResponse(200, "Task deleted successfully", task)
+            )
+
+
+    }
+    catch (error) {
+        console.log(" Error => ", error.message)
+        throw new ApiError(400, error.message);    
+    }
+
+} )
+
+
+const editTask = asyncHandler(async(req, res) => {
+    
+    try {
+        
+            console.log("req.query => ", req.query);
+            console.log("req.params => ", req.params);
+            
+            const {_id} = req.params;
+            
+            if(!_id) {
+                throw new ApiError(400, "Please provide the task id");
+            }
+            
+            // find the entry in the database
+            
+            const task = await Client.findById(_id);
+            
+            if(!task) {
+                throw new ApiError(400, "Task does not exist");
+            }
+            
+            // update the entry in the database 
+            
+            const updatedTask = await Client.findByIdAndUpdate(_id, {
+                
+                taskName: req.body.taskName,
+                priority: req.body.priority,
+                saptype: req.body.saptype,
+                dueDate: req.body.dueDate,
+                assignedTo: req.body.assignedTo,
+                assignedByEmail: req.body.assignedByEmail,
+                assignedByName: req.body.assignedByName,
+                ticketName: req.body.ticketName,
+                ticketId: req.body.ticketId,
+                description: req.body.ticketDescription,
+                ticketDocument: req.body.ticketDocument,
+                saptype: req.body.saptype,
+                dueDate: req.body.dueDate,
+            
+            })
+            
+            return res.status(200).json(                                           // 
+                new ApiResponse(200, "Task updated successfully", updatedTask)
+            )
+
+
+    }
+    catch (error) {
+        console.log(" Error => ", error.message)
+        throw new ApiError(400, error.message);    
+    }
+})      
+
+
 
 export {
     editClient,
-    deleteClient
+    deleteClient,
+    editTask,
+    deleteTask
 };

@@ -240,4 +240,4 @@ const EditTaskForm = () => {
     );
 };
 
-export default TaskForm;
+export default EditTaskForm;
