@@ -34,6 +34,7 @@ const teamSchema = new Schema( {
 
    project: [{
       type: Schema.Types.ObjectId,
+      ref: "Project",
       required: true,
    }],
 

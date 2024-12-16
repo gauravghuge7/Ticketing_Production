@@ -8,6 +8,8 @@ import { asyncHandler } from "../../utils/asyncHandler.js";
 import { uploadOnCloudinary } from "../../helper/cloudinary.js";
 import { generateTicketId } from "../../helper/generateTicketId.js";
 import { sendEmail, ticketForwardTemplate } from "../../helper/sendEmail.js";
+import { Team } from "../../model/team.model.js";
+import { Employee } from "../../model/employee.model.js";
 
 
 const fetchTasks = asyncHandler (async (req,res) => {
@@ -107,56 +109,60 @@ const createTicket = asyncHandler(async (req, res) => {
         })
 
         const teamDetail = await Project.aggregate([
+    
             {
-                $match: new mongoose.Types.ObjectId(project)
+                $match: {
+                    _id: new mongoose.Types.ObjectId(project)
+                }
             },
+
             {
                 $lookup: {
                     from: "teams",
                     localField: "team",
                     foreignField: "_id",
                     as: "team",
-                    pipeline: [
-                        {
-                            $lookup: {
-                                from: "employees",
-                                foreignField: "_id",
-                                localField: "employee"
-                            }
-                        },
-                        {
-                            $addFields: {
-                                "teamLeadEmail": {
-                                    $arrayElemAt: [
-                                        "$team.employee.email",
-                                        0
-                                    ]
-                                }
-                            }
-                        }
-                    ]
+
                 }
             },
             {
+                $addFields: {
+                    teamLead: "$team.teamLead",
+                    teamName: "$team.teamName"
+                }
+            },
+
+            {
                 $project: {
-                    teamLeadEmail: 1,
-                    teamName: 1,
+                    
                     projectName: 1,
-                    projectId: 1,
-                    employee: 1,
                     teamLead: 1,
-                    _id: 0
+                    teamName: 1
+                
                 }
             }
-        
+
         ])
+
+        console.log("teamDetail => ", teamDetail)
+
+        const teamLead = teamDetail[0].teamLead;
+        const teamName = teamDetail[0].teamName[0];
+
+
+        const employee = await Employee.findById(teamLead);
+
+
     
-        // const html = await ticketForwardTemplate(email, ticket.ticketId, projectName, teamName)
+        const html = await ticketForwardTemplate(employee.employeeEmail, ticket.ticketId, projectName, teamName)
 
-        // const subject = `New Ticket from ${projectName} project`
+        console.log("HTML => ", html)
 
-        // console.log("teamDetail => ", teamDetail);
-        // const sendMail = await sendEmail(teamDetail[0].teamLeadEmail, subject, html);
+        const subject = `New Ticket from ${projectName} project`
+
+        const sendMail = await sendEmail(employee.employeeEmail, subject, html);
+
+
 
         return res
         .status(200)
