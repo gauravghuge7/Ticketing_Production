@@ -23,7 +23,7 @@ export const sendEmail = async (email, subject, html) => {
         
         // send mail with defined transport object
         await transporter.sendMail({
-            from: "akashdaud26@gmail.com",
+            from: "akashdaud2612@gmail.com",
             to: email,
             subject: subject,
             html: html,

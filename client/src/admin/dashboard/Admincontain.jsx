@@ -1,8 +1,9 @@
-import React from 'react';
+import { useEffect, useState } from 'react';
 import { Card, Container, Row, Col } from 'react-bootstrap';
 import { FaUserPlus, FaUsers, FaBuilding, FaProjectDiagram } from 'react-icons/fa';
 import { useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
+import  axios  from 'axios';
 
 const AdminContain = () => {
   const navigate = useNavigate();
@@ -11,6 +12,36 @@ const AdminContain = () => {
   const teams = useSelector((state) => state.teamReducer?.team);
   const client = useSelector((state) => state.clientReducer?.client.clientList);
   const project = useSelector((state) => state.projectReducer?.project);
+
+
+  const [projects, setProjects] = useState(0);
+
+
+  const fetchProjects = () => {
+    try {
+      
+      axios.get("/api/admin/project")
+      .then((res) => {
+        console.log(res.data);
+
+        console.log(res.data.data.project);
+
+        setProjects(res.data.data.project);
+
+      })
+      
+    } 
+    catch (error) {
+        console.log(error);
+    }
+    finally {
+      console.log("function execution complete");
+    }
+  }
+
+  useEffect(() => {
+    fetchProjects();
+  }, [project]);
 
   const cardStyle = {
     borderRadius: '12px',
@@ -140,7 +171,7 @@ const AdminContain = () => {
               <div className="d-flex justify-content-center mb-3">
                 <FaProjectDiagram size={40} className="text-info mb-2" />
               </div>
-              <h5 className="card-title text-center" style={titleStyle}>{project?.length}</h5>
+              <h5 className="card-title text-center" style={titleStyle}>{projects?.length}</h5>
               <p className="card-text text-center" style={textStyle}>Total number of projects.</p>
             </Card.Body>
           </Card>
