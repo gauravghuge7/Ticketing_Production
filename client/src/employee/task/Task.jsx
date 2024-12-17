@@ -143,6 +143,7 @@ const TaskList = ({ setConditionalComponent }) => {
                 <th>Task Detail</th>
                 <th>Document</th>
                 <th>Task Forward</th>
+                <th>Status</th>
               </tr>
             </thead>
             <tbody>
@@ -189,6 +190,15 @@ const TaskList = ({ setConditionalComponent }) => {
                     >
                       Forward
                     </Button>
+                  </td>
+                  <td>
+                   <select name="" id="">
+                    <option value="">Open</option>
+                    <option value="">In Progress</option> 
+                    <option value="">Closed</option>
+              
+
+                   </select>
                   </td>
                 </tr>
               ))}

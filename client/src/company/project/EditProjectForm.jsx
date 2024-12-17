@@ -90,7 +90,17 @@ const TaskForm = ({ currentProject, setConditionalComponent, onSave, setIsEditin
         catch (error) {
             message.error(error.message);
         }
-
+       finally {
+            setFormData({
+          
+                description: "",
+                title: "",
+                priority: "",
+                status: "",
+                dueDate: "",
+                assignedTo: "",
+            });
+        }
 
     };
 
@@ -156,7 +166,7 @@ const TaskForm = ({ currentProject, setConditionalComponent, onSave, setIsEditin
                                         value={formData.priority}
                                         onChange={(e) => setFormData({ ...formData, priority: e.target.value })}
                                         required
-                                        style={{ borderRadius: '12px', padding: '10px', boxShadow: '0 3px 6px rgba(0, 0, 0, 0.1)' }}
+                                        style={{ borderRadius: '12px', padding: '5px', boxShadow: '0 3px 6px rgba(0, 0, 0, 0.1)' }}
                                     >
                                         <option value="">Select Priority</option>
                                         <option value="High">High</option>
@@ -174,9 +184,9 @@ const TaskForm = ({ currentProject, setConditionalComponent, onSave, setIsEditin
                                         value={formData.saptype}
                                         onChange={(e) => setFormData({ ...formData, saptype: e.target.value })}
                                         required
-                                        style={{ borderRadius: '12px', padding: '10px', boxShadow: '0 3px 6px rgba(0, 0, 0, 0.1)' }}
+                                        style={{ borderRadius: '12px', padding: '5px', boxShadow: '0 3px 6px rgba(0, 0, 0, 0.1)' }}
                                     >
-                                        <option value="">Select Priority</option>
+                                        <option value="">Select SAP Type</option>
                                         <option value="sapabap">SAP ABAP</option>
                                         <option value="sapmm">SAP MM</option>
                                         <option value="sappp">SAP PP</option>
@@ -185,18 +195,7 @@ const TaskForm = ({ currentProject, setConditionalComponent, onSave, setIsEditin
                                     </Form.Control>
                                 </Form.Group>
 
-                                <Form.Group controlId="assignName" className="mb-3">
-                                    <Form.Label>Assign To Team</Form.Label>
-                                    <Form.Control
-                                        type="text"
-                                        name="assignName"
-                                        value={formData.assignteam}
-                                        onChange={(e) => setFormData({ ...formData, assignteam: e.target.value })}
-                                        required
-                                        style={{ borderRadius: '12px', padding: '10px', boxShadow: '0 3px 6px rgba(0, 0, 0, 0.1)' }}
-                                    />
-                                </Form.Group>
-                            
+                             
 
                                 {/* <Form.Group controlId="dueDate" className="mb-3">
                                     <Form.Label>Due Date</Form.Label>
@@ -211,7 +210,7 @@ const TaskForm = ({ currentProject, setConditionalComponent, onSave, setIsEditin
                                 </Form.Group> */}
 
                                 <Form.Group controlId="assignName" className="mb-3">
-                                    <Form.Label>Assign BY Name</Form.Label>
+                                    <Form.Label>Spokesperson Name</Form.Label>
                                     <Form.Control
                                         type="text"
                                         name="assignName"
@@ -223,7 +222,7 @@ const TaskForm = ({ currentProject, setConditionalComponent, onSave, setIsEditin
                                 </Form.Group>
 
                                 <Form.Group controlId="assignName" className="mb-3">
-                                    <Form.Label>Assign By Email</Form.Label>
+                                    <Form.Label>Spokesperson Email</Form.Label>
                                     <Form.Control
                                         type="Email"
                                         name="assignEmail"
@@ -233,7 +232,18 @@ const TaskForm = ({ currentProject, setConditionalComponent, onSave, setIsEditin
                                         style={{ borderRadius: '12px', padding: '10px', boxShadow: '0 3px 6px rgba(0, 0, 0, 0.1)' }}
                                     />
                                 </Form.Group>
-
+                                <Form.Group controlId="assignName" className="mb-3">
+                                    <Form.Label>Spokesperson Number</Form.Label>
+                                    <Form.Control
+                                        type="text"
+                                        name="assignName"
+                                        value={formData.assignteam}
+                                        onChange={(e) => setFormData({ ...formData, assignteam: e.target.value })}
+                                        required
+                                        style={{ borderRadius: '12px', padding: '10px', boxShadow: '0 3px 6px rgba(0, 0, 0, 0.1)' }}
+                                    />
+                                </Form.Group>
+                            
                               
 
                             

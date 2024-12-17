@@ -214,7 +214,7 @@ const ProjectSection = ({ setConditionalComponent, projectId }) => {
              
                   <th>Assigned By Email</th>
                   <th>Assigned By Name</th>
-                  {/* <th>Assigned To</th> */}
+                  <th>Assigned To</th>
                   <th>Status</th>
              
                   <th>Description</th>
@@ -234,7 +234,7 @@ const ProjectSection = ({ setConditionalComponent, projectId }) => {
                     
                     <td>{ticket.assignedByEmail}</td>
                     <td>{ticket.assignedByName}</td>
-                    {/* <td>{ticket.assignedByNumber}</td> */}
+                    <td>{ticket.assignedTo }</td>
                     <td>{ticket.status}</td>
                    
                     <td>{ticket?.ticketDescription}</td>
@@ -370,9 +370,10 @@ const ProjectSection = ({ setConditionalComponent, projectId }) => {
                 <th className="border px-4 py-2">SAP Type</th>
                 <th className="border px-4 py-2">Due Date</th>
                 <th className="border px-4 py-2">Status</th>
-                <th className="border px-4 py-2">Assigned To</th>
+             
                 <th className="border px-4 py-2">Assigned By Email</th>
                 <th className="border px-4 py-2">Assigned By Name</th>
+                <th className="border px-4 py-2">Assigned By Number</th>
                 <th className="border px-4 py-2">Tickets Description</th>
                 <th className="border px-4 py-2">Tickets Document</th>
               </tr>
@@ -389,9 +390,10 @@ const ProjectSection = ({ setConditionalComponent, projectId }) => {
                   <td className="border px-4 py-2">{task.ticket ? task.ticket.saptype : "-"}</td>
                   <td className="border px-4 py-2">{new Date(task.dueDate).toLocaleDateString()}</td>
                   <td className="border px-4 py-2">{task.ticket ? task.ticket.status : task.status}</td>
-                  <td className="border px-4 py-2">{task.ticket ? task.ticket.assignedTo : "-"}</td>
+                
                   <td className="border px-4 py-2">{task.ticket ? task.ticket.assignedByEmail : "-"}</td>
                   <td className="border px-4 py-2">{task.ticket ? task.ticket.assignedByName : "-"}</td>
+                    <td className="border px-4 py-2">{task.ticket ? task.ticket.assignedTo : "-"}</td>
                   <td className="border px-4 py-2">{task.ticket ? task.ticket.ticketDescription : task.description}</td>
                   <td className="border px-4 py-2">
                     <a href={task?.taskDocument || task?.ticket?.ticketDocument } target="_blank" rel="noreferrer">

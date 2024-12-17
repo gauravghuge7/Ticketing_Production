@@ -43,7 +43,7 @@ const Watch = () => {
                                  onMouseLeave={(e) => { e.currentTarget.style.boxShadow = cardStyle.boxShadow; }}>
                                 <div className="card-header d-flex justify-content-center" style={headerStyle}>To-Do Ticket</div>
                                 <div className="card-body">
-                                    <h5 className="card-title d-flex justify-content-center" style={titleStyle}>8 Tasks</h5>
+                                    <h5 className="card-title d-flex justify-content-center" style={titleStyle}>8 Ticket</h5>
                                     <p className="card-text" style={textStyle}>Ticket that are planned but not yet started. To-Do Ticket.</p>
                                 </div>
                             </div>
