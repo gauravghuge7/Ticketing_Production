@@ -1,4 +1,4 @@
-import mongoose from "mongoose";
+import mongoose, { mongo } from "mongoose";
 import { Client } from "../../model/client.model.js";
 import { Project } from "../../model/project.model.js";
 import { Ticket } from "../../model/ticket.project.model.js";
@@ -254,9 +254,78 @@ const editTicket = asyncHandler(async (req, res) => {
 })
 
 
+const fetchTicketByClient = asyncHandler(async (req, res) => {
+
+    try {
+
+        const tickets = await Project.aggregate([
+            {
+                $match: {
+                    client: new mongoose.Types.ObjectId(req?.user?._id)
+                }
+            },
+            {
+                $lookup: {
+                    from: "tickets",
+                    localField: "_id",
+                    foreignField: "project",
+                    as: "tickets",
+
+                
+                }
+            },
+
+            {
+                $addFields: {
+                    tickets: "$tickets"
+                }
+            },
+            {
+                $project: {
+                    tickets: 1,
+                }
+            }
+
+
+        ])
+
+
+        const arraySome = [];
+
+        const ticket = tickets.map(ticket => {
+            arraySome.push(ticket.tickets)
+        })
+
+        console.log("ticket => ", arraySome.length);
+
+        const temp = arraySome.flat();
+
+        return res 
+            .status(200)
+            .json(
+                new ApiResponse(
+                    200, 
+                    "tickets fetched successfully", 
+                    {
+                        tickets : temp
+                    }
+                )
+            )
+        
+    } 
+    catch (error) {
+        console.log("Error => ", error)    
+    }
+    finally {
+        console.log("function execution successfully");
+    }
+})
+
+
 export {
     createTicket,
     fetchTasks,
+    fetchTicketByClient
 }
 
 
