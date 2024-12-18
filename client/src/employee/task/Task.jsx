@@ -1,15 +1,22 @@
 import axios from 'axios';
+
+
 import React, { useEffect, useState, useRef } from 'react';
 import { Col, Container, Row, Table, InputGroup, FormControl, Button } from 'react-bootstrap';
 import { message } from 'react-message-popup';
 
 const TaskList = ({ setConditionalComponent }) => {
-  const [tasks, setTasks] = useState([]);
+  const [tasks, setTasks] = useState([{
+    status: ""
+  }]);
   const [currentPage, setCurrentPage] = useState(0);
   const [searchTerm, setSearchTerm] = useState('');
   const [currentTask, setCurrentTask] = useState(null);
   const [sendTask, setSendTask] = useState({ taskId: null, employeeId: null });
   const forwardTicketRef = useRef(null);
+  const [reload , setReload] = useState(1);
+
+
 
   const fetchTasks = async () => {
     try {
@@ -23,9 +30,7 @@ const TaskList = ({ setConditionalComponent }) => {
     }
   };
 
-  useEffect(() => {
-    fetchTasks();
-  }, []);
+
 
   const openForwardTicketDialog = (taskId) => {
     const task = tasks.find(t => t._id === taskId);
@@ -73,6 +78,44 @@ const TaskList = ({ setConditionalComponent }) => {
     currentPage * tasksPerPage,
     (currentPage + 1) * tasksPerPage
   );
+
+  const refresh = useEffect(() => {
+    fetchTasks();
+  }, [reload]);
+
+  const handlechangeStatus = async(value, _id) => {
+
+    try {
+
+      const body = {
+        status: value
+      }
+  
+      const config = {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+        withCredentials: true
+      }
+  
+  
+      const response = await axios.put("/api/employee/changeStatus/" + _id, body, config);
+  
+  
+      console.log(response)
+
+      if(response.data.success === true){
+        setReload(reload + 1);
+      }
+    } 
+    catch (error) {
+      console.log(error);  
+    }
+
+
+  }
+
+ 
 
   return (
     <Container
@@ -192,13 +235,19 @@ const TaskList = ({ setConditionalComponent }) => {
                     </Button>
                   </td>
                   <td>
-                   <select name="" id="">
-                    <option value="Open">Open</option>
-                    <option value="In Progress">In Progress</option> 
-                    <option value="Closed">Closed</option>
-              
+                   <select 
+                      name="" 
+                      id=""
+                      onChange={(e) => handlechangeStatus(e?.target?.value, task._id)}
+                      value={task?.status}
+                    >
 
-                   </select>
+
+                      <option value="Open">Open</option>
+                      <option value="In Progress">In Progress</option>
+                      <option value="Closed">Closed</option>
+                
+                    </select>
                   </td>
                 </tr>
               ))}

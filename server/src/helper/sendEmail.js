@@ -37,12 +37,14 @@ export const sendEmail = async (email, subject, html) => {
 
 
 
-export const ticketForwardTemplate = (email, ticketId, projectName, teamName,teamleadname,ticketName) => {
+export const ticketForwardTemplate = (email, ticketId, projectName, teamName, clientName, clientEmail) => {
 
     const html = `
         <p>Hi ${teamName},</p>
         <p>You have been assigned to a new ticket from ${projectName} .</p>
         <p>Please click on the Ticket below to view the Ticket details.</p>
+        <p>${clientName}</p>
+        <p>${clientEmail}</p>
         <a href="https://gbis.team/task-management/task/${ticketId}">${ticketId}</a>
         <p>Thanks,<br>
         </p>

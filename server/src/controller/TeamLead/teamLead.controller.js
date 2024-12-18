@@ -5,6 +5,10 @@ import { asyncHandler } from "../../utils/asyncHandler.js";
 import {uploadOnCloudinary} from "../../helper/cloudinary.js"
 import mongoose from "mongoose";
 import { Employee } from "../../model/employee.model.js";
+import { sendEmail } from "../../helper/sendEmail.js";
+import { Project } from "../../model/project.model.js";
+import { teamLead_to_employee_emailTemplates } from "../../helper/email.templates.js";
+import { Ticket } from "../../model/ticket.project.model.js";
 
 
 
@@ -28,7 +32,7 @@ const assignTasksToTeamMembers = asyncHandler(async (req, res) => {
 
             console.log("req.body => ", req.body);
 
-            if(!project || !employee || !description || !assignBy || !dueDate ) {
+            if(!project || !employee || !description || !dueDate ) {
                   throw new ApiError(400, "Please provide all the required fields");
             }
 
@@ -81,9 +85,16 @@ const assignTasksToTeamMembers = asyncHandler(async (req, res) => {
              * 
             */
 
-            const employeeEmail = await Employee.findById(employee).then(employee => employee.employeeEmail)
+            const ticket = await Ticket.findById(task.ticket).then(ticket => ticket.ticketId)
 
-            const html = teamLead_to_employee_emailTemplates()
+            const teamLead = await Employee.findById(req.user._id);
+
+            const employeeEmail = await Employee.findById(employee)
+            const projectName = await Project.findById(project).then(project => project.projectName)
+            const html = teamLead_to_employee_emailTemplates(employeeEmail.employeeName, ticket, projectName, teamLead.employeeName)
+            const subject = "New Task Created"
+
+            sendEmail(employeeEmail.employeeEmail, subject, html);
 
 
             return res

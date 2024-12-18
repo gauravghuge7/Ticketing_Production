@@ -10,7 +10,7 @@ import { loginUser } from '../controller/common.login.controller.js';
 import { getEmployeeByTeam, getEmployeeDetails, logoutEmployee, registerEmployee } from '../controller/Employee/employee.controller.js';
 
 import { getTeamLeadOrNot } from '../controller/Employee/employee.manage.controller.js';
-import { fetchProjectById, forwardTicketsAndTasksToAnotherEmployee, getEmployeeAllTasks, getEmployeeProjects, getTasksByProjectId } from '../controller/Employee/employee.project.controller.js';
+import { changeStatus, fetchProjectById, forwardTicketsAndTasksToAnotherEmployee, getEmployeeAllTasks, getEmployeeProjects, getTasksByProjectId } from '../controller/Employee/employee.project.controller.js';
 import { fetchProjectByTeamId, getTeamLeadProjects } from '../controller/TeamLead/teamlead.project.controller.js';
 import { assignTasksToTeamMembers, getAllTasks, getTeamTasks } from '../controller/TeamLead/teamLead.controller.js';
 
@@ -136,6 +136,17 @@ employeeRouter.route("/getEmployeeAllTasks").get(
     getEmployeeAllTasks
 )
 
+
+
+
+
+
+employeeRouter.route("/changeStatus/:taskId").put(
+    
+    verifyEmployee,
+    upload.none(),
+    changeStatus
+)
 
 
 
