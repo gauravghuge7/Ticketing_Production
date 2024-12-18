@@ -150,11 +150,11 @@ const TaskList = ({ setConditionalComponent, projectId }) => {
                 <th>Ticket Name</th>
                 <th>Priority</th>
                 <th>SAP Type</th>
-                <th>Ticket Status</th>
-                <th>Assign BY Email</th>
-                <th>Ticket Description</th>
-                <th>Ticket Document</th>
-                <th>Action</th>
+                <th> Status</th>
+                <th>Spokesperson Email</th>
+                <th> Description</th>
+                <th> Document</th>
+                {/* <th>Action</th> */}
               </tr>
             </thead>
             <tbody>
@@ -175,16 +175,16 @@ const TaskList = ({ setConditionalComponent, projectId }) => {
                       </Button>
                     </a>
                   </td>
-                  <td>
+                  {/* <td>
                     <div className='d-flex'>
                       <Button variant="" style={{ color:"#007BFF" }} className="me-2" onClick={() => handleEdit(task)}>
                         <i className="bi bi-pencil-square"></i>
                       </Button>
-                      {/* <Button variant="" onClick={() => handleDelete(task)} style={{ color:"red" }}>
+                      <Button variant="" onClick={() => handleDelete(task)} style={{ color:"red" }}>
                         <i className="bi bi-trash-fill"></i>
-                      </Button> */}
+                      </Button>
                     </div>
-                  </td>
+                  </td> */}
                 </tr>
               ))}
             </tbody>

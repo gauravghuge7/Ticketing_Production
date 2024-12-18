@@ -85,7 +85,7 @@ const Watch = () => {
                                     <h5 className="card-title d-flex justify-content-center" style={titleStyle}>{openTickets?.length} Tasks</h5>
                                     <p className="card-text" style={textStyle}>Ticket that are planned but not yet started. To-Do Ticket.</p>
                                 </div>
-                            </div>
+                            </div> 
                         </div>
 
                         <div className="col-md-12 d-flex  align-items-space-between ">

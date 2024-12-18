@@ -83,7 +83,7 @@ const Home = () => {
           </Col>
 
           {/* Login Section */}
-          <Col lg={6} md={12} className="d-flex flex-column justify-content-center p-4" style={{ backgroundColor: "#fff" }}>
+          <Col lg={6} md={12} className="d-flex flex-column justify-content-center p-4"  style={{ backgroundColor: "#fff" }}>
             <h2 className="text-center mb-4" style={{ fontWeight: "bold", fontSize: "2.5rem" }}>Login Here</h2>
             <Form onSubmit={handleSubmit}>
               <Form.Group controlId="formBasicEmail" className="mb-3">
@@ -124,19 +124,10 @@ const Home = () => {
       {/* Second container with About Us and Contact Us */}
       <Container fluid className="p-0" style={{ backgroundColor: "#E3F2FD" }}>
         <Row noGutters style={{ minHeight: "100vh" }}>
-          {/* Left side About Us */}
-          <Col lg={6} md={12} className="d-flex flex-column justify-content-center p-4" style={{ backgroundColor: "#fff" }}>
-          <h1 style={{ fontWeight: "bold", fontSize: "2.5rem",  textAlign: "center",color: "#1565C0" }}>
-              About Us
-            </h1>
-            <br />
-            <p style={{ ...fontStyle }}>
-              Excellence, enthusiasm, and adaptability are all hallmarks of Global Business Infotech Solutions. We’ve been providing world-class SAP and Salesforce consulting, software development, testing, and user interface design services for over three years.  <br /> <br />Our highly skilled team ensures that every project is executed on time, within scope, and at an affordable cost, meeting diverse business needs with exceptional quality.
-            </p>
-          </Col>
+        
 
           {/* Right side Contact Us form */}
-          <Col lg={6} md={12} className="d-flex flex-column justify-content-center p-4" style={{ backgroundColor: "#E3F2FD" }}>
+          <Col lg={6} md={12} className="d-flex flex-column justify-content-center p-4" style={{ backgroundColor: "#fff" }}>
             <h2 className="text-center mb-4" style={{ fontWeight: "bold", fontSize: "2.5rem" }}>Contact Us</h2>
             <Form onSubmit={handleContactSubmit}>
               <Form.Group controlId="contactName" className="mb-3">
@@ -185,6 +176,17 @@ const Home = () => {
                 Send Message
               </Button>
             </Form>
+          </Col>
+
+            {/* Left side About Us */}
+            <Col lg={6} md={12} className="d-flex flex-column justify-content-center p-4">
+          <h1 style={{ fontWeight: "bold", fontSize: "2.5rem",  textAlign: "center",color: "#1565C0" }}>
+              About Us
+            </h1>
+            <br />
+            <p style={{ ...fontStyle }}>
+              Excellence, enthusiasm, and adaptability are all hallmarks of Global Business Infotech Solutions. We’ve been providing world-class SAP and Salesforce consulting, software development, testing, and user interface design services for over three years.  <br /> <br />Our highly skilled team ensures that every project is executed on time, within scope, and at an affordable cost, meeting diverse business needs with exceptional quality.
+            </p>
           </Col>
         </Row>
       </Container>
