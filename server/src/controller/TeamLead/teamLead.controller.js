@@ -4,6 +4,7 @@ import { ApiResponse } from "../../utils/ApiResponse.js";
 import { asyncHandler } from "../../utils/asyncHandler.js";
 import {uploadOnCloudinary} from "../../helper/cloudinary.js"
 import mongoose from "mongoose";
+import { Employee } from "../../model/employee.model.js";
 
 
 
@@ -71,6 +72,18 @@ const assignTasksToTeamMembers = asyncHandler(async (req, res) => {
                   await task.save({validateBeforeSave: false});
             }
 
+
+            //   algorithm 
+            /** 
+             *  1)  find the email and send to the email
+             * 2)  create the template 
+             *  3)  send the template
+             * 
+            */
+
+            const employeeEmail = await Employee.findById(employee).then(employee => employee.employeeEmail)
+
+            const html = teamLead_to_employee_emailTemplates()
 
 
             return res

@@ -43,7 +43,7 @@ export const ticketForwardTemplate = (email, ticketId, projectName, teamName) =>
         <h1>Hi ${email},</h1>
         <p>You have been assigned to a new task by ${teamName} team.</p>
         <p>Please click on the link below to view the task details.</p>
-        <a href="https://gbis.team/task-management/task/${ticketId}">Task Details</a>
+        
         <p>Thanks,<br>
         ${teamName} Team</p>
     `;
