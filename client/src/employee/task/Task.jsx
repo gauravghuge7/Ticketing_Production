@@ -193,9 +193,9 @@ const TaskList = ({ setConditionalComponent }) => {
                   </td>
                   <td>
                    <select name="" id="">
-                    <option value="">Open</option>
-                    <option value="">In Progress</option> 
-                    <option value="">Closed</option>
+                    <option value="Open">Open</option>
+                    <option value="In Progress">In Progress</option> 
+                    <option value="Closed">Closed</option>
               
 
                    </select>

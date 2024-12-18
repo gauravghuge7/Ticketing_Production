@@ -3,10 +3,7 @@ import {Schema, model} from 'mongoose';
 
 const projectSchema = new Schema({
 
-   clientEmail: {
-      type: Schema.Types.ObjectId,
-      ref: 'Client',
-   },
+
 
    admin: {
       type: Schema.Types.ObjectId,

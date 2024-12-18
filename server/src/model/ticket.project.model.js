@@ -1,6 +1,6 @@
 import {
-  model,
-  Schema,
+    model,
+    Schema,
 } from 'mongoose';
 
 const ticketSchema = new Schema({

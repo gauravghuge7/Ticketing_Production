@@ -1,9 +1,48 @@
-import React from 'react';
-import Componynavabar from '../navbar/Componynavabar';
+import axios from "axios";
+import { useEffect, useState } from "react";
 
-import Clock from './Clock';
+
 
 const Watch = () => {
+
+
+    const [tickets, setTickets] = useState([]);
+
+    const [completeTickets, setCompleteTickets] = useState();
+    const [pendingTickets, setPendingTickets] = useState();
+    const [openTickets, setOpenTickets] = useState();
+
+    const fetchTickets = async () => {
+        try {
+            const response = await axios.get("/api/client/fetchTicketByClient");
+
+            console.log(response.data);
+
+            if(response.data.success){
+                setTickets(response.data.data.tickets);
+            
+                setCompleteTickets(tickets.filter(e => e.status === "Closed"));
+                setPendingTickets(tickets.filter(e => e.status === "In Progress"));
+                setOpenTickets(tickets.filter(e => e.status === "Open"));
+            }
+
+
+            
+        } 
+        catch (error) {
+            console.log(error);
+        }
+        finally {
+            console.log("finally");
+        }
+    };
+
+
+    useEffect(() =>{
+        fetchTickets();
+    }, [])
+
+
     return (
         <div className="container mt-5">
             {/* Header Section */}
@@ -17,7 +56,7 @@ const Watch = () => {
                                  onMouseLeave={(e) => { e.currentTarget.style.boxShadow = cardStyle.boxShadow; }}>
                                 <div className="card-header d-flex justify-content-center" style={headerStyle}>Completed Ticket</div>
                                 <div className="card-body">
-                                    <h5 className="card-title d-flex justify-content-center" style={titleStyle}>10 Ticket</h5>
+                                    <h5 className="card-title d-flex justify-content-center" style={titleStyle}>{completeTickets?.length} Ticket</h5>
                                     <p className="card-text" style={textStyle}>All Ticket that have been successfully completed.</p>
                                 </div>
                             </div>
@@ -30,7 +69,7 @@ const Watch = () => {
                                  onMouseLeave={(e) => { e.currentTarget.style.boxShadow = cardStyle.boxShadow; }}>
                                 <div className="card-header d-flex justify-content-center" style={headerStyle}>Pending Ticket</div>
                                 <div className="card-body">
-                                    <h5 className="card-title d-flex justify-content-center" style={titleStyle}>5 Ticket</h5>
+                                    <h5 className="card-title d-flex justify-content-center" style={titleStyle}>{pendingTickets?.length} Ticket</h5>
                                     <p className="card-text" style={textStyle}>Ticket that are still in progress and need to be completed.</p>
                                 </div>
                             </div>
@@ -43,10 +82,10 @@ const Watch = () => {
                                  onMouseLeave={(e) => { e.currentTarget.style.boxShadow = cardStyle.boxShadow; }}>
                                 <div className="card-header d-flex justify-content-center" style={headerStyle}>To-Do Ticket</div>
                                 <div className="card-body">
-                                    <h5 className="card-title d-flex justify-content-center" style={titleStyle}>8 Ticket</h5>
+                                    <h5 className="card-title d-flex justify-content-center" style={titleStyle}>{openTickets?.length} Tasks</h5>
                                     <p className="card-text" style={textStyle}>Ticket that are planned but not yet started. To-Do Ticket.</p>
                                 </div>
-                            </div>
+                            </div> 
                         </div>
 
                         <div className="col-md-12 d-flex  align-items-space-between ">
