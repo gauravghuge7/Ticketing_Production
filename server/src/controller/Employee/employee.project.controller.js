@@ -13,6 +13,7 @@ import { ApiError } from '../../utils/ApiError.js';
 import { ApiResponse } from '../../utils/ApiResponse.js';
 import { asyncHandler } from '../../utils/asyncHandler.js';
 import {Task } from "../../model/Task.model.js";
+import { Ticket } from '../../model/ticket.project.model.js';
 
 
 
@@ -554,10 +555,63 @@ const getEmployeeAllTasks = asyncHandler(async (req, res) => {
 
 
 
+const changeStatus = asyncHandler(async(req, res) => {
+
+    try {
+        
+        const { taskId } = req.params;
+        
+        const { 
+            status
+        } = req.body;
+        
+        console.log("req.body => ", req.body);
+        console.log("req.params => ", req.params);
+        
+        console.log("req.file", req.file);
+        
+        
+        if(!taskId || !status) {
+            throw new ApiError(400, "Please provide all the required fields");
+        }
+
+        const ticket = await Ticket.findById(taskId);
+
+        if(ticket) {
+            ticket.status = status;
+            await ticket.save();
+        } 
+        const task = await Task.findById(taskId);
+
+        if(task) {
+            task.status = status;
+            await task.save();
+        }
+
+        return res 
+            .status(200)
+            .json(
+                new ApiResponse(201, "Ticket status changed successfully", {
+                    ticket: ticket,
+                    task: task
+                })
+            )
+    } 
+    catch (error) {
+        console.log(" Error => ", error.message)
+        throw new ApiError(400, error.message);
+    }
+    finally {
+        console.log("function execution successfully");
+    }
+})
+
+
 export {
     getEmployeeProjects,
     fetchProjectById,
     getTasksByProjectId,
     forwardTicketsAndTasksToAnotherEmployee,
-    getEmployeeAllTasks
+    getEmployeeAllTasks,
+    changeStatus
 }

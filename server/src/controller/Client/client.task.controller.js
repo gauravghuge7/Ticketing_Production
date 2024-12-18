@@ -154,7 +154,7 @@ const createTicket = asyncHandler(async (req, res) => {
 
 
     
-        const html = await ticketForwardTemplate(employee.employeeEmail, ticket.ticketId, projectName, teamName)
+        const html = await ticketForwardTemplate(employee.employeeEmail, ticket.ticketId, projectName, teamName, client.clientName, client.clientEmail)
 
         console.log("HTML => ", html)
 

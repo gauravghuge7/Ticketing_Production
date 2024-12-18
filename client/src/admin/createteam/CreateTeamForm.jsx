@@ -23,8 +23,7 @@ const CreateTeamForm = () => {
     /// set the employees in above state 
     const setEmployee = () => {
 
-       let data = [];
-
+        let data = [];
 
         emp.forEach((employee) => {
             data.push(employee.employeeName);
@@ -34,9 +33,6 @@ const CreateTeamForm = () => {
         console.log("data => ", data);
 
         setEmployees(data);
-
-        
-
 
     }
 
