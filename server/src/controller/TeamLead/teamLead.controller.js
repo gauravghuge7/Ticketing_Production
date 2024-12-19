@@ -64,7 +64,7 @@ const assignTasksToTeamMembers = asyncHandler(async (req, res) => {
                   taskDocument: response?.url,
                   taskName,
                   priority,
-                  status: "Started",
+                  status: "Open",
                   currentWork: "Assigned task to employee",
 
 
@@ -92,7 +92,7 @@ const assignTasksToTeamMembers = asyncHandler(async (req, res) => {
             const employeeEmail = await Employee.findById(employee)
             const projectName = await Project.findById(project).then(project => project.projectName)
             const html = teamLead_to_employee_emailTemplates(employeeEmail.employeeName, ticket, projectName, teamLead.employeeName)
-            const subject = "New Task Created"
+            const subject = "New Task from " + projectName + " project"
 
             sendEmail(employeeEmail.employeeEmail, subject, html);
 
