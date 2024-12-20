@@ -2,7 +2,7 @@ import axios from 'axios';
 import { useEffect, useState } from 'react';
 import { Navbar, Nav, Button, Container } from 'react-bootstrap';
 import { useNavigate } from 'react-router-dom';
-
+import logo from '../../assets/GBIS.png';
 const AdminNavbar = () => {
   const [admin, setAdmin] = useState('');
   const navigate = useNavigate();
@@ -40,7 +40,7 @@ const AdminNavbar = () => {
       <Container>
         <Navbar.Brand href="#home" className="mr-aut\" style={{ marginLeft:-80, padding: 0 }}>
           <img
-            src="./accets/GBIS.png"
+            src={logo}
             width="190"
             className="d-inline-block align-top"
             alt="Logo"
