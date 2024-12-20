@@ -52,9 +52,9 @@ const Sidebar = ({ setValue, setConditionalComponent }) => {
         style={{ cursor: 'pointer', alignSelf: 'center', color: "#007BFF" }}
       >
         {isCollapsed ? (
-          <BiChevronRight size={30} color= "#007BFF" />
+         <i class="bi bi-list"></i>
         ) : (
-          <BiChevronLeft size={30} color= "#007BFF" />
+          <i class="bi bi-list"></i>
         )}
       </div>
 

@@ -28,12 +28,12 @@ const Componysidebar = ({ setConditionalComponent }) => {
       {/* Arrow Button */}
       <div
         onClick={toggleSidebar}
-        style={{ cursor: 'pointer', alignSelf: 'center', marginBottom: '10px' }}
+        style={{ cursor: 'pointer', alignSelf: 'center', color: "#007BFF" }}
       >
         {isCollapsed ? (
-          <BiChevronRight size={20} color="#1C75BB" />
+         <i class="bi bi-list"></i>
         ) : (
-          <BiChevronLeft size={20} color="#1C75BB" />
+          <i class="bi bi-list"></i>
         )}
       </div>
 

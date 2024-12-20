@@ -38,7 +38,7 @@ const EmployeeSidebar = ({ setConditionalComponent }) => {
       style={{
         width: isCollapsed ? '80px' : '250px', 
         height: 'auto',
-        minHeight: '100vh',
+        minHeight: '75vh',
         buttonShadow: '2px 0 5px rgba(0, 0, 0, 0.5)', // Add subtle shadow for depth
         background: '#000000',
         boxShadow: '2px 0px 15px rgba(0, 0, 0, 0.3)',
@@ -51,9 +51,9 @@ const EmployeeSidebar = ({ setConditionalComponent }) => {
         style={{ cursor: 'pointer', alignSelf: 'center', color: "#007BFF" }}
       >
         {isCollapsed ? (
-          <BiChevronRight size={30} color="#007BFF" />
+         <i class="bi bi-list"></i>
         ) : (
-          <BiChevronLeft size={30} color="#007BFF" />
+          <i class="bi bi-list"></i>
         )}
       </div>
 
