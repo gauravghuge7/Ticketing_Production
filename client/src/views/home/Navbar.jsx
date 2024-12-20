@@ -1,13 +1,13 @@
 // Navbar.js
 import React from 'react';
 import { Link } from 'react-router-dom';
-
+import logo from '../../assets/GBIS.png';
 const Navbar = () => {
   return (
     <nav style={styles.navbar}>
       <div style={styles.logoContainer}>
         <img
-          src="../../../accets/GBIS.png" // Update this path if necessary
+          src={logo} // Update this path if necessary
           alt="Logo"
           style={styles.logo}
         />

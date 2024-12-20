@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import axios from 'axios'
 import { useEffect, useState } from 'react';
 import { message } from 'react-message-popup';
-
+import logo from '../../assets/GBIS.png';
 const Employeenavbar = () => {
   
   const [employee, setemployee] = useState('');
@@ -50,10 +50,10 @@ const Employeenavbar = () => {
   return (
     <Navbar bg="light" variant="dark" expand="lg">
       <Container>
-        <Navbar.Brand href="#home" style={{ marginLeft:-80, padding: 0 }}>
+        <Navbar.Brand href="#home" style={{ marginLeft:0, padding: 0 }}>
           {/* Replace with your logo */}
           <img
-            src="../../../accets/GBIS.png"
+            src={logo}
             width="190"
             className="d-inline-block align-top"
             alt="Logo"

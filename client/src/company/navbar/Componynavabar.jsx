@@ -4,7 +4,7 @@ import { Navbar, Button, Container,  Nav } from "react-bootstrap";
 import axios from 'axios'
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-
+import logo from '../../assets/GBIS.png';
 
 function Componynavabar() {
 
@@ -77,7 +77,7 @@ useEffect(() => {
           {/* Logo */}
           <Navbar.Brand href="#" className="mb-3">
             <img
-              src="./GBIS.png"
+              src={logo}
               alt="Logo"
               style={{ width: "70%", height: "auto" }}
             />
