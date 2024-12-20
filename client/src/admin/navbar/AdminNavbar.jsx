@@ -3,6 +3,7 @@ import { useEffect, useState } from 'react';
 import { Navbar, Nav, Button, Container } from 'react-bootstrap';
 import { useNavigate } from 'react-router-dom';
 import logo from '../../assets/GBIS.png';
+import { left } from '@popperjs/core';
 const AdminNavbar = () => {
   const [admin, setAdmin] = useState('');
   const navigate = useNavigate();
@@ -38,7 +39,7 @@ const AdminNavbar = () => {
   return (
     <Navbar bg="light" variant="dark" expand="lg">
       <Container>
-        <Navbar.Brand href="#home" className="mr-aut\" style={{ marginLeft:-80, padding: 0 }}>
+        <Navbar.Brand href="#home" className="mr-aut\" style={{ marginLeft:0, padding: 0 }}>
           <img
             src={logo}
             width="190"
