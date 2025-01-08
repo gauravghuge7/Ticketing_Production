@@ -1,24 +1,23 @@
 import React, { useEffect, useState } from 'react';
-import { Container, Table, Button, Form, InputGroup, FormControl } from 'react-bootstrap';
+import { Container, Table, Button, FormControl, InputGroup } from 'react-bootstrap';
 import axios from 'axios';
 
 const TaskProjectList = ({ setConditionalComponent, setProjectId }) => {
   const [projectData, setProjectData] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
-  const [searchTerm, setSearchTerm] = useState("");
+  const [searchTerm, setSearchTerm] = useState('');
+  const [expandedDescriptions, setExpandedDescriptions] = useState({});
 
   const projectsPerPage = 10;
 
   const getProjects = async () => {
     try {
       const response = await axios.get('/api/client/fetchProjects');
-      console.log(response.data);
-
       if (response.data.success) {
         setProjectData(response.data.data);
       }
     } catch (error) {
-      console.log(error);
+      console.error(error);
     }
   };
 
@@ -31,7 +30,14 @@ const TaskProjectList = ({ setConditionalComponent, setProjectId }) => {
     setConditionalComponent('tasklist');
   };
 
-  const filteredProjects = projectData.filter(project =>
+  const toggleDescription = (id) => {
+    setExpandedDescriptions((prevState) => ({
+      ...prevState,
+      [id]: !prevState[id],
+    }));
+  };
+
+  const filteredProjects = projectData.filter((project) =>
     project.projectName.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
@@ -44,28 +50,24 @@ const TaskProjectList = ({ setConditionalComponent, setProjectId }) => {
   return (
     <Container
       style={{
-        background: "#f0f4f8",
-        padding: "40px",
-        borderRadius: "12px",
-        boxShadow: "0 6px 15px rgba(0, 0, 0, 0.2)",
-        color: "#333",
-        maxWidth: "95%",
-        marginTop: "30px",
+        background: '#f0f4f8',
+        padding: '40px',
+        borderRadius: '12px',
+        boxShadow: '0 6px 15px rgba(0, 0, 0, 0.2)',
+        color: '#333',
+        maxWidth: '95%',
+        marginTop: '30px',
       }}
     >
-      <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "25px" }}>
-      <h2 style={{ margin: 0, color: "#333", fontWeight: "bold" }}>Ticket List</h2>
-                <InputGroup style={{ maxWidth: "30%" }}>
-                    <FormControl
-                        placeholder="Search Project Name"
-                        value={searchTerm}
-                        onChange={(e) => setSearchTerm(e.target.value)}
-                    />
-                    {/* <InputGroup.Text>
-                        <i className="bi bi-search"></i>
-                    </InputGroup.Text> */}
-                </InputGroup>
-      
+      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '25px' }}>
+        <h2 style={{ margin: 0, color: '#333', fontWeight: 'bold' }}>Ticket List</h2>
+        <InputGroup style={{ maxWidth: '30%' }}>
+          <FormControl
+            placeholder="Search Project Name"
+            value={searchTerm}
+            onChange={(e) => setSearchTerm(e.target.value)}
+          />
+        </InputGroup>
       </div>
       <Table
         striped
@@ -73,16 +75,16 @@ const TaskProjectList = ({ setConditionalComponent, setProjectId }) => {
         hover
         responsive
         style={{
-          backgroundColor: "#fff",
-          color: "#333",
-          borderRadius: "12px",
-          overflow: "hidden",
+          backgroundColor: '#fff',
+          color: '#333',
+          borderRadius: '12px',
+          overflow: 'hidden',
         }}
       >
         <thead
           style={{
-            backgroundColor: "#007BFF",
-            color: "#fff",
+            backgroundColor: '#007BFF',
+            color: '#fff',
           }}
         >
           <tr>
@@ -103,30 +105,48 @@ const TaskProjectList = ({ setConditionalComponent, setProjectId }) => {
                 <td>{data.spokePersonEmail}</td>
                 <td>{data.spokePersonName}</td>
                 <td>{data.spokePersonNumber}</td>
-                <td>{data?.team?.map(team => team?.teamLead?.map(teamLead => teamLead))}</td>
-                <td>{data.description}</td>
+                <td>
+                  {data?.team?.map((team) =>
+                    team?.teamLead?.map((teamLead) => teamLead)
+                  )}
+                </td>
+                <td>
+                  {expandedDescriptions[data._id] || data.description.length <= 50
+                    ? data.description
+                    : `${data.description.slice(0, 50)}...`}
+                  {data.description.length > 50 && (
+                    <Button
+                      variant="link"
+                      style={{ padding: 0, marginLeft: '5px' }}
+                      onClick={() => toggleDescription(data._id)}
+                    >
+                      {expandedDescriptions[data._id] ? 'Read Less' : 'Read More'}
+                    </Button>
+                  )}
+                </td>
                 <td>
                   <Button
                     style={{
-                      backgroundColor: "transparent",
-                      border: "none",
-                      padding: "8px 16px",
-                      borderRadius: "8px",
-                      color: "#007BFF",
-                      fontWeight: "bold",
-                      transition: "background-color 0.3s ease",
+                      backgroundColor: 'transparent',
+                      border: 'none',
+                      padding: '8px 16px',
+                      borderRadius: '8px',
+                      color: '#007BFF',
+                      fontWeight: 'bold',
+                      transition: 'background-color 0.3s ease',
                     }}
-                  
                     onClick={() => sendProjectId(data._id)}
                   >
-                   Tickets
+                    Tickets
                   </Button>
                 </td>
               </tr>
             ))
           ) : (
             <tr>
-              <td colSpan="7" className="text-center">No projects available</td>
+              <td colSpan="7" className="text-center">
+                No projects available
+              </td>
             </tr>
           )}
         </tbody>
@@ -137,14 +157,14 @@ const TaskProjectList = ({ setConditionalComponent, setProjectId }) => {
           onClick={() => paginate(currentPage - 1)}
           disabled={currentPage === 1}
         >
-        <i className="bi bi-arrow-left"></i>
+          <i className="bi bi-arrow-left"></i>
         </Button>
         <Button
           variant="primary"
           onClick={() => paginate(currentPage + 1)}
           disabled={indexOfLastProject >= filteredProjects.length}
         >
-        <i className="bi bi-arrow-right"></i>
+          <i className="bi bi-arrow-right"></i>
         </Button>
       </div>
     </Container>
