@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Container, Table, Button, InputGroup, Pagination,FormControl } from 'react-bootstrap';
+import { Container, Table, Button, InputGroup, FormControl } from 'react-bootstrap';
 import axios from 'axios';
 import EditProjectForm from './EditProjectForm';
 
@@ -19,6 +19,7 @@ const ProjectList = ({ setConditionalComponent }) => {
   const [searchQuery, setSearchQuery] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 10;
+  const [expandedDescriptions, setExpandedDescriptions] = useState({});
 
   const handleAddTask = (data) => {
     setIsEditing(true);
@@ -61,6 +62,13 @@ const ProjectList = ({ setConditionalComponent }) => {
     setCurrentPage(pageNumber);
   };
 
+  const toggleDescription = (id) => {
+    setExpandedDescriptions((prev) => ({
+      ...prev,
+      [id]: !prev[id],
+    }));
+  };
+
   if (isEditing) {
     return (
       <EditProjectForm 
@@ -92,38 +100,14 @@ const ProjectList = ({ setConditionalComponent }) => {
           marginBottom: "25px",
         }}
       >
-        {/* <h2 style={{ margin: 0, color: "#333" }}>Project List</h2>
-        <InputGroup className="w-60" style={{ maxWidth: "25%" }}>
-          <input
-            type="text"
-            className="form-control"
-            placeholder="Search Projects"
+        <h2 style={{ margin: 0, color: "#333", fontWeight: "bold" }}>Project List</h2>
+        <InputGroup style={{ maxWidth: "30%" }}>
+          <FormControl
+            placeholder="Search Project"
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
-            style={{ 
-              borderRadius: '8px', 
-              padding: '12px', 
-              border: '1px solid #ced4da',
-              boxShadow: '0 4px 8px rgba(0, 0, 0, 0.1)',
-              marginRight: '20px',
-              maxWidth: "100%",
-            }}
           />
-        </InputGroup> */}
-
-
-        <h2 style={{ margin: 0, color: "#333", fontWeight: "bold" }}>Project List</h2>
-                <InputGroup style={{ maxWidth: "30%" }}>
-                    <FormControl
-                        placeholder="Search Project"
-                        value={searchQuery}
-                        onChange={(e) => setSearchQuery(e.target.value)}
-                    />
-                    {/* <InputGroup.Text>
-                        <i className="bi bi-search"></i>
-                    </InputGroup.Text> */}
-                </InputGroup>
-
+        </InputGroup>
       </div>
       <Table
         striped
@@ -155,68 +139,73 @@ const ProjectList = ({ setConditionalComponent }) => {
           </tr>
         </thead>
         <tbody>
-          {
-            currentItems.length > 0 ? (
-              currentItems.map((data, index) => (
-                <tr key={index}>
-                  <td>{data?.projectName}</td>
-                  <td>{data?.spokePersonEmail}</td>
-                  <td>{data?.spokePersonName}</td>
-                  <td>{data?.spokePersonNumber}</td>
-                  <td>{data?.team?.map(team => team?.teamLead?.map(teamLead => teamLead))}</td>
-                  <td>{data?.description}</td>
-                  <td>
-                    <a href={data?.descriptionDocument} target="_blank" rel="noreferrer">
-                      <Button
-                        style={{
-                          backgroundColor: "transparent",
-                          border: "none",
-                          padding: "8px 16px",
-                          borderRadius: "8px",
-                          color: "#007BFF",
-                          fontWeight: "bold",
-                          transition: "background-color 0.3s ease",
-                        }}
-                      
-                      >
-                      <i className="bi bi-eye-fill"></i>
-                      </Button>
-                    </a>
-                  </td>
-                  <td>
-                    <Button 
+          {currentItems.length > 0 ? (
+            currentItems.map((data, index) => (
+              <tr key={index}>
+                <td>{data?.projectName}</td>
+                <td>{data?.spokePersonEmail}</td>
+                <td>{data?.spokePersonName}</td>
+                <td>{data?.spokePersonNumber}</td>
+                <td>{data?.team?.map(team => team?.teamLead?.join(", "))}</td>
+                <td>
+                  {expandedDescriptions[data._id]
+                    ? data?.description
+                    : `${data?.description.slice(0, 50)}...`}
+                  <Button
+                    variant="link"
+                    style={{ padding: 0, marginLeft: "5px" }}
+                    onClick={() => toggleDescription(data._id)}
+                  >
+                    {expandedDescriptions[data._id] ? "Read Less" : "Read More"}
+                  </Button>
+                </td>
+                <td>
+                  
+                <a href={data?.descriptionDocument} target="_blank" rel="noreferrer">
+                    <Button
                       style={{
                         backgroundColor: "transparent",
-                        border: "#007BFF",
+                        border: "none",
                         padding: "8px 16px",
-                        Size: "large",
-                        
                         borderRadius: "8px",
                         color: "#007BFF",
                         fontWeight: "bold",
                         transition: "background-color 0.3s ease",
-                        marginRight: "10px"
                       }}
-                     
-                      onClick={() => handleAddTask(data)}
                     >
-                      <i className="bi bi-plus-square-fill"></i>
+                      <i className="bi bi-eye-fill"></i>
                     </Button>
-                    {/* <Button className="btn btn-danger" onClick={handleDelete}>Delete</Button> */}
-                  </td>
-                </tr>
-              ))
-            ) : (
-              <tr>
-                <td colSpan="8" className="text-center">No projects available</td>
+                  </a>
+                </td>
+                <td>
+                  <Button
+                    style={{
+                      backgroundColor: "transparent",
+                      border: "#007BFF",
+                      padding: "8px 16px",
+                      borderRadius: "8px",
+                      color: "#007BFF",
+                      fontWeight: "bold",
+                      transition: "background-color 0.3s ease",
+                      marginRight: "10px",
+                    }}
+                    onClick={() => handleAddTask(data)}
+                  >
+                    <i className="bi bi-plus-square-fill"></i>
+                  </Button>
+                </td>
               </tr>
-            )
-          }
+            ))
+          ) : (
+            <tr>
+              <td colSpan="8" className="text-center">No projects available</td>
+            </tr>
+          )}
         </tbody>
       </Table>
       <div style={{ display: 'flex', justifyContent: 'space-between', marginTop: '20px' }}>
-        <Button 
-          onClick={() => handlePageChange(currentPage - 1)} 
+        <Button
+          onClick={() => handlePageChange(currentPage - 1)}
           disabled={currentPage === 1}
           style={{
             backgroundColor: "#007BFF",
@@ -227,28 +216,23 @@ const ProjectList = ({ setConditionalComponent }) => {
             fontWeight: "bold",
             transition: "background-color 0.3s ease",
           }}
-          onMouseEnter={(e) => (e.target.style.backgroundColor = "#0056b3")}
-          onMouseLeave={(e) => (e.target.style.backgroundColor = "#007BFF")}
         >
-        <i className="bi bi-arrow-left"></i>
+          <i className="bi bi-arrow-left"></i>
         </Button>
-        <Button 
-          onClick={() => handlePageChange(currentPage + 1)} 
+        <Button
+          onClick={() => handlePageChange(currentPage + 1)}
           disabled={currentPage === totalPages}
           style={{
             backgroundColor: "#007BFF",
             border: "none",
-          
             padding: "8px 16px",
             borderRadius: "8px",
             color: "#fff",
             fontWeight: "bold",
             transition: "background-color 0.3s ease",
           }}
-          onMouseEnter={(e) => (e.target.style.backgroundColor = "#0056b3")}
-          onMouseLeave={(e) => (e.target.style.backgroundColor = "#007BFF")}
         >
-        <i className="bi bi-arrow-right"></i>
+          <i className="bi bi-arrow-right"></i>
         </Button>
       </div>
     </Container>
