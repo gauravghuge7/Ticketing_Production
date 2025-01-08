@@ -112,9 +112,9 @@ const TaskList = ({ setConditionalComponent, projectId }) => {
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
             />
-            <InputGroup.Text>
+            {/* <InputGroup.Text>
               <i className="bi bi-search"></i>
-            </InputGroup.Text>
+            </InputGroup.Text> */}
           </InputGroup>
           <Button variant="success" onClick={exportToExcel}>
             <i className="bi bi-file-earmark-spreadsheet-fill"></i> Export to Excel
