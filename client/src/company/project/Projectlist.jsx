@@ -52,6 +52,16 @@ const ProjectList = ({ setConditionalComponent }) => {
     setIsEditing(false);
   };
 
+  const indexOfLastItem = currentPage * itemsPerPage;
+  const indexOfFirstItem = indexOfLastItem - itemsPerPage;
+  const currentItems = filteredProjects.slice(indexOfFirstItem, indexOfLastItem);
+
+  const totalPages = Math.ceil(filteredProjects.length / itemsPerPage);
+
+  const handlePageChange = (pageNumber) => {
+    setCurrentPage(pageNumber);
+  };
+
   const toggleDescription = (id) => {
     setExpandedDescriptions((prev) => ({
       ...prev,
@@ -99,118 +109,134 @@ const ProjectList = ({ setConditionalComponent }) => {
           />
         </InputGroup>
       </div>
-      <div
-  style={{
-    maxHeight: "400px", // Set fixed height for vertical scrolling
-    overflowY: "scroll", // Enable vertical scrolling
-    overflowX: "auto", // Enable horizontal scrolling
-    border: "1px solid #ccc",
-    borderRadius: "8px",
-    padding: "10px",
-    whiteSpace: "nowrap", // Prevent table content from wrapping
-  }}
->
-  <Table
-    striped
-    bordered
-    hover
-    responsive={false} // Disable Bootstrap's responsive table behavior to control scroll
-    style={{
-      backgroundColor: "#fff",
-      color: "#333",
-      borderRadius: "8px",
-    }}
-  >
-    <thead
-      style={{
-        backgroundColor: "#007BFF",
-        color: "#fff",
-        position: "sticky",
-        top: 0,
-        zIndex: 1,
-      }}
-    >
-      <tr>
-        <th>Project Name</th>
-        <th>Spokesperson Email</th>
-        <th>Spokesperson Name</th>
-        <th>Spokesperson Number</th>
-        <th>Team Lead</th>
-        <th>Description</th>
-        <th>Document</th>
-        <th>Add Ticket</th>
-      </tr>
-    </thead>
-    <tbody>
-      {filteredProjects.length > 0 ? (
-        filteredProjects.map((data, index) => (
-          <tr key={index}>
-            <td>{data?.projectName}</td>
-            <td>{data?.spokePersonEmail}</td>
-            <td>{data?.spokePersonName}</td>
-            <td>{data?.spokePersonNumber}</td>
-            <td>{data?.team?.map((team) => team?.teamLead?.join(", "))}</td>
-            <td>
-              {expandedDescriptions[data._id]
-                ? data?.description
-                : `${data?.description.slice(0, 50)}...`}
-                {data?.description.length > 50 && (
-              <Button
-                variant="link"
-                style={{ padding: 0, marginLeft: "5px" }}
-                onClick={() => toggleDescription(data._id)}
-              >
-                {expandedDescriptions[data._id] ? "-" : "+"}
-              </Button>
-            )}
-            </td>
-            <td>
-              <a href={data?.descriptionDocument} target="_blank" rel="noreferrer">
-                <Button
-                  style={{
-                    backgroundColor: "transparent",
-                    border: "none",
-                    padding: "8px 16px",
-                    borderRadius: "8px",
-                    color: "#007BFF",
-                    fontWeight: "bold",
-                    transition: "background-color 0.3s ease",
-                  }}
-                >
-                  <i className="bi bi-eye-fill"></i>
-                </Button>
-              </a>
-            </td>
-            <td>
-              <Button
-                style={{
-                  backgroundColor: "transparent",
-                  border: "#007BFF",
-                  padding: "8px 16px",
-                  borderRadius: "8px",
-                  color: "#007BFF",
-                  fontWeight: "bold",
-                  transition: "background-color 0.3s ease",
-                  marginRight: "10px",
-                }}
-                onClick={() => handleAddTask(data)}
-              >
-                <i className="bi bi-plus-square-fill"></i>
-              </Button>
-            </td>
+      <Table
+        striped
+        bordered
+        hover
+        responsive
+        style={{
+          backgroundColor: "#fff",
+          color: "#333",
+          borderRadius: "12px",
+          overflow: "hidden",
+        }}
+      >
+        <thead
+          style={{
+            backgroundColor: "#007BFF",
+            color: "#fff",
+          }}
+        >
+          <tr>
+            <th>Project Name</th>
+            <th>Spokesperson Email</th>
+            <th>Spokesperson Name</th>
+            <th>Spokesperson Number</th>
+            <th>Team Lead</th>
+            <th>Description</th>
+            <th>Document</th>
+            <th>Add Ticket</th>
           </tr>
-        ))
-      ) : (
-        <tr>
-          <td colSpan="8" className="text-center">
-            No projects available
-          </td>
-        </tr>
-      )}
-    </tbody>
-  </Table>
-</div>
+        </thead>
+        <tbody>
+          {currentItems.length > 0 ? (
+            currentItems.map((data, index) => (
+              <tr key={index}>
+                <td>{data?.projectName}</td>
+                <td>{data?.spokePersonEmail}</td>
+                <td>{data?.spokePersonName}</td>
+                <td>{data?.spokePersonNumber}</td>
+                <td>{data?.team?.map(team => team?.teamLead?.join(", "))}</td>
 
+                <td>
+                  {expandedDescriptions[data._id] || data.description.length <= 50
+                    ? data?.description
+                    : `${data?.description.slice(0, 50)}...`}
+                       {data.description.length > 50 && (
+                  <Button
+                    variant="link"
+                    style={{ padding: 0, marginLeft: "5px" }}
+                    onClick={() => toggleDescription(data._id)}
+                  >
+                    {expandedDescriptions[data._id] ? "-" : "+"}
+                  </Button> )}
+                </td>
+                <td>
+                  
+                <a href={data?.descriptionDocument} target="_blank" rel="noreferrer">
+                    <Button
+                      style={{
+                        backgroundColor: "transparent",
+                        border: "none",
+                        padding: "8px 16px",
+                        borderRadius: "8px",
+                        color: "#007BFF",
+                        fontWeight: "bold",
+                        transition: "background-color 0.3s ease",
+                      }}
+                    >
+                      <i className="bi bi-eye-fill"></i>
+                    </Button>
+                  </a>
+                </td>
+                <td>
+                  <Button
+                    style={{
+                      backgroundColor: "transparent",
+                      border: "#007BFF",
+                      padding: "8px 16px",
+                      borderRadius: "8px",
+                      color: "#007BFF",
+                      fontWeight: "bold",
+                      transition: "background-color 0.3s ease",
+                      marginRight: "10px",
+                    }}
+                    onClick={() => handleAddTask(data)}
+                  >
+                    <i className="bi bi-plus-square-fill"></i>
+                  </Button>
+                </td>
+              </tr>
+            ))
+          ) : (
+            <tr>
+              <td colSpan="8" className="text-center">No projects available</td>
+            </tr>
+          )}
+        </tbody>
+      </Table>
+      <div style={{ display: 'flex', justifyContent: 'space-between', marginTop: '20px' }}>
+        <Button
+          onClick={() => handlePageChange(currentPage - 1)}
+          disabled={currentPage === 1}
+          style={{
+            backgroundColor: "#007BFF",
+            border: "none",
+            padding: "8px 16px",
+            borderRadius: "8px",
+            color: "#fff",
+            fontWeight: "bold",
+            transition: "background-color 0.3s ease",
+          }}
+        >
+          <i className="bi bi-arrow-left"></i>
+        </Button>
+        <Button
+          onClick={() => handlePageChange(currentPage + 1)}
+          disabled={currentPage === totalPages}
+          style={{
+            backgroundColor: "#007BFF",
+            border: "none",
+            padding: "8px 16px",
+            borderRadius: "8px",
+            color: "#fff",
+            fontWeight: "bold",
+            transition: "background-color 0.3s ease",
+          }}
+        >
+          <i className="bi bi-arrow-right"></i>
+        </Button>
+      </div>
     </Container>
   );
 };
