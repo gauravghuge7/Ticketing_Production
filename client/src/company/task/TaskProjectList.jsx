@@ -61,9 +61,9 @@ const TaskProjectList = ({ setConditionalComponent, setProjectId }) => {
                         value={searchTerm}
                         onChange={(e) => setSearchTerm(e.target.value)}
                     />
-                    <InputGroup.Text>
+                    {/* <InputGroup.Text>
                         <i className="bi bi-search"></i>
-                    </InputGroup.Text>
+                    </InputGroup.Text> */}
                 </InputGroup>
       
       </div>

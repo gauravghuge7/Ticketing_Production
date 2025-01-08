@@ -119,9 +119,9 @@ const ProjectList = ({ setConditionalComponent }) => {
                         value={searchQuery}
                         onChange={(e) => setSearchQuery(e.target.value)}
                     />
-                    <InputGroup.Text>
+                    {/* <InputGroup.Text>
                         <i className="bi bi-search"></i>
-                    </InputGroup.Text>
+                    </InputGroup.Text> */}
                 </InputGroup>
 
       </div>

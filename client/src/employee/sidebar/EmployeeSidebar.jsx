@@ -38,7 +38,7 @@ const EmployeeSidebar = ({ setConditionalComponent }) => {
       style={{
         width: isCollapsed ? '80px' : '250px', 
         height: 'auto',
-        minHeight: '75vh',
+        minHeight: '70vh',
         buttonShadow: '2px 0 5px rgba(0, 0, 0, 0.5)', // Add subtle shadow for depth
         background: '#000000',
         boxShadow: '2px 0px 15px rgba(0, 0, 0, 0.3)',
