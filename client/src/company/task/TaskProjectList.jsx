@@ -120,7 +120,7 @@ const TaskProjectList = ({ setConditionalComponent, setProjectId }) => {
                       style={{ padding: 0, marginLeft: '5px' }}
                       onClick={() => toggleDescription(data._id)}
                     >
-                      {expandedDescriptions[data._id] ? 'Read Less' : 'Read More'}
+                      {expandedDescriptions[data._id] ? '-' : '+'}
                     </Button>
                   )}
                 </td>
