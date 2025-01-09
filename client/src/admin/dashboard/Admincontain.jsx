@@ -92,7 +92,7 @@ const AdminContain = () => {
               e.currentTarget.style.boxShadow = cardStyle.boxShadow;
               e.currentTarget.style.transform = 'translateY(0)';
             }}
-            onClick={() => handleCardClick('/employees')} // Navigate to Employees page
+            
           >
             <div className="card-header text-center" style={headerStyle}>Employees</div>
             <Card.Body>
@@ -116,7 +116,7 @@ const AdminContain = () => {
               e.currentTarget.style.boxShadow = cardStyle.boxShadow;
               e.currentTarget.style.transform = 'translateY(0)';
             }}
-            onClick={() => handleCardClick('/teams')} // Navigate to Teams page
+          
           >
             <div className="card-header text-center" style={headerStyle}>Teams</div>
             <Card.Body>
@@ -140,7 +140,7 @@ const AdminContain = () => {
               e.currentTarget.style.boxShadow = cardStyle.boxShadow;
               e.currentTarget.style.transform = 'translateY(0)';
             }}
-            onClick={() => handleCardClick('/clients')} // Navigate to Clients page
+         
           >
             <div className="card-header text-center" style={headerStyle}>Clients</div>
             <Card.Body>
@@ -164,7 +164,7 @@ const AdminContain = () => {
               e.currentTarget.style.boxShadow = cardStyle.boxShadow;
               e.currentTarget.style.transform = 'translateY(0)';
             }}
-            onClick={() => handleCardClick('/projects')} // Navigate to Projects page
+           
           >
             <div className="card-header text-center" style={headerStyle}>Projects</div>
             <Card.Body>
