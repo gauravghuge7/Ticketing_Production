@@ -118,12 +118,7 @@ const ProjectList = () => {
                 maxWidth: "100%",
             }}
         >
-              <button style={{ padding: "8px 16px",
-            borderRadius: "8px",
-            color: "#fff"}} onClick={() => setIsEditing(false)}
-                    className="btn btn-primary btn-lg px- py-2">
-                <i className='bi bi-arrow-left'></i>
-            </button>
+              
             <Row className="mb-4">
                 <Col>
                 <h2 style={{ margin: 0, color: "#333", fontWeight: "bold" }}>Project List</h2>
