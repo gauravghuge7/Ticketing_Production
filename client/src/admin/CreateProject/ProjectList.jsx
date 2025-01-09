@@ -39,19 +39,16 @@ const ProjectList = () => {
     };
 
     const handleDelete = async (id) => {
-        try {
-            console.log(id);
-            const response = await axios.delete(`/api/admin/deleteProject/${id}`);
-            
-            console.log(response);
-
-        } catch (error) {
-            console.error('Error deleting project:', error);
+        console.log(id);
+        const response = await axios.delete(`/api/admin/deleteProject/${id}`);
+        console.log(response);
+        if (response.data.success) {
+            message.success('Project deleted successfully');
+            getAllProjects();
+        } else {
             message.error('Failed to delete project');
         }
     };
-    
-
 
 
 
@@ -190,9 +187,9 @@ const ProjectList = () => {
                                 </td>
                                 <td>
                     <div style={{ display: 'flex', alignItems: 'center' }}>
-                        {/* <Button style={{ background: "transparent", border: "none" }} onClick={() => handleEdit(data._id)}>
+                        <Button style={{ background: "transparent", border: "none" }} onClick={() => handleEdit(data._id)}>
                             <i className="bi bi-pencil-square" style={{ fontSize: "16px", color: "blue", cursor: "pointer" }}></i>
-                        </Button> */}
+                        </Button>
                         <Button style={{ background: "transparent", border: "none" }} onClick={() => handleDelete(data._id)}>
                             <i className="bi bi-trash-fill" style={{ fontSize: "16px", color: "red", cursor: "pointer" }}></i>
                         </Button>
