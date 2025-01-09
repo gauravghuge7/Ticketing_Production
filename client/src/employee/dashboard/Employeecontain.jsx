@@ -79,7 +79,7 @@ const Employeecontain = () => {
                                 <div className="card-body">
                                     <h5 className="card-title d-flex justify-content-center" style={titleStyle}>
                                         8 Tasks
-                                    </h5>
+                                    </h5></br>
                                     <p className="card-text" style={textStyle}>
                                         Tasks that are planned but not yet started.
                                     </p>

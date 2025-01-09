@@ -4,7 +4,7 @@ import { useSelector } from 'react-redux';
 import { message } from 'react-message-popup';
 import { Container, Row, Col, Card, Form, Button } from 'react-bootstrap';
 
-const CreateProjectForm = ({ clientId, clientName ,setIsEditing}) => {
+const CreateProjectForm = ({ clientId, clientName }) => {
     const [formData, setFormData] = useState({
         projectName: '',
         companyName: '',
@@ -66,12 +66,7 @@ const CreateProjectForm = ({ clientId, clientName ,setIsEditing}) => {
 
     return (
         <Container className="mt-5">
-            <button style={{ padding: "8px 16px",
-            borderRadius: "8px",
-            color: "#fff"}} onClick={() => setIsEditing(false)}
-                    className="btn btn-primary btn-lg px- py-2">
-                <i className='bi bi-arrow-left'></i>
-            </button>
+            
             <Row className="justify-content-md-center">
                 <Col md={8}>
                     <Card className="p-4 border-0" style={{ borderRadius: '20px', boxShadow: '0 6px 12px rgba(0, 0, 0, 0.15)' }}>

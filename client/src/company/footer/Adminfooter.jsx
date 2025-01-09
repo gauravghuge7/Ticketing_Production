@@ -7,12 +7,12 @@ const Footer = () => {
       <div className="container-fluid"> {/* Changed from container to container-fluid */}
         <div className="row d-flex justify-content-between align-items-center">
           {/* Left Section */}
-          <div className="col-md-3 text-center">
+          <div className="col-md-6 text-left">
             <p>© {new Date().getFullYear()} GBIS. All rights reserved.</p>
           </div>
 
           {/* Middle Section - Social Links */}
-          <div className="col-md-6 text-center">
+          {/* <div className="col-md-6 text-center">
             <a href="https://www.facebook.com" className="text-white me-3">
               <i className="fa fa-facebook fa-lg"></i>
             </a>
@@ -25,10 +25,10 @@ const Footer = () => {
             <a href="https://www.instagram.com" className="text-white me-3">
               <i className="fa fa-instagram fa-lg"></i>
             </a>
-          </div>
+          </div> */}
 
           {/* Right Section - Company Link */}
-          <div className="col-md-3 text-center">
+          <div className="col-md-6 text-right">
             <a href="https://gbisinc.com" className="text-white">
               Global Business Infotech Solutions
             </a>
