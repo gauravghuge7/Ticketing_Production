@@ -147,9 +147,9 @@ const ProjectList = () => {
                         value={searchTerm}
                         onChange={(e) => handleSearch(e.target.value)}
                     />
-                    <InputGroup.Text>
+                    {/* <InputGroup.Text>
                         <i className="bi bi-search"></i>
-                    </InputGroup.Text>
+                    </InputGroup.Text> */}
                 </InputGroup>
                 </Col>
             </Row>

@@ -109,9 +109,9 @@ const EmployeeList = ({ setValue }) => {
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
             />
-            <InputGroup.Text>
+            {/* <InputGroup.Text>
               <i className="bi bi-search"></i>
-            </InputGroup.Text>
+            </InputGroup.Text> */}
           </InputGroup>
           <Button
             style={{ backgroundColor: "#007BFF", border: "none", whiteSpace: "nowrap", borderRadius: "8px", color: "#fff", fontWeight: "bold", transition: "background-color 0.3s ease" }}

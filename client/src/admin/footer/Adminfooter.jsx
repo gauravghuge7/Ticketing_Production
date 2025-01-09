@@ -7,7 +7,7 @@ const Footer = () => {
       <div className="container-fluid"> {/* Changed from container to container-fluid */}
         <div className="row d-flex justify-content-between align-items-center">
           {/* Left Section */}
-          <div className="col-md-6 text-center">
+          <div className="col-md-6 text-left">
             <p>© {new Date().getFullYear()} GBIS. All rights reserved.</p>
           </div>
 
@@ -28,7 +28,7 @@ const Footer = () => {
           </div> */}
 
           {/* Right Section - Company Link */}
-          <div className="col-md-6 text-center">
+          <div className="col-md-6 ">
             <a href="https://gbisinc.com" className="text-white">
               Global Business Infotech Solutions
             </a>
