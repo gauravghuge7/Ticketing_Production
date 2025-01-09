@@ -28,7 +28,7 @@ const Footer = () => {
           </div> */}
 
           {/* Right Section - Company Link */}
-          <div className="col-md-6 ">
+          <div className="col-md-6 text-right">
             <a href="https://gbisinc.com" className="text-white">
               Global Business Infotech Solutions
             </a>
