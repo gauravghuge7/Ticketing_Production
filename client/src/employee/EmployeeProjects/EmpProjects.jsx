@@ -184,9 +184,9 @@ const EmpProjects = () => {
                         value={searchQuery}
                         onChange={(e) => handleSearch(e.target.value)}
                     />
-                    {/* <InputGroup.Text>
+                    <InputGroup.Text>
                         <i className="bi bi-search"></i>
-                    </InputGroup.Text> */}
+                    </InputGroup.Text>
                 </InputGroup>
           </div>
     
