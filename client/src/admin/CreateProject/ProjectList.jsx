@@ -118,6 +118,12 @@ const ProjectList = () => {
                 maxWidth: "100%",
             }}
         >
+              <button style={{ padding: "8px 16px",
+            borderRadius: "8px",
+            color: "#fff"}} onClick={() => setIsEditing(false)}
+                    className="btn btn-primary btn-lg px- py-2">
+                <i className='bi bi-arrow-left'></i>
+            </button>
             <Row className="mb-4">
                 <Col>
                 <h2 style={{ margin: 0, color: "#333", fontWeight: "bold" }}>Project List</h2>
@@ -188,7 +194,7 @@ const ProjectList = () => {
                                 <td>
                     <div style={{ display: 'flex', alignItems: 'center' }}>
                         <Button style={{ background: "transparent", border: "none" }} onClick={() => handleEdit(data._id)}>
-                            <i className="bi bi-pencil-square" style={{ fontSize: "16px", color: "blue", cursor: "pointer" }}></i>
+                            <i className="bi bi-pencil-square" style={{ color: "#007BFF" }} ></i>
                         </Button>
                         <Button style={{ background: "transparent", border: "none" }} onClick={() => handleDelete(data._id)}>
                             <i className="bi bi-trash-fill" style={{ fontSize: "16px", color: "red", cursor: "pointer" }}></i>
