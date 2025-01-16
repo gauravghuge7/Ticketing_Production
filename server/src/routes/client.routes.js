@@ -7,7 +7,7 @@ import { upload } from '../middleware/multer.middleware.js';
 import { getClient, loginClient, logoutClient, registerClient } from '../controller/Client/client.controller.js';
 import { createProject } from '../controller/Admin/project.controller.js';
 import { fetchProjects } from '../controller/Client/client.project.controller.js';
-import { createTicket, fetchTasks, fetchTicketByClient } from '../controller/Client/client.task.controller.js';
+import { createTicket, fetchAllClientTickets, fetchTasks, fetchTicketByClient } from '../controller/Client/client.task.controller.js';
 
 const clientRouter= express.Router();
       
@@ -77,6 +77,11 @@ clientRouter.route("/fetchTicketByClient").get( //verify client
    fetchTicketByClient
 )
 
+
+clientRouter.route("/fetchAllClientTickets").get( //verify client   
+   verifyClient,
+   fetchAllClientTickets
+)
 
 
 export default clientRouter;

@@ -17,8 +17,12 @@ app.use(cookieParser());
 
 // const allowedOrigins = process.env.CLIENT_URL;
 
-const allowedOrigins = "https://ticketing-x1a7.onrender.com";
-
+// const allowedOrigins = "https://ticketing-x1a7.onrender.com";
+const allowedOrigins = [
+  "https://ticketing-x1a7.onrender.com",
+  "http://localhost:5173",
+  "http://localhost:5174",
+]
 
 app.use(cors({
   origin: function (origin, callback) {
