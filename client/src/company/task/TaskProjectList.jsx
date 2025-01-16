@@ -1,9 +1,16 @@
-import React, { useEffect, useState } from 'react';
+import  { useEffect, useState } from 'react';
 import { Container, Table, Button, FormControl, InputGroup } from 'react-bootstrap';
 import axios from 'axios';
 
 const TaskProjectList = ({ setConditionalComponent, setProjectId }) => {
-  const [projectData, setProjectData] = useState([]);
+  const [projectData, setProjectData] = useState([{
+    tickets: {
+      projectName: "Akash",
+      spokePersonEmail: "akash@gmail.com",
+      spokePersonName: "Akash",
+      spokePersonNumber: 1234567890,
+    }
+  }]);
   const [currentPage, setCurrentPage] = useState(1);
   const [searchTerm, setSearchTerm] = useState('');
   const [expandedDescriptions, setExpandedDescriptions] = useState({});
@@ -12,11 +19,17 @@ const TaskProjectList = ({ setConditionalComponent, setProjectId }) => {
 
   const getProjects = async () => {
     try {
-      const response = await axios.get('/api/client/fetchProjects');
+      const response = await axios.get('/api/client/fetchAllClientTickets');
+
+      
       if (response.data.success) {
-        setProjectData(response.data.data);
+        console.log("response", response?.data?.data?.totalTickets);
+        setProjectData(response.data.data.totalTickets);
+
+        console.log("data => ", projectData)
       }
-    } catch (error) {
+    } 
+    catch (error) {
       console.error(error);
     }
   };
@@ -37,8 +50,8 @@ const TaskProjectList = ({ setConditionalComponent, setProjectId }) => {
     }));
   };
 
-  const filteredProjects = projectData.filter((project) =>
-    project.projectName.toLowerCase().includes(searchTerm.toLowerCase())
+  const filteredProjects = projectData?.filter((project) =>
+    project?.projectName?.toLowerCase()?.includes(searchTerm?.toLowerCase())
   );
 
   const indexOfLastProject = currentPage * projectsPerPage;
@@ -98,54 +111,22 @@ const TaskProjectList = ({ setConditionalComponent, setProjectId }) => {
           </tr>
         </thead>
         <tbody>
-          {currentProjects.length > 0 ? (
-            currentProjects.map((data, index) => (
+          {projectData?.length > 0 ? (
+            projectData.map((data, index) => (
               <tr key={index}>
-                <td>{data.projectName}</td>
-                <td>{data.spokePersonEmail}</td>
-                <td>{data.spokePersonName}</td>
-                <td>{data.spokePersonNumber}</td>
-                <td>
-                  {data?.team?.map((team) =>
-                    team?.teamLead?.map((teamLead) => teamLead)
-                  )}
-                </td>
-                <td>
-                  {expandedDescriptions[data._id] || data.description.length <= 50
-                    ? data.description
-                    : `${data.description.slice(0, 50)}...`}
-                  {data.description.length > 50 && (
-                    <Button
-                      variant="link"
-                      style={{ padding: 0, marginLeft: '5px' }}
-                      onClick={() => toggleDescription(data._id)}
-                    >
-                      {expandedDescriptions[data._id] ? '-' : '+'}
-                    </Button>
-                  )}
-                </td>
-                <td>
-                  <Button
-                    style={{
-                      backgroundColor: 'transparent',
-                      border: 'none',
-                      padding: '8px 16px',
-                      borderRadius: '8px',
-                      color: '#007BFF',
-                      fontWeight: 'bold',
-                      transition: 'background-color 0.3s ease',
-                    }}
-                    onClick={() => sendProjectId(data._id)}
-                  >
-                    Tickets
-                  </Button>
-                </td>
+                <td>{data?.tickets?.projectName}</td>
+                <td>{data?.tickets?.assignedByEmail}</td>
+                <td>{data?.tickets?.assignedByName}</td>
+        
+        
+
+                
               </tr>
             ))
           ) : (
             <tr>
               <td colSpan="7" className="text-center">
-                No projects available
+                No Tickets available
               </td>
             </tr>
           )}

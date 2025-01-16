@@ -417,71 +417,71 @@ const getTasksByProjectId = asyncHandler (async (req, res) => {
 
 const forwardTicketsAndTasksToAnotherEmployee = asyncHandler(async(req, res) => {
 
-   try {
+    try {
 
-       const {_id} = req.user;
+        const {_id} = req.user;
 
-       if(!_id) {
-           throw new ApiError(400, "Please provide the employee email");
-       }
+        if(!_id) {
+            throw new ApiError(400, "Please provide the employee email");
+        }
 
 
-       const {employeeId, taskId} = req.body;
+        const {employeeId, taskId} = req.body;
 
-       // get data from the frontend
-       /**
+        // get data from the frontend
+        /**
 
-           employeeId  
+            employeeId  
 
-       
-       */
+        
+        */
 
-   
-       // find the entry in the database
+    
+        // find the entry in the database
 
-       const employee = await Employee.findById(_id);
+        const employee = await Employee.findById(_id);
 
-       if(!employee) {
-           throw new ApiError(400, "Employee does not exist");
-       }
+        if(!employee) {
+            throw new ApiError(400, "Employee does not exist");
+        }
 
-       // check if the employee already exists
+        // check if the employee already exists
 
-       const existedEmployee = await Employee.findById(employeeId)
+        const existedEmployee = await Employee.findById(employeeId)
 
-       if(!existedEmployee) {
-           throw new ApiError(400, "Employee does not exist");
-       }
+        if(!existedEmployee) {
+            throw new ApiError(400, "Employee does not exist");
+        }
 
-       // check the entry in tasks 
+        // check the entry in tasks 
 
-       const task = await Task.findOne({employee: employee._id, taskId: taskId})
+        const task = await Task.findOne({employee: employee._id, taskId: taskId})
 
-       if(!task) {
-           throw new ApiError(400, "Employee does not exists in the task");
-       }
+        if(!task) {
+            throw new ApiError(400, "Employee does not exists in the task");
+        }
 
-       /// push current employee to the previous employee array
-       task.previousEmployee.push(employee._id);
+        /// push current employee to the previous employee array
+        task.previousEmployee.push(employee._id);
 
-       // set the current employee to the new employee
-       task.employee = req.body.employeeId;
+        // set the current employee to the new employee
+        task.employee = req.body.employeeId;
 
-       await task.save({validateBeforeSave: false});
-       
+        await task.save({validateBeforeSave: false});
+        
 
-       console.log("save task =>  ", task);
+        console.log("save task =>  ", task);
 
-       
-       return res.status(200).json(                                           // 
-           new ApiResponse(200, "ticket forward successfully to another employee", employee)
-       )
-       
-   } 
-   catch (error) {
-       console.log(" Error => ", error.message)
-       throw new ApiError(400, error.message);    
-   }
+        
+        return res.status(200).json(                                           // 
+            new ApiResponse(200, "ticket forward successfully to another employee", employee)
+        )
+        
+    } 
+    catch (error) {
+        console.log(" Error => ", error.message)
+        throw new ApiError(400, error.message);    
+    }
 
 })
 
