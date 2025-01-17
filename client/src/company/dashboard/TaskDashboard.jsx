@@ -9,11 +9,14 @@ ChartJS.register(ArcElement, Tooltip, Legend, BarElement, CategoryScale, LinearS
 
 const TaskDashboard = () => {
   // Data for the charts
-  const taskData = {
+  const [taskData, setTaskData] = useState({
     completed: 45,
     pending: 25,
     toDo: 30,
-  };
+  });
+
+
+
 
   // Prepare data for Pie Chart
   const pieData = {

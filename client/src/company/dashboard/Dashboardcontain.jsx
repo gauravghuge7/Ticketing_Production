@@ -16,12 +16,15 @@ const Watch = () => {
         try {
             const response = await axios.get("/api/client/fetchTicketByClient");
 
-            console.log(response.data);
+            console.log(" Response from server =>  ", response.data);
 
-            if(response.data.success){
+            if(response.data.success === true){
+
+                console.log(" Tickets =>  ", response.data.data.tickets);
                 setTickets(response.data.data.tickets);
             
                 setCompleteTickets(tickets.filter(e => e.status === "Closed"));
+                console.log("complete tickets =>  ", completeTickets?.length);
                 setPendingTickets(tickets.filter(e => e.status === "In Progress"));
                 setOpenTickets(tickets.filter(e => e.status === "Open"));
             }
@@ -63,7 +66,9 @@ const Watch = () => {
                         </div>
 
                         {/* Pending Tasks Card */}
-                        <div className="col-md-4 mb-4">
+                        <div className="col-md-4 mb-4"
+
+                        >
                             <div className="card text-white " style={cardStyle} 
                                  onMouseEnter={(e) => { e.currentTarget.style.boxShadow = hoverStyle.boxShadow; }}
                                  onMouseLeave={(e) => { e.currentTarget.style.boxShadow = cardStyle.boxShadow; }}>
