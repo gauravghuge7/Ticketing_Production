@@ -575,18 +575,20 @@ const changeStatus = asyncHandler(async(req, res) => {
             throw new ApiError(400, "Please provide all the required fields");
         }
 
-        const ticket = await Ticket.findById(taskId);
-
-        if(ticket) {
-            ticket.status = status;
-            await ticket.save();
-        } 
         const task = await Task.findById(taskId);
 
         if(task) {
             task.status = status;
             await task.save();
         }
+
+
+        const ticket = await Ticket.findById(task.ticket);
+
+        if(ticket) {
+            ticket.status = status;
+            await ticket.save();
+        } 
 
         return res 
             .status(200)
