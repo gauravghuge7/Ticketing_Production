@@ -200,61 +200,66 @@ const EmployeeList = ({ setValue }) => {
       )}
 
       {/* Edit Modal */}
-      <Modal show={showEditModal} onHide={() => setShowEditModal(false)}>
-        <Modal.Header closeButton>
-          <Modal.Title>Edit Employee</Modal.Title>
-        </Modal.Header>
-        <Modal.Body>
-          {selectedEmployee && (
-            <Form>
-              <Form.Group controlId="formEmployeeName">
-                <Form.Label>Full Name</Form.Label>
-                <Form.Control
-                  type="text"
-                  placeholder="Enter full name"
-                  value={selectedEmployee.employeeName}
-                  onChange={(e) => setSelectedEmployee({ ...selectedEmployee, employeeName: e.target.value })}
-                />
-              </Form.Group>
-              <Form.Group controlId="formEmployeeEmail">
-                <Form.Label>Email</Form.Label>
-                <Form.Control
-                  type="email"
-                  placeholder="Enter email"
-                  value={selectedEmployee.employeeEmail}
-                  onChange={(e) => setSelectedEmployee({ ...selectedEmployee, employeeEmail: e.target.value })}
-                />
-              </Form.Group>
-              <Form.Group controlId="formDesignation">
-                <Form.Label>Designation</Form.Label>
-                <Form.Control
-                  type="text"
-                  placeholder="Enter designation"
-                  value={selectedEmployee.designation}
-                  onChange={(e) => setSelectedEmployee({ ...selectedEmployee, designation: e.target.value })}
-                />
-              </Form.Group>
-              <Form.Group controlId="formPassword">
-                <Form.Label>Password</Form.Label>
-                <Form.Control
-                  type="password"
-                  placeholder="Enter password"
-                  value={selectedEmployee.employeePassword}
-                  onChange={(e) => setSelectedEmployee({ ...selectedEmployee, employeePassword: e.target.value })}
-                />
-              </Form.Group>
-            </Form>
-          )}
-        </Modal.Body>
-        <Modal.Footer>
-          <Button variant="secondary" onClick={() => setShowEditModal(false)}>
-            Close
-          </Button>
-          <Button variant="primary" onClick={handleEditSubmit}>
-            Save Changes
-          </Button>
-        </Modal.Footer>
-      </Modal>
+      <Modal 
+  show={showEditModal} 
+  onHide={() => setShowEditModal(false)} 
+  dialogClassName="modal-fullscreen"
+>
+  <Modal.Header closeButton>
+    <Modal.Title>Edit Employee</Modal.Title>
+  </Modal.Header>
+  <Modal.Body>
+    {selectedEmployee && (
+      <Form>
+        <Form.Group controlId="formEmployeeName">
+          <Form.Label>Full Name</Form.Label>
+          <Form.Control
+            type="text"
+            placeholder="Enter full name"
+            value={selectedEmployee.employeeName}
+            onChange={(e) => setSelectedEmployee({ ...selectedEmployee, employeeName: e.target.value })}
+          />
+        </Form.Group>
+        <Form.Group controlId="formEmployeeEmail">
+          <Form.Label>Email</Form.Label>
+          <Form.Control
+            type="email"
+            placeholder="Enter email"
+            value={selectedEmployee.employeeEmail}
+            onChange={(e) => setSelectedEmployee({ ...selectedEmployee, employeeEmail: e.target.value })}
+          />
+        </Form.Group>
+        <Form.Group controlId="formDesignation">
+          <Form.Label>Designation</Form.Label>
+          <Form.Control
+            type="text"
+            placeholder="Enter designation"
+            value={selectedEmployee.designation}
+            onChange={(e) => setSelectedEmployee({ ...selectedEmployee, designation: e.target.value })}
+          />
+        </Form.Group>
+        <Form.Group controlId="formPassword">
+          <Form.Label>Password</Form.Label>
+          <Form.Control
+            type="password"
+            placeholder="Enter password"
+            value={selectedEmployee.employeePassword}
+            onChange={(e) => setSelectedEmployee({ ...selectedEmployee, employeePassword: e.target.value })}
+          />
+        </Form.Group>
+      </Form>
+    )}
+  </Modal.Body>
+  <Modal.Footer>
+    <Button variant="secondary" onClick={() => setShowEditModal(false)}>
+      Close
+    </Button>
+    <Button variant="primary" onClick={handleEditSubmit}>
+      Save Changes
+    </Button>
+  </Modal.Footer>
+</Modal>
+
     </Container>
   );
 };

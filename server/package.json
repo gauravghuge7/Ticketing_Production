@@ -13,7 +13,7 @@
     "express",
     "node"
   ],
-  "author": "akash daud gaurav ghuge",
+  "author": "akash daud",
   "license": "ISC",
   "dependencies": {
     "bcrypt": "^5.1.1",

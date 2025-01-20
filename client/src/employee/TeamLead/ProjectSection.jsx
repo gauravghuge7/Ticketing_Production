@@ -165,7 +165,15 @@ const ProjectSection = ({ setConditionalComponent, projectId }) => {
 
   return (
 
-    <div className="container mt-4">
+    <div className="container mt-4"
+    style={{
+      backgroundColor: '#f9fafc',
+      padding: '55px',
+      borderRadius: '12px',
+      boxShadow: '0 4px 20px rgba(0, 0, 0, 0.1)',
+      
+    
+    }}>
 
       {/**  back Button  */}
       <button 
@@ -193,7 +201,7 @@ const ProjectSection = ({ setConditionalComponent, projectId }) => {
               className="table table-bordered table-hover"
               style={{
                 backgroundColor: "#fff",
-                borderRadius: "12px",
+                borderRadius: "20px",
                 overflow: "hidden",
               }}
             >
@@ -261,6 +269,10 @@ const ProjectSection = ({ setConditionalComponent, projectId }) => {
                 ))}
               </tbody>
             </table>
+
+
+
+            
           </div>
         </div>
       </details>

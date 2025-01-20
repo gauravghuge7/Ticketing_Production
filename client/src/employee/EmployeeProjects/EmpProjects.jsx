@@ -165,7 +165,7 @@ const EmpProjects = () => {
     <Container
       style={{
         background: "#f0f4f8",
-        padding: "80px",
+        padding: "px",
         borderRadius: "12px",
         boxShadow: "0 6px 15px rgba(0, 0, 0, 0.2)",
         color: "#333",
@@ -177,16 +177,14 @@ const EmpProjects = () => {
   
   <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "25px" }}>
             
-<h2 style={{ margin: 0, color: "#333", fontWeight: "bold" }}>You're working on this project</h2>
+<h2 style={{ margin: 0, color: "#333", fontWeight: "bold" }}>Projects</h2>
                 <InputGroup style={{ maxWidth: "30%" }}>
                     <FormControl
-                        placeholder="Search Tickets"
+                        placeholder="Search Project"
                         value={searchQuery}
                         onChange={(e) => handleSearch(e.target.value)}
                     />
-                    <InputGroup.Text>
-                        <i className="bi bi-search"></i>
-                    </InputGroup.Text>
+                  
                 </InputGroup>
           </div>
     
@@ -217,6 +215,8 @@ const EmpProjects = () => {
               <th>Spokesperson Name</th>
               <th>Spokesperson Email</th>
               <th>Phone Number</th>
+              <th>Description</th>
+              <th>Document</th>
               <th>Actions</th>
             </tr>
           </thead>
@@ -230,6 +230,15 @@ const EmpProjects = () => {
                 <td>{project.spokePersonName}</td>
                 <td>{project.spokePersonEmail}</td>
                 <td>{project.spokePersonNumber}</td>
+                <td>{project.description}</td>
+               
+                <td>
+                    <a href={project.descriptionDocument} target="_blank" rel="noreferrer">
+                      <Button variant="" style={{ color:"#007BFF" }}>
+                        <i className="bi bi-eye-fill"></i>
+                      </Button>
+                    </a>
+                  </td>
                 <td>
                   <Button style={{ background: "transparent", border: "none" }}  onClick={() => viewOurWork(project._id)}>
                     <i className="bi bi-plus-square-fill" style={{ fontSize: "16px", color: "#007BFF" }}></i>
@@ -277,18 +286,24 @@ const EmpProjects = () => {
           </div> */}
 
 
+
+
+
+
+
+
+
+
           <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "25px" }}>
             
 <h2 style={{ margin: 0, color: "#333", fontWeight: "bold" }}>Your Tickets for Project</h2>
-                <InputGroup style={{ maxWidth: "30%" }}>
+                <InputGroup style={{ maxWidth: "40%" }}>
                     <FormControl
                         placeholder="Search Ticket Name"
                         value={searchQuery}
                         onChange={(e) => handleSearch(e.target.value)}
                     />
-                    <InputGroup.Text>
-                        <i className="bi bi-search"></i>
-                    </InputGroup.Text>
+                    
                 </InputGroup>
           </div>
 
@@ -353,7 +368,7 @@ const EmpProjects = () => {
                     </a>
                   </td>
                   <td>
-                    <Button style={{
+                  <Button style={{
                       backgroundColor: "transparent",
                       border: "none",
                       padding: "8px 16px",

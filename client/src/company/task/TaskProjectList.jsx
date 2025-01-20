@@ -1,18 +1,16 @@
-import  { useEffect, useState } from 'react';
-import { Container, Table, Button, FormControl, InputGroup } from 'react-bootstrap';
+import { useEffect, useState } from 'react';
+import { Container, Table, Button, FormControl, InputGroup, Row, Col, Form } from 'react-bootstrap';
 import axios from 'axios';
 
 const TaskProjectList = ({ setConditionalComponent, setProjectId }) => {
-  const [projectData, setProjectData] = useState([{
-    tickets: {
-      projectName: "Akash",
-      spokePersonEmail: "akash@gmail.com",
-      spokePersonName: "Akash",
-      spokePersonNumber: 1234567890,
-    }
-  }]);
+  const [projectData, setProjectData] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
-  const [searchTerm, setSearchTerm] = useState('');
+  const [searchFilters, setSearchFilters] = useState({
+    sapType: '',
+    ticketName: '',
+    projectName: '',
+    ticketId: '',
+  });
   const [expandedDescriptions, setExpandedDescriptions] = useState({});
 
   const projectsPerPage = 10;
@@ -20,16 +18,10 @@ const TaskProjectList = ({ setConditionalComponent, setProjectId }) => {
   const getProjects = async () => {
     try {
       const response = await axios.get('/api/client/fetchAllClientTickets');
-
-      
       if (response.data.success) {
-        console.log("response", response?.data?.data?.totalTickets);
         setProjectData(response.data.data.totalTickets);
-
-        console.log("data => ", projectData)
       }
-    } 
-    catch (error) {
+    } catch (error) {
       console.error(error);
     }
   };
@@ -37,6 +29,11 @@ const TaskProjectList = ({ setConditionalComponent, setProjectId }) => {
   useEffect(() => {
     getProjects();
   }, []);
+
+  const handleFilterChange = (e) => {
+    const { name, value } = e.target;
+    setSearchFilters((prevFilters) => ({ ...prevFilters, [name]: value }));
+  };
 
   const sendProjectId = (Id) => {
     setProjectId(Id);
@@ -50,9 +47,14 @@ const TaskProjectList = ({ setConditionalComponent, setProjectId }) => {
     }));
   };
 
-  const filteredProjects = projectData?.filter((project) =>
-    project?.projectName?.toLowerCase()?.includes(searchTerm?.toLowerCase())
-  );
+  const filteredProjects = projectData.filter((project) => {
+    return (
+      (!searchFilters.sapType || project.tickets.saptype?.toLowerCase().includes(searchFilters.sapType.toLowerCase())) &&
+      (!searchFilters.ticketName || project.tickets.ticketName?.toLowerCase().includes(searchFilters.ticketName.toLowerCase())) &&
+      (!searchFilters.projectName || project.tickets.projectName?.toLowerCase().includes(searchFilters.projectName.toLowerCase())) &&
+      (!searchFilters.ticketId || project.tickets.ticketId?.toLowerCase().includes(searchFilters.ticketId.toLowerCase()))
+    );
+  });
 
   const indexOfLastProject = currentPage * projectsPerPage;
   const indexOfFirstProject = indexOfLastProject - projectsPerPage;
@@ -74,14 +76,45 @@ const TaskProjectList = ({ setConditionalComponent, setProjectId }) => {
     >
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '25px' }}>
         <h2 style={{ margin: 0, color: '#333', fontWeight: 'bold' }}>Ticket List</h2>
-        <InputGroup style={{ maxWidth: '30%' }}>
-          <FormControl
-            placeholder="Search Project Name"
-            value={searchTerm}
-            onChange={(e) => setSearchTerm(e.target.value)}
-          />
-        </InputGroup>
       </div>
+
+      <Row className="mb-3">
+      <Col>
+          <FormControl
+            placeholder=" Ticket ID"
+            name="ticketId"
+            value={searchFilters.ticketId}
+            onChange={handleFilterChange}
+          />
+        </Col>
+        <Col>
+          <FormControl
+            placeholder="Project Name"
+            name="projectName"
+            value={searchFilters.projectName}
+            onChange={handleFilterChange}
+          />
+        </Col>
+      
+        <Col>
+          <FormControl
+            placeholder=" Ticket Name"
+            name="ticketName"
+            value={searchFilters.ticketName}
+            onChange={handleFilterChange}
+          />
+        </Col>
+        
+        <Col>
+          <FormControl
+            placeholder=" SAP Type"
+            name="sapType"
+            value={searchFilters.sapType}
+            onChange={handleFilterChange}
+          />
+        </Col>
+      </Row>
+
       <Table
         striped
         bordered
@@ -101,37 +134,54 @@ const TaskProjectList = ({ setConditionalComponent, setProjectId }) => {
           }}
         >
           <tr>
+            <th>#</th>
+            <th>Ticket ID</th>
             <th>Project Name</th>
+            <th>Ticket Name</th>
+            <th>Priority</th>
+            <th>SAP Type</th>
+            <th>Status</th>
             <th>Spokesperson Email</th>
             <th>Spokesperson Name</th>
             <th>Spokesperson Number</th>
-            <th>Team Lead</th>
             <th>Description</th>
-            <th>Actions</th>
+            <th>Document</th>
           </tr>
         </thead>
         <tbody>
-          {projectData?.length > 0 ? (
-            projectData.map((data, index) => (
+          {currentProjects.length > 0 ? (
+            currentProjects.map((data, index) => (
               <tr key={index}>
-                <td>{data?.tickets?.projectName}</td>
-                <td>{data?.tickets?.assignedByEmail}</td>
-                <td>{data?.tickets?.assignedByName}</td>
-        
-        
-
-                
+                <td>{index + 1 + indexOfFirstProject}</td>
+                <td>{data.tickets.ticketId}</td>
+                <td>{data.tickets.projectName}</td>
+                <td>{data.tickets.ticketName}</td>
+                <td>{data.tickets.priority}</td>
+                <td>{data.tickets.saptype}</td>
+                <td>{data.tickets.status}</td>
+                <td>{data.tickets.assignedByEmail}</td>
+                <td>{data.tickets.assignedByName}</td>
+                <td>{data.tickets.assignedTo}</td>
+                <td>{data.tickets.ticketDescription}</td>
+                <td>
+                  <a href={data.tickets.ticketDocument} target="_blank" rel="noopener noreferrer">
+                    <Button variant="" style={{ color: '#007BFF' }}>
+                      <i className="bi bi-eye-fill"></i>
+                    </Button>
+                  </a>
+                </td>
               </tr>
             ))
           ) : (
             <tr>
-              <td colSpan="7" className="text-center">
+              <td colSpan="12" className="text-center">
                 No Tickets available
               </td>
             </tr>
           )}
         </tbody>
       </Table>
+
       <div className="d-flex justify-content-between mt-3">
         <Button
           variant="primary"

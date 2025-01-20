@@ -32,7 +32,7 @@ const LeadTeam = ({ setConditionalComponent, setTeamId }) => {
     <div
       style={{
         backgroundColor: '#f9fafc',
-        padding: '40px',
+        padding: '55px',
         borderRadius: '12px',
         boxShadow: '0 4px 20px rgba(0, 0, 0, 0.1)',
         marginTop: '30px',
