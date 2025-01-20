@@ -8,7 +8,7 @@ const Watch = () => {
 
     const [tickets, setTickets] = useState([]);
 
-    const [completeTickets, setCompleteTickets] = useState();
+    const [completeTickets, setCompleteTickets] = useState(0);
     const [pendingTickets, setPendingTickets] = useState();
     const [openTickets, setOpenTickets] = useState();
 
@@ -26,7 +26,9 @@ const Watch = () => {
                 setCompleteTickets(tickets.filter(e => e.status === "Closed"));
                 console.log("complete tickets =>  ", completeTickets?.length);
                 setPendingTickets(tickets.filter(e => e.status === "In Progress"));
+                console.log("In Progress tickets =>  ", completeTickets?.length);
                 setOpenTickets(tickets.filter(e => e.status === "Open"));
+                console.log("Open tickets =>  ", completeTickets?.length);
             }
 
 
