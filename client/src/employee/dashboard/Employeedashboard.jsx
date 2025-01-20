@@ -65,8 +65,8 @@ function Employeedashboard() {
       <div className="flex-grow-1 p-3">
 
         {conditionalComponent === "TaskList" && <Task />}
-        {conditionalComponent === "" && <Employeecontain/>}
-        {conditionalComponent === "Contain" && <Employeecontain/>}
+        {conditionalComponent === "" && <Employeecontain setConditionalComponent={setConditionalComponent} />}
+        {conditionalComponent === "Contain" && <Employeecontain setConditionalComponent={setConditionalComponent} />}
 
         {conditionalComponent === "projects" && <EmpProjects />}
 

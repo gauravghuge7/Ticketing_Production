@@ -3,7 +3,7 @@ import { useEffect, useState } from "react";
 
 
 
-const Watch = () => {
+const Watch = ({ setConditionalComponent }) => {
 
 
     const [tickets, setTickets] = useState([]);
@@ -21,12 +21,14 @@ const Watch = () => {
             if(response.data.success === true){
 
                 console.log(" Tickets =>  ", response.data.data.tickets);
+
+                const tempTickets = response.data.data.tickets;
                 setTickets(response.data.data.tickets);
             
-                setCompleteTickets(tickets.filter(e => e.status === "Closed"));
+                setCompleteTickets(tempTickets.filter(e => e.status === "Closed"));
                 console.log("complete tickets =>  ", completeTickets?.length);
-                setPendingTickets(tickets.filter(e => e.status === "In Progress"));
-                setOpenTickets(tickets.filter(e => e.status === "Open"));
+                setPendingTickets(tempTickets.filter(e => e.status === "In Progress"));
+                setOpenTickets(tempTickets.filter(e => e.status === "Open"));
             }
 
 
@@ -47,10 +49,14 @@ const Watch = () => {
 
 
     return (
-        <div className="container mt-5">
+        <div className="container mt-5"
+
+        >
             {/* Header Section */}
             <div className="row">
-                <div className="col-md-12">
+                <div className="col-md-12"
+                    onClick={() => setConditionalComponent("CompanyTasks")}
+                >
                     <div className="row">
                         {/* Completed Tasks Card */}
                         <div className="col-md-4 mb-4">

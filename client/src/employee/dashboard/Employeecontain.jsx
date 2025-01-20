@@ -1,13 +1,62 @@
-import React from 'react';
-import { Card, Row, Col } from 'react-bootstrap';
+import  { useEffect, useState } from 'react';
 import MyCalendar from './MyCalendar';
+import axios from 'axios';
 
-const Employeecontain = () => {
+const Employeecontain = ({ setConditionalComponent }) => {
+
+
+    const [completeTickets, setCompleteTickets] = useState();
+    const [pendingTickets, setPendingTickets] = useState();
+    const [openTickets, setOpenTickets] = useState();
+
+    const fetchTickets = async () => {
+
+        try {
+
+            const response = await axios.get("/api/employee/getEmployeeAllTasks");
+
+            console.log(" Response from server =>  ", response.data);
+
+            if(response.data.success === true){
+
+                console.log(" Tickets =>  ", response.data.data);
+
+                const tempTickets = response.data.data;
+            
+                setCompleteTickets(tempTickets.filter(e => e.status === "Closed"));
+                console.log("complete tickets =>  ", completeTickets?.length);
+                setPendingTickets(tempTickets.filter(e => e.status === "In Progress"));
+                setOpenTickets(tempTickets.filter(e => e.status === "Open"));
+            }
+
+
+            
+        } 
+        catch (error) {
+            console.log(error);
+        }
+        finally {
+            console.log("finally");
+        }
+    };
+
+
+    useEffect(() =>{
+        fetchTickets();
+    }, [])
+
+    
+
+
     return (
-        <div className="container mt-5">
+        <div className="container mt-5"
+            
+        >
             {/* Header Section */}
             <div className="row">
-                <div className="col-md-12">
+                <div className="col-md-12"
+                    onClick={() => setConditionalComponent("projects")}
+                >
                     <div className="row"> 
                         {/* Completed Tasks Card */}
                         <div className="col-md-4 mb-4">
@@ -26,7 +75,7 @@ const Employeecontain = () => {
                                 </div>
                                 <div className="card-body">
                                     <h5 className="card-title d-flex justify-content-center" style={titleStyle}>
-                                        10 Tasks
+                                        {completeTickets?.length} Tasks
                                     </h5>
                                     <p className="card-text" style={textStyle}>
                                         All tasks that have been successfully completed.
@@ -52,7 +101,7 @@ const Employeecontain = () => {
                                 </div>
                                 <div className="card-body">
                                     <h5 className="card-title d-flex justify-content-center" style={titleStyle}>
-                                        5 Tasks
+                                        {pendingTickets?.length} Tasks
                                     </h5>
                                     <p className="card-text" style={textStyle}>
                                         Tasks that are still in progress and need to be completed.
@@ -78,7 +127,7 @@ const Employeecontain = () => {
                                 </div>
                                 <div className="card-body">
                                     <h5 className="card-title d-flex justify-content-center" style={titleStyle}>
-                                        8 Tasks
+                                        {openTickets?.length} Tasks
                                     </h5>
                                     <p className="card-text" style={textStyle}>
                                         Tasks that are planned but not yet started.
