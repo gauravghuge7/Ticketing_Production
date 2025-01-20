@@ -43,9 +43,10 @@ const TaskList = ({ setConditionalComponent, projectId }) => {
   // Fetch tasks from the server
   const fetchTasks = async () => {
     try {
-      const response = await axios.get(`/api/client/fetchTasks/${projectId}`);
+      const response = await axios.get(`/api/client/fetchAllClientTickets`);
+      console.log("response", response);
       if (response.data.success) {
-        setTasks(response.data.data);
+        setTasks(response?.data?.data?.tickets);
       }
     } catch (error) {
       console.error('Error fetching tasks:', error);

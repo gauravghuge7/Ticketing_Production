@@ -135,6 +135,7 @@ const ProjectList = ({ setConditionalComponent }) => {
             }}
           >
             <tr>
+              <th>#</th>
               <th>Project Name</th>
               <th>Spokesperson Email</th>
               <th>Spokesperson Name</th>
@@ -149,6 +150,7 @@ const ProjectList = ({ setConditionalComponent }) => {
             {currentItems.length > 0 ? (
               currentItems.map((data, index) => (
                 <tr key={index}>
+                  <td>{index + 1}</td>
                   <td>{data?.projectName}</td>
                   <td>{data?.spokePersonEmail}</td>
                   <td>{data?.spokePersonName}</td>

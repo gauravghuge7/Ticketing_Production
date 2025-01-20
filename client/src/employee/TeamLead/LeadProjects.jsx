@@ -59,7 +59,7 @@ const LeadProjects = ({ setConditionalComponent, teamId, setProjectId }) => {
         borderRadius: "12px",
         boxShadow: "0 6px 15px rgba(0, 0, 0, 0.2)",
         color: "#333",
-        maxWidth: "95%",
+        maxWidth: "100%",
         marginTop: "30px",
       }}
     >
@@ -69,6 +69,7 @@ const LeadProjects = ({ setConditionalComponent, teamId, setProjectId }) => {
           justifyContent: "space-between",
           alignItems: "center",
           marginBottom: "25px",
+          maxWidth: "100%",
         }}
       >
         <h2 style={{ margin: 0, color: "#333", fontWeight: "bold" }}>
@@ -80,9 +81,7 @@ const LeadProjects = ({ setConditionalComponent, teamId, setProjectId }) => {
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
           />
-          <InputGroup.Text>
-            <i className="bi bi-search"></i>
-          </InputGroup.Text>
+          
         </InputGroup>
       </div>
 
@@ -97,6 +96,7 @@ const LeadProjects = ({ setConditionalComponent, teamId, setProjectId }) => {
       >
         <thead style={{ backgroundColor: "#007BFF", color: "#fff" }}>
           <tr>
+          <th scope="col">#</th>
             <th scope="col">Client Name</th>
             <th scope="col">Project Name</th>
             <th scope="col">Spokesperson Name</th>
@@ -111,6 +111,7 @@ const LeadProjects = ({ setConditionalComponent, teamId, setProjectId }) => {
           {currentProjects.length > 0 ? (
             currentProjects.map((project, index) => (
               <tr key={index}>
+                <td>{index + 1}</td>
                 <td>{project.clientName}</td>
                 <td>{project.projectName}</td>
                 <td>{project.spokePersonName}</td>

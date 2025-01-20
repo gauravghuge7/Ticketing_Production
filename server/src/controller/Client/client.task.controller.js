@@ -322,10 +322,110 @@ const fetchTicketByClient = asyncHandler(async (req, res) => {
 })
 
 
+
+const fetchAllClientTickets = asyncHandler(async (req, res) => {
+
+    try {
+        
+        const _id = req?.user?._id;
+
+
+        const tickets = await Project.aggregate([
+
+            /**  Matching All Projects where client exists */
+            {
+                $match: {
+                    client: new mongoose.Types.ObjectId(_id)
+                }
+            },
+
+            /**  Fetching Tickets for each project and add projectName field into the tickets  */
+            {
+                $lookup: {
+                    from: "tickets",
+                    foreignField: "project",
+                    localField: "_id",
+                    as: "tickets",
+                    pipeline: [
+                        {
+                            $addFields: {
+                                projectName: "$$ROOT.projectName"
+                            }
+                        }
+                    ]
+                }
+            },
+            /*** Unwind tickets array  */
+            {
+                $unwind: "$tickets"
+            },
+            /***  add projectName field into the tickets Object */
+            {
+                $addFields: {
+                    "tickets.projectName": "$projectName"
+                }
+            },
+            /*** Unwind tickets array  */
+            {
+                $unwind: "$tickets"
+            },
+            {
+                $unwind: "$tickets"
+            },
+            {
+                $unwind: "$tickets"
+            },
+
+            /** Overall Tickets Projection and  data here is the tickets array  */
+            {
+                $project: {
+                    tickets: {
+                        projectName: 1,
+                        ticketId: 1,
+                        priority: 1,
+                        status: 1,
+                        dueDate: 1,
+                        assignedTo: 1,
+                        assignedByEmail: 1,
+                        assignedByName: 1,
+                        ticketName: 1,
+                        saptype: 1,
+                        ticketDescription: 1,
+                        ticketDocument: 1,
+                        createdAt: 1,
+                        ticketId: 1,
+                    }
+                    
+                }
+            }
+        ])
+
+        console.log("tickets", tickets);
+        
+
+        return res 
+            .status(200)
+            .json(
+                new ApiResponse(
+                    200, 
+                    "tickets fetched successfully", 
+                    {
+                        totalTickets : tickets
+                    }
+                )
+            )
+        
+    } 
+    catch (error) {
+        
+    }
+})
+
 export {
     createTicket,
     fetchTasks,
-    fetchTicketByClient
+    fetchTicketByClient,
+    fetchAllClientTickets
 }
 
 
