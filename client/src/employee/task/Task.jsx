@@ -1,18 +1,19 @@
 import axios from 'axios';
 import React, { useEffect, useState, useRef } from 'react';
-
 import { Col, Container, Row, Table, InputGroup, FormControl, Button } from 'react-bootstrap';
 import { message } from 'react-message-popup';
 
 const TaskList = ({ setConditionalComponent }) => {
   const [tasks, setTasks] = useState([]);
   const [currentPage, setCurrentPage] = useState(0);
-  const [team, setTeam] = useState({});
   const [searchFilters, setSearchFilters] = useState({
     ticketName: '',
-    projectName: '',
     ticketID: '',
     dueDate: '',
+    status: '',
+    priority: '',
+    assignedTo: '',
+    ticketType: '', // New filter for Ticket Type
   });
   const [currentTask, setCurrentTask] = useState(null);
   const [sendTask, setSendTask] = useState({ taskId: null, employeeId: null });
@@ -25,7 +26,6 @@ const TaskList = ({ setConditionalComponent }) => {
       if (response.data.success) {
         message.success(response.data.message);
         setTasks(response.data.data);
-     
       }
     } catch (error) {
       message.error(error.message);
@@ -38,22 +38,18 @@ const TaskList = ({ setConditionalComponent }) => {
     setSendTask({ taskId: taskId, employeeId: null });
     if (forwardTicketRef.current) {
       forwardTicketRef.current.showModal();
-      
-
     }
   };
 
   const closeForwardTicketDialog = () => {
     if (forwardTicketRef.current) {
       forwardTicketRef.current.close();
-      
     }
     setCurrentTask(null);
   };
 
   const handleForwardTicket = async () => {
     try {
-
       const body = {
         employeeId: sendTask.employeeId,
         taskId: sendTask.taskId,
@@ -66,30 +62,46 @@ const TaskList = ({ setConditionalComponent }) => {
         withCredentials: true,
       };
 
-      
-
-      const response = await axios.post('/api/employee/forwardTicketsAndTasksToAnotherEmployee', body, config)
-      
-      
-      console.log("response.data => ", response.data);
-     
-      
-
-    } 
-    catch (error) {
-      console.log(error);  
+      const response = await axios.post(
+        '/api/employee/forwardTicketsAndTasksToAnotherEmployee',
+        body,
+        config
+      );
+      console.log('response.data => ', response.data);
+    } catch (error) {
+      console.log(error);
     }
-  }
+  };
 
   const tasksPerPage = 10;
+
   const filteredTasks = tasks.filter((task) => {
     return (
-      (searchFilters.ticketName === '' || task.taskName?.toLowerCase().includes(searchFilters.ticketName.toLowerCase())) &&
-      (searchFilters.projectName === '' || task.companyName?.toLowerCase().includes(searchFilters.projectName.toLowerCase())) &&
-      (searchFilters.ticketID === '' || task.ticket?.ticketId?.includes(searchFilters.ticketID)) &&
-      (searchFilters.dueDate === '' || new Date(task.dueDate).toLocaleDateString() === searchFilters.dueDate)
+      (searchFilters.ticketName === '' ||
+        (task.taskName?.toLowerCase().includes(searchFilters.ticketName.toLowerCase()) ||
+          task.ticket?.ticketName?.toLowerCase().includes(searchFilters.ticketName.toLowerCase()))) &&
+      (searchFilters.ticketID === '' ||
+        task.ticket?.ticketId?.toLowerCase().includes(searchFilters.ticketID.toLowerCase())) &&
+      (searchFilters.dueDate === '' ||
+        (task.dueDate &&
+          new Date(task.dueDate).toLocaleDateString() === searchFilters.dueDate)) &&
+      (searchFilters.status === '' ||
+        task.status?.toLowerCase() === searchFilters.status.toLowerCase()) &&
+      (searchFilters.priority === '' ||
+        (task.priority?.toLowerCase() || task.ticket?.priority?.toLowerCase()) ===
+          searchFilters.priority.toLowerCase()) &&
+      (searchFilters.assignedTo === '' ||
+        task.assignedTo?.toLowerCase().includes(searchFilters.assignedTo.toLowerCase())) &&
+      (searchFilters.ticketType === '' ||
+        (task.ticket
+          ? 'Client Ticket'
+          : 'Team Lead Task'
+        )
+          .toLowerCase()
+          .includes(searchFilters.ticketType.toLowerCase()))
     );
   });
+  
 
   const displayedTasks = filteredTasks.slice(
     currentPage * tasksPerPage,
@@ -121,42 +133,71 @@ const TaskList = ({ setConditionalComponent }) => {
       style={{
         background: '#f0f4f8',
         padding: '30px',
-        borderRadius: '12px',
+        borderRadius: '10px',
         boxShadow: '0 6px 15px rgba(0, 0, 0, 0.2)',
         color: '#333',
-        maxWidth: '82%',
-        marginLeft: '10px',
-        overflowX: 'auto',  // Enables horizontal scrolling
-        // whiteSpace: 'nowrap' // Prevents wrapping and keeps content in a single line
-        
-
       }}
     >
-      <h2 style={{ marginBottom: '25px', color: '#333', fontWeight: 'bold',  textAlign: 'center' }}>Ticket List</h2>
+      <h2 style={{ marginBottom: '25px', color: '#333', fontWeight: 'bold', textAlign: 'center' }}>
+        Ticket List
+      </h2>
 
       <Row className="mb-4">
-        <Col md={3}>
+        <Col md={2}>
           <FormControl
-            placeholder="Filter by Ticket Name"
-            value={searchFilters.ticketName}
-            onChange={(e) => setSearchFilters({ ...searchFilters, ticketName: e.target.value })}
-          />
-        </Col>
-        <Col md={3}>
-          <FormControl
-            placeholder="Filter by Project Name"
-            value={searchFilters.projectName}
-            onChange={(e) => setSearchFilters({ ...searchFilters, projectName: e.target.value })}
-          />
-        </Col>
-        <Col md={3}>
-          <FormControl
-            placeholder="Filter by Ticket ID"
+            placeholder="Ticket ID"
             value={searchFilters.ticketID}
             onChange={(e) => setSearchFilters({ ...searchFilters, ticketID: e.target.value })}
           />
         </Col>
-        <Col md={3}>
+        <Col md={2}>
+          <FormControl
+            placeholder="Ticket Name"
+            value={searchFilters.ticketName}
+            onChange={(e) => setSearchFilters({ ...searchFilters, ticketName: e.target.value })}
+          />
+        </Col>
+        
+        <Col md={2}>
+          <FormControl
+            as="select"
+            value={searchFilters.status}
+            onChange={(e) => setSearchFilters({ ...searchFilters, status: e.target.value })}
+          >
+            <option value="">Status</option>
+            <option value="Open">Open</option>
+            <option value="In Progress">In Progress</option>
+            <option value="Closed">Closed</option>
+          </FormControl>
+        </Col>
+        
+        <Col md={2}>
+          <FormControl
+            as="select"
+            value={searchFilters.priority}
+            onChange={(e) => setSearchFilters({ ...searchFilters, priority: e.target.value })}
+          >
+            <option value="">Priority</option>
+            <option value="Low">Low</option>
+            <option value="Medium">Medium</option>
+            <option value="High">High</option>
+            <option value="Urgent">Urgent</option>
+          </FormControl>
+        </Col>
+
+        <Col md={2}>
+          <FormControl
+            as="select"
+            value={searchFilters.ticketType}
+            onChange={(e) => setSearchFilters({ ...searchFilters, ticketType: e.target.value })}
+          >
+            <option value="">Ticket Type</option>
+            <option value="Client Ticket">Client Ticket</option>
+            <option value="Team Lead Task">Team Lead Task</option>
+          </FormControl>
+        </Col>
+
+        <Col md={2}>
           <FormControl
             type="date"
             value={searchFilters.dueDate}
@@ -166,8 +207,13 @@ const TaskList = ({ setConditionalComponent }) => {
       </Row>
 
       <Row className="justify-content-md-center mt-5">
-        <Col md={12}>
-          <Table style={{ overflowX: 'auto' }} >
+        <Col md={12} style={{ overflowX: 'auto' }}>
+          <Table bordered striped hover responsive
+            style={{
+              backgroundColor: "#fff",
+              color: "#333",
+              borderRadius: "12px",
+            }}>
             <thead>
               <tr>
                 <th>#</th>
@@ -175,16 +221,15 @@ const TaskList = ({ setConditionalComponent }) => {
                 <th>Ticket ID</th>
                 <th>Ticket Name</th>
                 <th>Priority</th>
-                <th>SAP Type</th>
+                <th>SAP Module</th>
                 <th>Due Date</th>
-                <th>Assigned To Team</th>
-                <th>Assigned By Name</th>
-                <th>Assigned By Email</th>
-                <th>Task Detail</th>
+                <th>Number</th>
+                <th>Name</th>
+                <th>Email</th>
+                <th>Ticket Detail</th>
                 <th>Document</th>
                 <th>Status</th>
-                <th>Task Forward</th>
-                
+                {/* <th>Ticket Forward</th> */}
               </tr>
             </thead>
             <tbody>
@@ -204,11 +249,10 @@ const TaskList = ({ setConditionalComponent }) => {
                   <td>
                     <a href={task.taskDocument || task.ticket?.ticketDocument} target="_blank" rel="noreferrer">
                       <Button variant="link">
-                      <i className="bi bi-eye-fill" style={{ fontSize: "16px", color: "#007BFF" }}></i>
+                        <i className="bi bi-eye-fill" style={{ fontSize: '16px', color: '#007BFF' }}></i>
                       </Button>
                     </a>
                   </td>
-                 
                   <td>
                     <select
                       onChange={(e) => handleStatusChange(e.target.value, task._id)}
@@ -219,100 +263,27 @@ const TaskList = ({ setConditionalComponent }) => {
                       <option value="Closed">Closed</option>
                     </select>
                   </td>
-                  <td>
-                  <Button style={{
-                      backgroundColor: "transparent",
-                      border: "none",
-                      padding: "8px 16px",
-                      borderRadius: "5px",
-                      color: "#007BFF",
-                      fontWeight: "bold",
-                      transition: "background-color 0.3s ease",
-                    }}
+                 
+                    {/* <Button
+                      style={{
+                        backgroundColor: 'transparent',
+                        border: 'none',
+                        padding: '8px 16px',
+                        borderRadius: '5px',
+                        color: '#007BFF',
+                        fontWeight: 'bold',
+                        transition: 'background-color 0.3s ease',
+                      }}
                       variant="primary"
                       onClick={() => openForwardTicketDialog(task)}
-
                     >
-                      Forward 
-                    </Button>
-                  </td>
+                      Forward
+                    </Button> */}
+                 
                 </tr>
               ))}
             </tbody>
           </Table>
-
-          <main>
-        <section className="d-flex justify-content-center align-items-center">
-        
-          <dialog
-          ref={forwardTicketRef}
-          className="p-6 rounded-lg shadow-lg bg-white"
-          style={{
-            width: '300px',
-            border: '1px solid #ccc',
-            position: 'fixed',
-            top: '50%',
-            left: '50%',
-            transform: 'translate(-50%, -50%)',
-            zIndex: 1000,
-          }}
-        >
-          <h2 className="text-xl font-bold mb-4">Forward Ticket</h2>
-          <h2 className="text-xl mb-4">{currentTask?.taskName}</h2>
-          <form
-            onSubmit={() => handleForwardTicket()}
-          >
-            <div className="mb-4">
-              <label htmlFor="employee" className="block mb-2">Select Employee</label>
-              <select
-                name="employee"
-                id="employee"
-                value={sendTask.employeeId}
-                onChange={(e) => setSendTask({...sendTask, employeeId: e.target.value})}
-                className="w-full p-2 border rounded"
-              >
-                <option value="">Select employee</option>
-                {team.employeeDetails &&
-                  team.employeeDetails.map((employee) => (
-                  <option key={employee._id} value={employee._id}>
-                    {employee.employeeName}
-                  </option>
-                ))}
-              </select>
-            </div>
-            <div className="flex justify-end space-x-2">
-              <button
-                type="submit"
-                className="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600"
-              >
-                Forward
-              </button>
-              <button
-                type="button"
-                onClick={closeForwardTicketDialog}
-                className="px-4 py-2 bg-gray-300 text-gray-700 rounded hover:bg-gray-400">
-                Cancel
-              </button>
-            </div>
-          </form>
-          </dialog>
-        </section>
-      </main>
-
-          <div style={{ display: 'flex', justifyContent: 'space-between', marginTop: '10px' }}>
-            <Button
-              onClick={() => setCurrentPage(currentPage - 1)}
-              disabled={currentPage === 0}
-            >
-              Previous
-            </Button>
-            <Button
-              onClick={() => setCurrentPage(currentPage + 1)}
-              disabled={(currentPage + 1) * tasksPerPage >= filteredTasks.length}
-            >
-              Next
-            </Button>
-          </div>
         </Col>
       </Row>
     </Container>

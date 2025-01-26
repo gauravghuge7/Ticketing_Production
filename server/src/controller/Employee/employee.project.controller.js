@@ -14,6 +14,7 @@ import { ApiResponse } from '../../utils/ApiResponse.js';
 import { asyncHandler } from '../../utils/asyncHandler.js';
 import {Task } from "../../model/Task.model.js";
 import { Ticket } from '../../model/ticket.project.model.js';
+import { sendEmail } from '../../helper/sendEmail.js';
 
 
 
@@ -589,6 +590,21 @@ const changeStatus = asyncHandler(async(req, res) => {
             ticket.status = status;
             await ticket.save();
         } 
+
+        const html = `
+            <p>Hi ${task.teamLead},</p>
+            <p>Your ticket has been assigned to ${task.employeeName} .</p>
+            <p>Please click on the Ticket below to view the Ticket details.</p>
+            
+         
+            <a href="https://gbis.team/task-management/task/${task.ticket}">${task.ticket}</a>
+            <p>Thanks,
+            <p>${task.employeeName}
+               <p>${task.employeeEmail}</p>
+            </p>
+        `;
+
+        sendEmail(task.assignBy, "Ticket Status Changed", html);
 
         return res 
             .status(200)

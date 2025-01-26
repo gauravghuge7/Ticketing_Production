@@ -78,7 +78,7 @@ const EmployeeSidebar = ({ setConditionalComponent }) => {
           onClick={() => setConditionalComponent("projects")} 
           isCollapsed={isCollapsed} 
           icon={<AiOutlineProject size={20} />} 
-          text="Project Section" 
+          text="Projects" 
         />
 
         <SidebarButton 

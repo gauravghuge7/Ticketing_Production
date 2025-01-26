@@ -354,6 +354,7 @@ const ProjectSection = ({ setConditionalComponent, projectId }) => {
       >
         Tickets List
       </summary>
+      
 
       <div className="card-body" style={{ padding: "20px" }}>
 

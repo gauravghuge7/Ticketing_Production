@@ -165,11 +165,11 @@ const EmpProjects = () => {
     <Container
       style={{
         background: "#f0f4f8",
-        padding: "px",
+        padding: "30px",
         borderRadius: "12px",
         boxShadow: "0 6px 15px rgba(0, 0, 0, 0.2)",
         color: "#333",
-        maxWidth: "95%",
+       
         marginTop: "30px",
       }}
     >
@@ -331,9 +331,9 @@ const EmpProjects = () => {
                 <th>Ticket Type</th>
                 <th>Ticket ID</th>
                 <th>Ticket Name</th>
-                <th>SAP Type</th>
+                <th>SAP Module</th>
                 <th>Due Date</th>
-                <th>Assigned To</th>
+                <th>Spokesperson</th>
                 <th>Priority</th>
                 <th>Status</th>
                 <th>Description</th>

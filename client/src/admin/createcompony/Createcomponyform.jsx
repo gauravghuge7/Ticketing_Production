@@ -1,7 +1,7 @@
-import  { useState } from 'react';
+import { useState } from 'react';
 import { Form, Button, Container, Row, Col, Card } from 'react-bootstrap';
 import axios from "axios";
-import {message } from "react-message-popup";
+import { message } from "react-message-popup";
 
 const CreateCompanyForm = () => {
     const [companyName, setCompanyName] = useState('');
@@ -9,40 +9,41 @@ const CreateCompanyForm = () => {
     const [companyPassword, setCompanyPassword] = useState('');
     const [confirmPassword, setConfirmPassword] = useState('');
 
-    const handleSubmit = async(event) => {
+    const handleSubmit = async (event) => {
         event.preventDefault();
-        
+
         if (companyPassword !== confirmPassword) {
             alert('Passwords do not match!');
             return;
         }
+
         try {
-            
             const body = {
                 clientName: companyName,
                 clientEmail: companyEmail,
                 clientPassword: companyPassword,
-            }
-    
+            };
+
             const config = {
                 headers: {
                     'Content-Type': 'multipart/form-data',
                 },
             };
-    
-            const response = await axios.post('/api/client/register', body, config);
-    
-            console.log(response);
 
-            if(response?.data?.success) {
+            const response = await axios.post('/api/client/register', body, config);
+
+            if (response?.data?.success) {
                 message.success(response?.data?.message);
+
+                // Clear the form fields
+                setCompanyName('');
+                setCompanyEmail('');
+                setCompanyPassword('');
+                setConfirmPassword('');
             }
-            
-        } 
-        catch (error) {
+        } catch (error) {
             message.error(error.message);
         }
-        
     };
 
     return (

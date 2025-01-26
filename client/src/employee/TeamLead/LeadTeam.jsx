@@ -36,6 +36,8 @@ const LeadTeam = ({ setConditionalComponent, setTeamId }) => {
         borderRadius: '12px',
         boxShadow: '0 4px 20px rgba(0, 0, 0, 0.1)',
         marginTop: '30px',
+        
+        height: '100%',
       }}
     >
       <h2 className="text-center" style={{ color: '#1a1a1a', fontWeight: '700', letterSpacing: '1px' }}>

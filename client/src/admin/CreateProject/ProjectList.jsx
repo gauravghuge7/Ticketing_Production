@@ -188,9 +188,9 @@ const ProjectList = () => {
                                 </td>
                                 <td>
                     <div style={{ display: 'flex', alignItems: 'center' }}>
-                        <Button style={{ background: "transparent", border: "none" }} onClick={() => handleEdit(data._id)}>
+                        {/* <Button style={{ background: "transparent", border: "none" }} onClick={() => handleEdit(data._id)}>
                             <i className="bi bi-pencil-square" style={{ color: "#007BFF" }} ></i>
-                        </Button>
+                        </Button> */}
                         <Button style={{ background: "transparent", border: "none" }} onClick={() => handleDelete(data._id)}>
                             <i className="bi bi-trash-fill" style={{ fontSize: "16px", color: "red", cursor: "pointer" }}></i>
                         </Button>

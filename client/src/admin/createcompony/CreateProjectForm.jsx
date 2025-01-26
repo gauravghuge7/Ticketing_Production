@@ -36,42 +36,63 @@ const CreateProjectForm = ({ clientId, clientName }) => {
     const handleSubmit = async (e) => {
         e.preventDefault();
 
-        const body = {
-            projectName: formData.projectName,
-            companyName: formData.companyName,
-            spokePersonEmail: formData.spokePersonEmail,
-            spokePersonName: formData.spokePersonName,
-            spokePersonNumber: formData.spokePersonNumber,
-            description: formData.description,
-            team: formData.team,
-            projectId: formData.projectId,
-            client: clientId,
-            clientName: clientName,
-            file: formData.file
-        };
+        try {
+            const body = new FormData();
+            body.append('projectName', formData.projectName);
+            body.append('companyName', formData.companyName);
+            body.append('spokePersonEmail', formData.spokePersonEmail);
+            body.append('spokePersonName', formData.spokePersonName);
+            body.append('spokePersonNumber', formData.spokePersonNumber);
+            body.append('description', formData.description);
+            body.append('team', formData.team);
+            body.append('projectId', formData.projectId);
+            body.append('client', clientId);
+            body.append('clientName', clientName);
+            if (formData.file) {
+                body.append('file', formData.file);
+            }
 
-        const config = {
-            headers: {
-                'Content-Type': 'multipart/form-data',
-            },
-            withCredentials: true,
-        };
+            const config = {
+                headers: {
+                    'Content-Type': 'multipart/form-data',
+                },
+                withCredentials: true,
+            };
 
-        const response = await axios.post("/api/admin/project", body, config);
+            const response = await axios.post("/api/admin/project", body, config);
 
-        if (response.data.success) {
-            message.success(response.data.message);
+            if (response.data.success) {
+                message.success(response.data.message);
+
+                // Reset the form
+                setFormData({
+                    projectName: '',
+                    companyName: '',
+                    spokePersonEmail: '',
+                    spokePersonName: '',
+                    spokePersonNumber: '',
+                    description: '',
+                    team: "team",
+                    projectId: "",
+                    document: "",
+                    file: ""
+                });
+            }
+        } catch (error) {
+            console.error("Error submitting the project:", error);
+            message.error(error.response?.data?.message || "Something went wrong. Please try again.");
         }
     };
 
     return (
         <Container className="mt-5">
-            
             <Row className="justify-content-md-center">
                 <Col md={8}>
                     <Card className="p-4 border-0" style={{ borderRadius: '20px', boxShadow: '0 6px 12px rgba(0, 0, 0, 0.15)' }}>
                         <Card.Body>
-                            <h2 className="text-center mb-4" style={{ fontWeight: 'bold' }}>Create New Project for <b>{clientName}</b></h2>
+                            <h2 className="text-center mb-4" style={{ fontWeight: 'bold' }}>
+                                Create New Project for <b>{clientName}</b>
+                            </h2>
                             <Form onSubmit={handleSubmit}>
                                 <Form.Group controlId="projectId" className="mb-3">
                                     <Form.Label>Project ID</Form.Label>
@@ -96,18 +117,6 @@ const CreateProjectForm = ({ clientId, clientName }) => {
                                         style={{ borderRadius: '12px', padding: '10px', boxShadow: '0 3px 6px rgba(0, 0, 0, 0.1)' }}
                                     />
                                 </Form.Group>
-
-                                {/* <Form.Group controlId="companyName" className="mb-3">
-                                    <Form.Label>Client Name</Form.Label>
-                                    <Form.Control
-                                        type="text"
-                                        name="companyName"
-                                        value={formData.companyName}
-                                        onChange={handleChange}
-                                        required
-                                        style={{ borderRadius: '12px', padding: '10px', boxShadow: '0 3px 6px rgba(0, 0, 0, 0.1)' }}
-                                    />
-                                </Form.Group> */}
 
                                 <Form.Group controlId="spokePersonName" className="mb-3">
                                     <Form.Label>Spokesperson Name</Form.Label>
@@ -153,7 +162,7 @@ const CreateProjectForm = ({ clientId, clientName }) => {
                                         value={formData.team}
                                         onChange={handleChange}
                                         required
-                                        style={{ borderRadius: '12px', padding: '10px', boxShadow: '0 3px 6px rgba(0, 0, 0, 0.1)' }}
+                                        style={{ borderRadius: '12px', padding: '1px', boxShadow: '0 3px 6px rgba(0, 0, 0, 0.1)' }}
                                     >
                                         <option value="team">Select Team</option>
                                         {teams.map((team, index) => (
@@ -162,52 +171,40 @@ const CreateProjectForm = ({ clientId, clientName }) => {
                                     </Form.Control>
                                 </Form.Group>
 
-                                <section>
-                                    <label>Project Description</label>
+                                <Form.Group className="mb-3">
+                                    <Form.Label>Project Description</Form.Label>
                                     <textarea
                                         cols="50"
-                                        className='w-full border p-2 mb-4'
+                                        className="w-full border p-2"
                                         placeholder="Add project description"
                                         value={formData.description}
                                         onChange={(e) => setFormData({ ...formData, description: e.target.value })}
                                         style={{ borderRadius: '12px', padding: '10px', boxShadow: '0 3px 6px rgba(0, 0, 0, 0.1)' }}
                                     ></textarea>
-                                </section>
+                                </Form.Group>
 
-                                <div>
-                                    <label>Select Document</label>
-                                    <br />
+                                <Form.Group className="mb-3">
+                                    <Form.Label>Select Document</Form.Label>
                                     <input
                                         type="file"
                                         onChange={onImageChange}
-                                        accept='*'
+                                        accept="*"
                                     />
-                                    <br />
-                                </div>
-                                <br />
+                                </Form.Group>
 
                                 <Button
                                     variant="primary"
                                     type="submit"
                                     style={{
-                                        backgroundColor: 'primary', // Teal color
+                                        backgroundColor: 'primary',
                                         border: 'none',
                                         borderRadius: '12px',
                                         padding: '12px 24px',
                                         boxShadow: '0 5px 10px rgba(0, 0, 0, 0.2)',
                                         color: '#fff',
                                         fontWeight: 'bold',
-                                        transition: 'background-color 0.3s ease, transform 0.2s ease',
                                     }}
                                     className="w-100"
-                                    onMouseEnter={(e) => {
-                                        e.target.style.backgroundColor = ''; // Darker teal on hover
-                                        e.target.style.transform = 'scale(1.05)'; // Slight scale-up on hover
-                                    }}
-                                    onMouseLeave={(e) => {
-                                        e.target.style.backgroundColor = ''; // Original teal when not hovering
-                                        e.target.style.transform = 'scale(1)'; // Reset scale when not hovering
-                                    }}
                                 >
                                     Submit Project
                                 </Button>

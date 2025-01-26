@@ -1,19 +1,70 @@
-import React from 'react';
-import { Card, Row, Col } from 'react-bootstrap';
+import  { useEffect, useState } from 'react';
 import MyCalendar from './MyCalendar';
+import axios from 'axios';
 
-const Employeecontain = () => {
+const Employeecontain = ({ setConditionalComponent }) => {
+
+
+    const [completeTickets, setCompleteTickets] = useState();
+    const [pendingTickets, setPendingTickets] = useState();
+    const [openTickets, setOpenTickets] = useState();
+
+    const fetchTickets = async () => {
+
+        try {
+
+            const response = await axios.get("/api/employee/getEmployeeAllTasks");
+
+            console.log(" Response from server =>  ", response.data);
+
+            if(response.data.success === true){
+
+                console.log(" Tickets =>  ", response.data.data);
+
+                const tempTickets = response.data.data;
+            
+                setCompleteTickets(tempTickets.filter(e => e.status === "Closed"));
+                console.log("complete tickets =>  ", completeTickets?.length);
+                setPendingTickets(tempTickets.filter(e => e.status === "In Progress"));
+                setOpenTickets(tempTickets.filter(e => e.status === "Open"));
+            }
+
+
+            
+        } 
+        catch (error) {
+            console.log(error);
+        }
+        finally {
+            console.log("finally");
+        }
+    };
+
+
+    useEffect(() =>{
+        fetchTickets();
+    }, [])
+
+    
+
+
     return (
-        <div className="container mt-5">
+        <div className="container mt-5"
+            
+        >
             {/* Header Section */}
             <div className="row">
-                <div className="col-md-12">
+                <div className="col-md-12"
+                  
+                >
                     <div className="row"> 
                         {/* Completed Tasks Card */}
                         <div className="col-md-4 mb-4">
                             <div
-                                className="card text-white bg-info"
-                                style={cardStyle}
+                            onClick={() => setConditionalComponent("TaskList")} 
+                             style={{ backgroundColor: '#77AFDC' }}
+                                className="card text-white "
+                               
                                 onMouseEnter={(e) => {
                                     e.currentTarget.style.boxShadow = hoverStyle.boxShadow;
                                 }}
@@ -21,25 +72,26 @@ const Employeecontain = () => {
                                     e.currentTarget.style.boxShadow = cardStyle.boxShadow;
                                 }}
                             >
-                                <div className="card-header d-flex justify-content-center align-items-center" style={headerStyle}>
-                                    <i className="bi bi-check-circle me-2"></i> Completed Tasks
+                                <div 
+                                  className="card-header d-flex justify-content-center align-items-center" style={headerStyle}>
+                                    <i className="bi bi-check-circle me-2"></i> Completed Tickets
                                 </div>
                                 <div className="card-body">
                                     <h5 className="card-title d-flex justify-content-center" style={titleStyle}>
-                                        10 Tasks
+                                        {completeTickets?.length} Tickets
                                     </h5>
-                                    <p className="card-text" style={textStyle}>
-                                        All tasks that have been successfully completed.
-                                    </p>
+                                    
                                 </div>
                             </div>
                         </div>
 
                         {/* Pending Tasks Card */}
-                        <div className="col-md-4 mb-4">
+                        <div className="col-md-4 mb-4"
+                          onClick={() => setConditionalComponent("TaskList")}>
                             <div
-                                className="card text-white bg-info"
-                                style={cardStyle}
+                             style={{ backgroundColor: '#77AFDC' }}
+                                className="card text-white "
+                               
                                 onMouseEnter={(e) => {
                                     e.currentTarget.style.boxShadow = hoverStyle.boxShadow;
                                 }}
@@ -48,24 +100,26 @@ const Employeecontain = () => {
                                 }}
                             >
                                 <div className="card-header d-flex justify-content-center align-items-center" style={headerStyle}>
-                                    <i className="bi bi-hourglass-split me-2"></i> Pending Tasks
+                                    <i className="bi bi-hourglass-split me-2"></i> Pending Tickets
                                 </div>
                                 <div className="card-body">
                                     <h5 className="card-title d-flex justify-content-center" style={titleStyle}>
-                                        5 Tasks
+                                        {pendingTickets?.length} Tickets
                                     </h5>
-                                    <p className="card-text" style={textStyle}>
-                                        Tasks that are still in progress and need to be completed.
-                                    </p>
+                                   
                                 </div>
                             </div>
                         </div>
 
                         {/* To-Do Tasks Card */}
-                        <div className="col-md-4 mb-4">
+                        <div className="col-md-4 mb-4"
+                          onClick={() => setConditionalComponent("TaskList")}
+                          >
+                            
                             <div
-                                className="card text-white bg-info"
-                                style={cardStyle}
+                            style={{ backgroundColor: '#77AFDC' }}
+                                className="card text-white bg-#77AFDC"
+                               
                                 onMouseEnter={(e) => {
                                     e.currentTarget.style.boxShadow = hoverStyle.boxShadow;
                                 }}
@@ -74,15 +128,13 @@ const Employeecontain = () => {
                                 }}
                             >
                                 <div className="card-header d-flex justify-content-center align-items-center" style={headerStyle}>
-                                    <i className="bi bi-list-task me-2"></i> To-Do Tasks
+                                    <i className="bi bi-list-task me-2"></i> To-Do Tickets
                                 </div>
                                 <div className="card-body">
                                     <h5 className="card-title d-flex justify-content-center" style={titleStyle}>
-                                        8 Tasks
+                                        {openTickets?.length} Tickets
                                     </h5>
-                                    <p className="card-text" style={textStyle}>
-                                        Tasks that are planned but not yet started.
-                                    </p>
+                                    
                                 </div>
                             </div>
                         </div>
@@ -107,6 +159,7 @@ const cardStyle = {
     cursor: 'pointer',
     width: '100%',
     maxWidth: '400px',
+    
 };
 
 const hoverStyle = {

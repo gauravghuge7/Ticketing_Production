@@ -1,8 +1,8 @@
-import  { useState } from "react";
-import { Container, Row, Col, Card, Form, Button } from 'react-bootstrap';
+import { useState } from "react";
+import { Container, Row, Col, Card, Form, Button } from "react-bootstrap";
 import "bootstrap/dist/css/bootstrap.min.css";
-import { message } from 'react-message-popup';
-import axios from 'axios';
+import { message } from "react-message-popup";
+import axios from "axios";
 
 const NewEmployeeForm = ({ fetchEmployees }) => {
   const [formData, setFormData] = useState({
@@ -11,24 +11,19 @@ const NewEmployeeForm = ({ fetchEmployees }) => {
     password: "",
     confirmPassword: "",
     designation: "",
-    
   });
 
   const handleChange = (e) => {
-    const { name, value, files } = e.target;
-    if (name === "photo") {
-      setFormData({ ...formData, [name]: files[0] });
-    } else {
-      setFormData({ ...formData, [name]: value });
-    }
+    const { name, value } = e.target;
+    setFormData({ ...formData, [name]: value });
   };
 
-  const handleSubmit = async(e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
- 
+
     const config = {
       headers: {
-        'Content-Type': 'application/json',
+        "Content-Type": "application/json",
       },
       withCredentials: true,
     };
@@ -37,34 +32,51 @@ const NewEmployeeForm = ({ fetchEmployees }) => {
       employeeName: formData.fullName,
       employeeEmail: formData.email,
       designation: formData.designation,
-      employeePassword: formData.password, 
-    }
-
+      employeePassword: formData.password,
+    };
 
     try {
-      const response = await axios.post('/api/employee/register', data, config);  // thisthe bapi call to register the employee in the database
+      const response = await axios.post("/api/employee/register", data, config); // API call to register the employee
 
       console.log("response => ", response);
 
-      if(response.data.success === true) {
-        message.success('Employee added successfully');
+      if (response.data.success === true) {
+        message.success("Employee added successfully");
+
+        // Clear the form fields
+        setFormData({
+          fullName: "",
+          email: "",
+          password: "",
+          confirmPassword: "",
+          designation: "",
+        });
+
+        fetchEmployees(); // Fetch updated employee list
       }
-      fetchEmployees();
-    } 
-    catch (error) {
+    } catch (error) {
       message.error(error.message);
     }
-
-  
   };
 
   return (
     <Container className="mt-5">
       <Row className="justify-content-md-center">
         <Col md={8}>
-          <Card className="p-4 border-0" style={{ borderRadius: '15px', boxShadow: '0 4px 8px rgba(0, 0, 0, 0.1)' }}>
+          <Card
+            className="p-4 border-0"
+            style={{
+              borderRadius: "15px",
+              boxShadow: "0 4px 8px rgba(0, 0, 0, 0.1)",
+            }}
+          >
             <Card.Body>
-              <h3 className="text-center mb-4" style={{ fontWeight: '600' }}>Add New Employee</h3>
+              <h3
+                className="text-center mb-4"
+                style={{ fontWeight: "600" }}
+              >
+                Add New Employee
+              </h3>
               <Form onSubmit={handleSubmit}>
                 <Form.Group controlId="fullName" className="mb-3">
                   <Form.Label>Full Name</Form.Label>
@@ -75,7 +87,10 @@ const NewEmployeeForm = ({ fetchEmployees }) => {
                     name="fullName"
                     onChange={handleChange}
                     required
-                    style={{ borderRadius: '10px', boxShadow: '0 2px 4px rgba(0, 0, 0, 0.1)' }}
+                    style={{
+                      borderRadius: "10px",
+                      boxShadow: "0 2px 4px rgba(0, 0, 0, 0.1)",
+                    }}
                   />
                 </Form.Group>
 
@@ -88,7 +103,10 @@ const NewEmployeeForm = ({ fetchEmployees }) => {
                     name="email"
                     onChange={handleChange}
                     required
-                    style={{ borderRadius: '10px', boxShadow: '0 2px 4px rgba(0, 0, 0, 0.1)' }}
+                    style={{
+                      borderRadius: "10px",
+                      boxShadow: "0 2px 4px rgba(0, 0, 0, 0.1)",
+                    }}
                   />
                 </Form.Group>
 
@@ -101,7 +119,10 @@ const NewEmployeeForm = ({ fetchEmployees }) => {
                     name="designation"
                     onChange={handleChange}
                     required
-                    style={{ borderRadius: '10px', boxShadow: '0 2px 4px rgba(0, 0, 0, 0.1)' }}
+                    style={{
+                      borderRadius: "10px",
+                      boxShadow: "0 2px 4px rgba(0, 0, 0, 0.1)",
+                    }}
                   />
                 </Form.Group>
 
@@ -114,7 +135,10 @@ const NewEmployeeForm = ({ fetchEmployees }) => {
                     name="password"
                     onChange={handleChange}
                     required
-                    style={{ borderRadius: '10px', boxShadow: '0 2px 4px rgba(0, 0, 0, 0.1)' }}
+                    style={{
+                      borderRadius: "10px",
+                      boxShadow: "0 2px 4px rgba(0, 0, 0, 0.1)",
+                    }}
                   />
                 </Form.Group>
 
@@ -127,7 +151,10 @@ const NewEmployeeForm = ({ fetchEmployees }) => {
                     name="confirmPassword"
                     onChange={handleChange}
                     required
-                    style={{ borderRadius: '10px', boxShadow: '0 2px 4px rgba(0, 0, 0, 0.1)' }}
+                    style={{
+                      borderRadius: "10px",
+                      boxShadow: "0 2px 4px rgba(0, 0, 0, 0.1)",
+                    }}
                   />
                 </Form.Group>
 
@@ -135,11 +162,11 @@ const NewEmployeeForm = ({ fetchEmployees }) => {
                   variant="primary"
                   type="submit"
                   style={{
-                    background: '#007BFF',
-                    border: 'none',
-                    borderRadius: '10px',
-                    padding: '10px 20px',
-                    boxShadow: '0 4px 8px rgba(0, 0, 0, 0.1)',
+                    background: "#007BFF",
+                    border: "none",
+                    borderRadius: "10px",
+                    padding: "10px 20px",
+                    boxShadow: "0 4px 8px rgba(0, 0, 0, 0.1)",
                   }}
                   className="w-100"
                 >

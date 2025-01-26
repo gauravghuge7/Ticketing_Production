@@ -14,7 +14,7 @@ const EmployeeList = ({ setValue }) => {
 
   const data = useSelector((state) => state.employeeReducer.employee);
 
-  useEffect(() => { 
+  useEffect(() => {
     setEmployees(data);
   }, [data]);
 
@@ -109,9 +109,9 @@ const EmployeeList = ({ setValue }) => {
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
             />
-            {/* <InputGroup.Text>
+            <InputGroup.Text>
               <i className="bi bi-search"></i>
-            </InputGroup.Text> */}
+            </InputGroup.Text>
           </InputGroup>
           <Button
             style={{ backgroundColor: "#007BFF", border: "none", whiteSpace: "nowrap", borderRadius: "8px", color: "#fff", fontWeight: "bold", transition: "background-color 0.3s ease" }}
@@ -150,7 +150,9 @@ const EmployeeList = ({ setValue }) => {
                 <th>Email</th>
                 <th>Designation</th>
                 <th style={{ width: "120px" }}>Password</th>
-                <th style={{ width: "20px" }}>Actions</th>
+                <th style={{ 
+                
+                 }}>Actions</th>
               </tr>
             </thead>
             <tbody>
@@ -200,66 +202,61 @@ const EmployeeList = ({ setValue }) => {
       )}
 
       {/* Edit Modal */}
-      <Modal 
-  show={showEditModal} 
-  onHide={() => setShowEditModal(false)} 
-  dialogClassName="modal-fullscreen"
->
-  <Modal.Header closeButton>
-    <Modal.Title>Edit Employee</Modal.Title>
-  </Modal.Header>
-  <Modal.Body>
-    {selectedEmployee && (
-      <Form>
-        <Form.Group controlId="formEmployeeName">
-          <Form.Label>Full Name</Form.Label>
-          <Form.Control
-            type="text"
-            placeholder="Enter full name"
-            value={selectedEmployee.employeeName}
-            onChange={(e) => setSelectedEmployee({ ...selectedEmployee, employeeName: e.target.value })}
-          />
-        </Form.Group>
-        <Form.Group controlId="formEmployeeEmail">
-          <Form.Label>Email</Form.Label>
-          <Form.Control
-            type="email"
-            placeholder="Enter email"
-            value={selectedEmployee.employeeEmail}
-            onChange={(e) => setSelectedEmployee({ ...selectedEmployee, employeeEmail: e.target.value })}
-          />
-        </Form.Group>
-        <Form.Group controlId="formDesignation">
-          <Form.Label>Designation</Form.Label>
-          <Form.Control
-            type="text"
-            placeholder="Enter designation"
-            value={selectedEmployee.designation}
-            onChange={(e) => setSelectedEmployee({ ...selectedEmployee, designation: e.target.value })}
-          />
-        </Form.Group>
-        <Form.Group controlId="formPassword">
-          <Form.Label>Password</Form.Label>
-          <Form.Control
-            type="password"
-            placeholder="Enter password"
-            value={selectedEmployee.employeePassword}
-            onChange={(e) => setSelectedEmployee({ ...selectedEmployee, employeePassword: e.target.value })}
-          />
-        </Form.Group>
-      </Form>
-    )}
-  </Modal.Body>
-  <Modal.Footer>
-    <Button variant="secondary" onClick={() => setShowEditModal(false)}>
-      Close
-    </Button>
-    <Button variant="primary" onClick={handleEditSubmit}>
-      Save Changes
-    </Button>
-  </Modal.Footer>
-</Modal>
-
+      <Modal show={showEditModal} onHide={() => setShowEditModal(false)}>
+        <Modal.Header closeButton>
+          <Modal.Title>Edit Employee</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          {selectedEmployee && (
+            <Form>
+              <Form.Group controlId="formEmployeeName">
+                <Form.Label>Full Name</Form.Label>
+                <Form.Control
+                  type="text"
+                  placeholder="Enter full name"
+                  value={selectedEmployee.employeeName}
+                  onChange={(e) => setSelectedEmployee({ ...selectedEmployee, employeeName: e.target.value })}
+                />
+              </Form.Group>
+              <Form.Group controlId="formEmployeeEmail">
+                <Form.Label>Email</Form.Label>
+                <Form.Control
+                  type="email"
+                  placeholder="Enter email"
+                  value={selectedEmployee.employeeEmail}
+                  onChange={(e) => setSelectedEmployee({ ...selectedEmployee, employeeEmail: e.target.value })}
+                />
+              </Form.Group>
+              <Form.Group controlId="formDesignation">
+                <Form.Label>Designation</Form.Label>
+                <Form.Control
+                  type="text"
+                  placeholder="Enter designation"
+                  value={selectedEmployee.designation}
+                  onChange={(e) => setSelectedEmployee({ ...selectedEmployee, designation: e.target.value })}
+                />
+              </Form.Group>
+              <Form.Group controlId="formPassword">
+                <Form.Label>Password</Form.Label>
+                <Form.Control
+                  type="password"
+                  placeholder="Enter password"
+                  value={selectedEmployee.employeePassword}
+                  onChange={(e) => setSelectedEmployee({ ...selectedEmployee, employeePassword: e.target.value })}
+                />
+              </Form.Group>
+            </Form>
+          )}
+        </Modal.Body>
+        <Modal.Footer>
+          <Button variant="secondary" onClick={() => setShowEditModal(false)}>
+            Close
+          </Button>
+          <Button variant="primary" onClick={handleEditSubmit}>
+            Save Changes
+          </Button>
+        </Modal.Footer>
+      </Modal>
     </Container>
   );
 };

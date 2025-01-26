@@ -62,8 +62,17 @@ const Home = () => {
     console.log("Contact Form Submitted", { contactName, contactEmail, contactMessage });
   };
 
+  const sectionStyle = {
+    backgroundColor: "#fff",
+    border: "6px solid #1565C0",
+    borderRadius: "15px",
+    boxShadow: "0 12px 12px rgba(0, 0, 0, 0.2)",
+    padding: "20px",
+    
+  };
+
   return (
-    <>
+    <div style={{ backgroundColor: "#fff" , marginTop: "80px"}}>
       <Navbar />
       
       {/* First container with Welcome and Login */}
@@ -83,8 +92,8 @@ const Home = () => {
           </Col>
 
           {/* Login Section */}
-          <Col lg={6} md={12} className="d-flex flex-column justify-content-center p-4"  style={{ backgroundColor: "#fff" }}>
-            <h2 className="text-center mb-4" style={{ fontWeight: "bold", fontSize: "2.5rem" }}>Login Here</h2>
+          <Col lg={6} md={12} className="d-flex flex-column justify-content-center p-4" style={sectionStyle}>
+            <h2 className="text-center mb-4" style={{ fontWeight: "bold", fontSize: "2.5rem" }}><u style={{ color: "#000" }}>Login Here</u></h2>
             <Form onSubmit={handleSubmit}>
               <Form.Group controlId="formBasicEmail" className="mb-3">
                 <Form.Label style={{ ...fontStyle }}>Email</Form.Label>
@@ -127,8 +136,8 @@ const Home = () => {
         
 
           {/* Right side Contact Us form */}
-          <Col lg={6} md={12} className="d-flex flex-column justify-content-center p-4" style={{ backgroundColor: "#fff" }}>
-            <h2 className="text-center mb-4" style={{ fontWeight: "bold", fontSize: "2.5rem" }}>Contact Us</h2>
+          <Col lg={6} md={12} className="d-flex flex-column justify-content-center p-4" style={sectionStyle}>
+            <h2 className="text-center mb-4" style={{ fontWeight: "bold", fontSize: "2.5rem" }}><u style={{ color: "#000" }}>Contact Us</u></h2>
             <Form onSubmit={handleContactSubmit}>
               <Form.Group controlId="contactName" className="mb-3">
                 <Form.Label style={{ ...fontStyle }}>Name</Form.Label>
@@ -192,7 +201,7 @@ const Home = () => {
       </Container>
 
       <Footer />
-    </>
+    </div>
   );
 };
 

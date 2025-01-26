@@ -68,7 +68,7 @@ const Componysidebar = ({ setConditionalComponent }) => {
             style={navButtonStyle}
           >
             <FiList size={20} className="me-2" />
-            {!isCollapsed && 'View Tickets'} {/* Show text only when expanded */}
+            {! isCollapsed && 'Tickets'} {/* Show text only when expanded */}
           </button>
         </li>
       </ul>
