@@ -23,6 +23,7 @@ const TaskProjectList = ({ setConditionalComponent, setProjectId }) => {
     try {
       const response = await axios.get('/api/client/fetchAllClientTickets');
       if (response.data.success) {
+        console.log("response", response);
         setProjectData(response.data.data.totalTickets);
       }
     } catch (error) {

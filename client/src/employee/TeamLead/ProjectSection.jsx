@@ -219,6 +219,7 @@ const ProjectSection = ({ setConditionalComponent, projectId }) => {
                   
                   <th>Priority</th>
                   <th>SAP Type</th>
+                  <th>Created Date</th>
              
                   <th>Assigned By Email</th>
                   <th>Assigned By Name</th>
@@ -239,6 +240,7 @@ const ProjectSection = ({ setConditionalComponent, projectId }) => {
                    
                     <td>{ticket.priority}</td>
                     <td>{ticket.saptype}</td>
+                    <td>{ticket.createdAt}</td>
                     
                     <td>{ticket.assignedByEmail}</td>
                     <td>{ticket.assignedByName}</td>
