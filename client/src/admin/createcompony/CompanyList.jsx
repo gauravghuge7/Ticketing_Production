@@ -1,16 +1,13 @@
 import axios from 'axios';
 import { useEffect, useState } from 'react';
-import { Container, Row, Col, Table, Button, FormControl,Modal, InputGroup,Form } from 'react-bootstrap';
+import { Container, Row, Col, Table, Button, FormControl, InputGroup } from 'react-bootstrap';
 import { message } from 'react-message-popup';
 
-const CompanyList = ({ setValue}) => {
+const CompanyList = ({ setValue, setClientId, setClientName}) => {
     const [companies, setCompanies] = useState([]);
     const [currentPage, setCurrentPage] = useState(1);
     const [searchTerm, setSearchTerm] = useState('');
- 
-    const [selectedCompany, setSelectedCompany] = useState(null);
-    const [showEditModal, setShowEditModal] = useState(false);  
-
+    const [editClient, setEditClient] = useState(null);
 
     const fetchCompanies = async () => {
         try {
@@ -24,11 +21,6 @@ const CompanyList = ({ setValue}) => {
         }
     };
   
-
-    const handleEdit = (company) => {
-        setSelectedCompany(company);
-        setShowEditModal(true);
-    };
 
     const handleDelete = async(id) => {
         // Implement delete functionality
@@ -47,27 +39,43 @@ const CompanyList = ({ setValue}) => {
 
     };
 
-    
-    const handleEditSubmit = async () => {
-        if (!selectedCompany) return;
-        console.log("Submitting edit for:", selectedCompany);
+    const handleEdit = async(id) => {    
+
+        
+        console.log(`Edit client with id: ${id}`);
         try {
-            const response = await axios.put(`/api/admin/updateClient/${selectedCompany._id}`, selectedCompany);
+            const response = await axios.put(`/api/admin/editClient/${id}`);
             console.log("API Response:", response.data);
             if (response.data.success) {
-                setCompanies((prevCompanies) =>
-                    prevCompanies.map((client) =>
-                        client._id === selectedCompany._id ? { ...client, ...selectedCompany } : client
-                    )
-                );
-                alert("Client updated successfully!");
-                setShowEditModal(false);
+                setEditClient(response.data.data);
+                setValue("editClient");
             }
         } 
         catch (error) {
-            console.error("Error updating client:", error);
+            console.error("Error fetching client:", error);
         }
     };  
+
+    // const handleEditSubmit = async () => {
+    //     if (!editClient) return;
+    //     console.log("Submitting edit for:", editClient);
+    //     try {
+    //         const response = await axios.put(`/api/admin/updateClient/${editClient._id}`, editClient);
+    //         console.log("API Response:", response.data);
+    //         if (response.data.success) {
+    //             setCompanies((prevCompanies) =>
+    //                 prevCompanies.map((client) =>
+    //                     client._id === editClient._id ? { ...client, ...editClient } : client
+    //                 )
+    //             );
+    //             alert("Client updated successfully!");
+    //             setValue("company");
+    //         }
+    //     } 
+    //     catch (error) {
+    //         console.error("Error updating client:", error);
+    //     }
+    // };  
 
 
 
@@ -117,9 +125,9 @@ const CompanyList = ({ setValue}) => {
                             value={searchTerm}
                             onChange={(e) => setSearchTerm(e.target.value)}
                         />
-                        {/* <InputGroup.Text>
+                        <InputGroup.Text>
                             <i className="bi bi-search"></i>
-                        </InputGroup.Text> */}
+                        </InputGroup.Text>
                     </InputGroup>
                     <Button
                         style={{ backgroundColor: "#007BFF", border: "none", whiteSpace: "nowrap", borderRadius: "8px", color: "#fff", fontWeight: "bold", transition: "background-color 0.3s ease", }}
@@ -177,7 +185,7 @@ const CompanyList = ({ setValue}) => {
                                         </td>
 
                                         <div className='d-flex'>
-                                            <Button variant="" onClick={() => handleEdit(company)} style={{ color: "#007BFF" }} className="me-2">
+                                            <Button variant="" onClick={() => handleEdit(company._id)} style={{ color: "#007BFF" }} className="me-2">
                                                 <i className="bi bi-pencil-square"></i>
                                             </Button>
                                             <Button variant="" onClick={() => handleDelete(company._id)} style={{ color: "red" }}>
@@ -193,66 +201,6 @@ const CompanyList = ({ setValue}) => {
                     )}
                 </Col>
             </Row>
-     {  /* Edit Modal */}
-            <Modal show={showEditModal} onHide={() => setShowEditModal(false)}>
-                <Modal.Header closeButton>
-                    <Modal.Title>Edit Client</Modal.Title>
-                </Modal.Header>
-                <Modal.Body>
-                    {selectedCompany && (
-                        <Form>
-                            <Form.Group controlId="formClientName">
-                                <Form.Label>Client Name</Form.Label>
-                                <Form.Control 
-                                    type="text" 
-                                    value={selectedCompany.clientName} 
-                                    onChange={(e) => setSelectedCompany({ ...selectedCompany, clientName: e.target.value })}
-                                />
-                            </Form.Group> 
-
-                            <Form.Group controlId="formClientEmail">
-                                <Form.Label>Client Email</Form.Label>
-                                <Form.Control 
-                                    type="email" 
-                                    value={selectedCompany.clientEmail} 
-                                    onChange={(e) => setSelectedCompany({ ...selectedCompany, clientEmail: e.target.value })}
-                                />
-                            </Form.Group>
-
-                            <Form.Group controlId="formClientPassword">
-                                <Form.Label>Client Password</Form.Label>
-                                <Form.Control 
-                                    type="password" 
-                                    value={selectedCompany.clientPassword} 
-                                    onChange={(e) => setSelectedCompany({ ...selectedCompany, clientPassword: e.target.value })}
-                                />
-                                
-                            </Form.Group>
-
-                           
-                        </Form>
-                    )}
-                </Modal.Body>
-                <Modal.Footer>
-                    <Button variant="secondary" onClick={() => setShowEditModal(false)}>
-                        Close
-                    </Button>
-                    <Button variant="primary" onClick={handleEditSubmit}>
-                        Save Changes
-                    </Button>
-                </Modal.Footer>         
-
-
-            </Modal>
-
-
-
-
-
-
-
-
-
 
             <div className="d-flex justify-content-between mt-3">
                 <Button

@@ -249,7 +249,7 @@ const TaskProjectList = ({ setConditionalComponent, setProjectId }) => {
                 <td>{data.tickets.projectName}</td>
                 <td>{data.tickets.ticketName}</td>
                 <td>{data.tickets.priority}</td>
-                <td>{data.tickets.createdDate || new Date().toLocaleDateString()}</td>
+                <td>{new Date(data.tickets.createdAt).toLocaleDateString()}</td>
                 <td>{data.tickets.saptype}</td>
                 <td>{data.tickets.status}</td>
                 <td>{data.tickets.assignedByEmail}</td>
