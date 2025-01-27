@@ -393,6 +393,7 @@ const fetchAllClientTickets = asyncHandler(async (req, res) => {
                         ticketDescription: 1,
                         ticketDocument: 1,
                         createdAt: 1,
+                        updatedAt: 1,
                         ticketId: 1,
                     }
                     

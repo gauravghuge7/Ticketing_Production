@@ -63,17 +63,9 @@ const ticketSchema = new Schema({
 
     dueDate: {
         type: Date,
-
     },
 
 
-
-
-
-
-
-
-    
 
 
 
@@ -87,6 +79,6 @@ const ticketSchema = new Schema({
 
     
 
-});
+}, { timestamps: true });
   
 export const Ticket = model('Ticket', ticketSchema);    
