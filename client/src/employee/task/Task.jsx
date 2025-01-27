@@ -229,7 +229,7 @@ const TaskList = ({ setConditionalComponent }) => {
                 <th>Ticket Detail</th>
                 <th>Document</th>
                 <th>Status</th>
-                {/* <th>Ticket Forward</th> */}
+                <th>Ticket Forward</th>
               </tr>
             </thead>
             <tbody>
@@ -264,7 +264,7 @@ const TaskList = ({ setConditionalComponent }) => {
                     </select>
                   </td>
                  
-                    {/* <Button
+                    <Button
                       style={{
                         backgroundColor: 'transparent',
                         border: 'none',
@@ -278,7 +278,7 @@ const TaskList = ({ setConditionalComponent }) => {
                       onClick={() => openForwardTicketDialog(task)}
                     >
                       Forward
-                    </Button> */}
+                    </Button>
                  
                 </tr>
               ))}
