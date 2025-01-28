@@ -1,13 +1,15 @@
 import axios from 'axios';
 import { useEffect, useState } from 'react';
-import { Container, Row, Col, Table, Button, FormControl, InputGroup } from 'react-bootstrap';
+import { Container, Row, Col, Table, Button, FormControl, InputGroup , Modal, Form } from 'react-bootstrap';
 import { message } from 'react-message-popup';
 
 const CompanyList = ({ setValue, setClientId, setClientName}) => {
     const [companies, setCompanies] = useState([]);
     const [currentPage, setCurrentPage] = useState(1);
     const [searchTerm, setSearchTerm] = useState('');
-    const [editClient, setEditClient] = useState(null);
+  
+    const [selectedCompany, setSelectedCompany] = useState(null);
+    const [showEditModal, setShowEditModal] = useState(false);          
 
     const fetchCompanies = async () => {
         try {
@@ -39,23 +41,33 @@ const CompanyList = ({ setValue, setClientId, setClientName}) => {
 
     };
 
-    const handleEdit = async(id) => {    
-
-        
-        console.log(`Edit client with id: ${id}`);
+   
+    
+    const handleEdit = async(company) => {
+        setSelectedCompany(company);
+        setShowEditModal(true);
+    };
+    
+    const handleEditSubmit = async () => {
+        if (!selectedCompany) return;
+        console.log("Submitting edit for:", selectedCompany);
         try {
-            const response = await axios.put(`/api/admin/editClient/${id}`);
+            const response = await axios.put(`/api/admin/editClient/${selectedCompany._id}`, selectedCompany);
             console.log("API Response:", response.data);
             if (response.data.success) {
-                setEditClient(response.data.data);
-                setValue("editClient");
+                setCompanies((prevCompanies) =>
+                    prevCompanies.map((client) =>
+                        client._id === selectedCompany._id ? { ...client, ...selectedCompany } : client
+                    )
+                );
+                alert("Company updated successfully!");
+                setShowEditModal(false);
             }
         } 
         catch (error) {
-            console.error("Error fetching client:", error);
+            console.error("Error updating client:", error);
         }
     };  
-
     // const handleEditSubmit = async () => {
     //     if (!editClient) return;
     //     console.log("Submitting edit for:", editClient);
@@ -125,9 +137,9 @@ const CompanyList = ({ setValue, setClientId, setClientName}) => {
                             value={searchTerm}
                             onChange={(e) => setSearchTerm(e.target.value)}
                         />
-                        <InputGroup.Text>
+                        {/* <InputGroup.Text>
                             <i className="bi bi-search"></i>
-                        </InputGroup.Text>
+                        </InputGroup.Text> */}
                     </InputGroup>
                     <Button
                         style={{ backgroundColor: "#007BFF", border: "none", whiteSpace: "nowrap", borderRadius: "8px", color: "#fff", fontWeight: "bold", transition: "background-color 0.3s ease", }}
@@ -143,27 +155,25 @@ const CompanyList = ({ setValue, setClientId, setClientName}) => {
             <Row className="justify-content-md-center">
                 <Col md={12}>
                     {currentCompanies.length > 0 ? (
-                        <Table
-                            striped
-                            bordered
-                            hover
-                            style={{
-                                backgroundColor: "#fff",
-                                color: "#333",
-                                borderRadius: "12px",
-                                overflow: "hidden",
-                            }}
-                        >
-                            <thead
-                                style={{
-                                    backgroundColor: "#007BFF",
-                                    color: "#fff",
-                                }}
-                            >
+                         <Table
+                         className="table table-bordered table-hover"
+                         style={{
+                           backgroundColor: "#fff",
+                           borderRadius: "20px",
+                           overflow: "hidden",
+                         }}
+                       >
+                         <thead
+                           className="thead-dark"
+                           style={{
+                             backgroundColor: "#007BFF",
+                             color: "#fff",
+                           }}
+                         >
                                 <tr>
                                     <th>#</th>
                                     <th>Client Name</th>
-                                    <th>Client Email</th>
+                                    <th>Client Email/ID</th>
                                     <th style={{ width: "150px" }}>Password</th>
                                     <th style={{ textAlign: "center" }}>Add Project</th>
                                     <th>Actions</th>
@@ -185,7 +195,7 @@ const CompanyList = ({ setValue, setClientId, setClientName}) => {
                                         </td>
 
                                         <div className='d-flex'>
-                                            <Button variant="" onClick={() => handleEdit(company._id)} style={{ color: "#007BFF" }} className="me-2">
+                                            <Button variant="" onClick={() => handleEdit(company)} style={{ color: "#007BFF" }} className="me-2">
                                                 <i className="bi bi-pencil-square"></i>
                                             </Button>
                                             <Button variant="" onClick={() => handleDelete(company._id)} style={{ color: "red" }}>
@@ -201,6 +211,74 @@ const CompanyList = ({ setValue, setClientId, setClientName}) => {
                     )}
                 </Col>
             </Row>
+
+
+
+           {/* Edit Model */}
+            <Modal show={showEditModal} onHide={() => setShowEditModal(false)}>
+                <Modal.Header closeButton>
+                    <Modal.Title>Edit Company</Modal.Title>
+                </Modal.Header>
+                <Modal.Body>
+                    {selectedCompany && (
+                        <Form>                        
+                            <Form.Group controlId="formCompanyName">
+                                <Form.Label>Company Name</Form.Label>
+                                <Form.Control
+                                    type="text"
+                                    placeholder="Enter company name"
+                                    value={selectedCompany.clientName}
+                                    onChange={(e) => setSelectedCompany({ ...selectedCompany, clientName: e.target.value })}
+                                />
+                            </Form.Group>
+                            <Form.Group controlId="formCompanyEmail">
+                                <Form.Label>Company Email</Form.Label>
+                                <Form.Control
+                                    type="email"
+                                    placeholder="Enter company email"
+                                    value={selectedCompany.clientEmail}
+                                    onChange={(e) => setSelectedCompany({ ...selectedCompany, clientEmail: e.target.value })}
+                                />
+                                
+                            </Form.Group>
+                            <Form.Group controlId="formCompanyPassword">
+                                <Form.Label>Company Password</Form.Label>
+                                <Form.Control
+                                    type="password"
+                                    placeholder="Enter password"
+                                    value={selectedCompany.clientPassword}
+                                    onChange={(e) => setSelectedCompany({ ...selectedCompany, clientPassword: e.target.value })}
+                                />
+                            </Form.Group>
+                        </Form>
+                    )}
+                </Modal.Body>
+                <Modal.Footer>
+                    <Button variant="secondary" onClick={() => setShowEditModal(false)}>
+                        Close
+                    </Button>
+                    <Button variant="primary" onClick={handleEditSubmit}>
+                        Save Changes
+                    </Button>
+
+                </Modal.Footer>                
+            </Modal>        
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
             <div className="d-flex justify-content-between mt-3">
                 <Button

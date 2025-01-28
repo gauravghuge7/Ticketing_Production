@@ -76,6 +76,21 @@ const ProjectSection = ({ setConditionalComponent, projectId }) => {
   const [employeeTask, setEmployeeTask] = useState(false);
   const employeeTaskRef = useRef();
 
+  const [currentTicketPage, setCurrentTicketPage] = useState(1);
+  const [currentEmployeePage, setCurrentEmployeePage] = useState(1);
+  const [currentTaskPage, setCurrentTaskPage] = useState(1);
+  const itemsPerPage = 10;
+
+  const [filters, setFilters] = useState({
+    status: '',
+    priority: '',
+    saptype: '',
+    startDate: '',
+    endDate: '',
+    ticketId: '',
+    ticketName: ''
+  });
+
   const fetchProjects = async () => {
     console.log("projectId => ", projectId);
 
@@ -161,7 +176,45 @@ const ProjectSection = ({ setConditionalComponent, projectId }) => {
     setAssignTask(true);
   }
 
+  const indexOfLastTicket = currentTicketPage * itemsPerPage;
+  const indexOfFirstTicket = indexOfLastTicket - itemsPerPage;
+  const currentTickets = tickets.slice(indexOfFirstTicket, indexOfLastTicket);
 
+  const indexOfLastEmployee = currentEmployeePage * itemsPerPage;
+  const indexOfFirstEmployee = indexOfLastEmployee - itemsPerPage;
+  const currentEmployees = employeeDetails.slice(indexOfFirstEmployee, indexOfLastEmployee);
+
+  const indexOfLastTask = currentTaskPage * itemsPerPage;
+  const indexOfFirstTask = indexOfLastTask - itemsPerPage;
+  const currentTasks = tasks.slice(indexOfFirstTask, indexOfLastTask);
+
+  const filteredTickets = tickets.filter(ticket => {
+    const ticketDate = new Date(ticket.createdAt);
+    const startDate = new Date(filters.startDate);
+    const endDate = new Date(filters.endDate);
+
+    return (!filters.status || ticket.status === filters.status) &&
+           (!filters.priority || ticket.priority === filters.priority) &&
+           (!filters.saptype || ticket.saptype === filters.saptype) &&
+           (!filters.startDate || ticketDate >= startDate) &&
+           (!filters.endDate || ticketDate <= endDate) &&
+           (!filters.ticketId || ticket.ticketId.includes(filters.ticketId)) &&
+           (!filters.ticketName || ticket.ticketName.toLowerCase().includes(filters.ticketName.toLowerCase()));
+  });
+
+  const filteredTasks = tasks.filter(task => {
+    const taskDate = new Date(task.createdAt);
+    const startDate = new Date(filters.startDate);
+    const endDate = new Date(filters.endDate);
+
+    return (!filters.status || task.status === filters.status) &&
+           (!filters.priority || task.priority === filters.priority) &&
+           (!filters.saptype || task.saptype === filters.saptype) &&
+           (!filters.startDate || taskDate >= startDate) &&
+           (!filters.endDate || taskDate <= endDate) &&
+           (!filters.ticketId || (task.ticket && task.ticket.ticketId.includes(filters.ticketId))) &&
+           (!filters.ticketName || (task.ticket && task.ticket.ticketName.toLowerCase().includes(filters.ticketName.toLowerCase())));
+  });
 
   return (
 
@@ -195,7 +248,87 @@ const ProjectSection = ({ setConditionalComponent, projectId }) => {
       >
         <summary style={{ padding: "15px", cursor: "pointer", fontSize: "18px" }}> Client Ticket </summary>
         <div className="card-body">
-          <legend style={{ marginBottom: "20px", fontSize: "24px", fontWeight: "bold" }}> Client Ticket </legend>
+          {/* <legend style={{ marginBottom: "20px", fontSize: "24px", fontWeight: "bold" }}> Client Ticket </legend> */}
+          <div className="row mb-3">
+          <div className="row mb-3">
+            <div className="col-md-2">
+              <input 
+                type="text"
+                className="form-control"
+                placeholder="Ticket ID"
+                value={filters.ticketId}
+                onChange={(e) => setFilters({...filters, ticketId: e.target.value})}
+              />
+            </div>
+            <div className="col-md-2">
+              <input 
+                type="text"
+                className="form-control"
+                placeholder="Ticket Name"
+                value={filters.ticketName}
+                onChange={(e) => setFilters({...filters, ticketName: e.target.value})}
+              />
+            </div>
+            <div className="col-md-2">
+              <select 
+                className="form-select"
+                value={filters.status}
+                onChange={(e) => setFilters({...filters, status: e.target.value})}
+              >
+                <option value="">Status</option>
+                <option value="Open">Open</option>
+                <option value="In Progress">In Progress</option>
+                <option value="Completed">Completed</option>
+              </select>
+            </div>
+            {/* <div className="col-md-2">
+              <select 
+                className="form-select"
+                value={filters.priority}
+                onChange={(e) => setFilters({...filters, priority: e.target.value})}
+              >
+                <option value="">Filter by Priority</option>
+                <option value="High">High</option>
+                <option value="Medium">Medium</option>
+                <option value="Low">Low</option>
+              </select>
+            </div> */}
+            <div className="col-md-2">
+              <select 
+                className="form-select"
+                value={filters.saptype}
+                onChange={(e) => setFilters({...filters, saptype: e.target.value})}
+              >
+                <option value="">SAP Module</option>
+                <option value="ABAP">ABAP</option>
+                <option value="Basis">Basis</option>
+                <option value="FICO">FICO</option>
+                <option value="MM">MM</option>
+                <option value="PP">PP</option>
+                <option value="SD">SD</option>
+              </select>
+            </div>
+        
+          
+            <div className="col-md-2">
+              <input 
+                type="date"
+                className="form-control"
+                value={filters.startDate}
+                onChange={(e) => setFilters({...filters, startDate: e.target.value})}
+              />
+            </div>
+            {/* <div className="col-md-2">
+              <input 
+                type="date"
+                className="form-control"
+                value={filters.endDate}
+                onChange={(e) => setFilters({...filters, endDate: e.target.value})}
+              />
+            </div> */}
+          </div>
+         
+          </div>
           <div className="table-responsive">
             <table
               className="table table-bordered table-hover"
@@ -219,63 +352,94 @@ const ProjectSection = ({ setConditionalComponent, projectId }) => {
                   
                   <th>Priority</th>
                   <th>SAP Type</th>
-                  <th>Created Date</th>
+                  <th>Creation Date</th>
              
-                  <th>Assigned By Email</th>
-                  <th>Assigned By Name</th>
-                  <th>Assigned To</th>
+                  <th>Spokesperson Email</th>
+                  <th>Spokesperson Name</th>
+                  <th>Spokesperson Number</th>
                   <th>Status</th>
              
                   <th>Description</th>
                   <th>Document</th>
                 </tr>
               </thead>
-              <tbody>
-                {tickets.map((ticket, index) => (
-                  <tr key={index}>
-                    <td>{index + 1}</td>
-                    <td>{ticket.ticketId}</td>
+              {filteredTickets.length > 0 ? (
+                <>
+                  <tbody>
+                    {currentTickets.map((ticket, index) => (
+                      <tr key={index}>
+                        <td>{index + 1}</td>
+                        <td>{ticket.ticketId}</td>
 
-                    <td>{ticket?.ticketName}</td>
-                   
-                    <td>{ticket.priority}</td>
-                    <td>{ticket.saptype}</td>
-                    <td>{ticket.createdAt}</td>
-                    
-                    <td>{ticket.assignedByEmail}</td>
-                    <td>{ticket.assignedByName}</td>
-                    <td>{ticket.assignedTo }</td>
-                    <td>{ticket.status}</td>
-                   
-                    <td>{ticket?.ticketDescription}</td>
-                    <td>
-                      <a href={ticket ? ticket?.ticketDocument : ""} target="_blank" rel="noreferrer">
-                        <button
-                          className="btn btn-primary"
-                          style={{
-                            backgroundColor: "transparent",
-                            border: "none",
-                            padding: "8px 16px",
-                            borderRadius: "8px",
-                            color: "#007BFF",
-                            fontWeight: "bold",
-                            
-                          }}
+                        <td>{ticket?.ticketName}</td>
+                       
+                        <td>{ticket.priority}</td>
+                        <td>{ticket.saptype}</td>
                           
-                        >
-                          <i className='bi bi-eye-fill'></i>
-                        </button>
-                      </a>
-                    </td>
+                        <td>{ticket.createdAt ? new Date(ticket.createdAt).toLocaleDateString() : 
+                            ticket.ticketCreatedAt ? new Date(ticket.ticketCreatedAt).toLocaleDateString() : ''}</td>
+                
+                        
+                        
+                        <td>{ticket.assignedByEmail}</td>
+                        <td>{ticket.assignedByName}</td>
+                        <td>{ticket.assignedTo }</td>
+                        <td>{ticket.status}</td>
+                       
+                        <td>{ticket?.ticketDescription}</td>
+                        <td>
+                          <a href={ticket ? ticket?.ticketDocument : ""} target="_blank" rel="noreferrer">
+                            <button
+                              className="btn btn-primary"
+                              style={{
+                                backgroundColor: "transparent",
+                                border: "none",
+                                padding: "8px 16px",
+                                borderRadius: "8px",
+                                color: "#007BFF",
+                                fontWeight: "bold",
+                                
+                              }}
+                              
+                            >
+                              <i className='bi bi-eye-fill'></i>
+                            </button>
+                          </a>
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                 
+                </>
+              ) : (
+                <tbody>
+                  <tr>
+                    <td colSpan="12" className="text-center">No tickets found.</td>
                   </tr>
-                ))}
-              </tbody>
+                </tbody>
+              )}
             </table>
 
 
 
             
           </div>
+          <div className="d-flex justify-content-between mt-3">
+                    <button
+                      className="btn btn-primary"
+                      onClick={() => setCurrentTicketPage(prev => prev - 1)}
+                      disabled={currentTicketPage === 1}
+                    >
+                      <i className="bi bi-arrow-left"></i>
+                    </button>
+                    <button
+                      className="btn btn-primary"
+                      onClick={() => setCurrentTicketPage(prev => prev + 1)}
+                      disabled={indexOfLastTicket >= tickets.length}
+                    >
+                      <i className="bi bi-arrow-right"></i>
+                    </button>
+                  </div>
         </div>
       </details>
 
@@ -287,17 +451,19 @@ const ProjectSection = ({ setConditionalComponent, projectId }) => {
           borderRadius: "12px",
           boxShadow: "0 6px 15px rgba(0, 0, 0, 0.2)",
           color: "#333",
+    
         }}>
         <summary style={{ padding: "15px", cursor: "pointer", fontSize: "18px" }}> Employee Details </summary>
-        <div className="card-body">
-          <legend style={{ marginBottom: "20px", fontSize: "24px", fontWeight: "bold" }}>Employee Details</legend>
+        <div className="card-body" >
+          {/* <legend style={{ marginBottom: "20px", fontSize: "24px", fontWeight: "bold" }}>Employee Details</legend> */}
         
           <div className="row" style={{
                 backgroundColor: "#fff",
                 borderRadius: "12px",
                 overflow: "hidden",
+                padding: "20px",
               }}>
-            {employeeDetails.map((employee, index) => (
+            {currentEmployees.map((employee, index) => (
               <div className="col-md-4 mb-3" key={index}>
                 <div className="card">
                   <div className="card-body">
@@ -324,6 +490,22 @@ const ProjectSection = ({ setConditionalComponent, projectId }) => {
               </div>
             ))}
           </div>
+          <div className="d-flex justify-content-between mt-3">
+            <button
+              className="btn btn-primary"
+              onClick={() => setCurrentEmployeePage(prev => prev - 1)}
+              disabled={currentEmployeePage === 1}
+            >
+              <i className="bi bi-arrow-left"></i>
+            </button>
+            <button
+              className="btn btn-primary"
+              onClick={() => setCurrentEmployeePage(prev => prev + 1)}
+              disabled={indexOfLastEmployee >= employeeDetails.length}
+            >
+              <i className="bi bi-arrow-right"></i>
+            </button>
+          </div>
         </div>
       </details>
 
@@ -340,7 +522,7 @@ const ProjectSection = ({ setConditionalComponent, projectId }) => {
         color: "#333",
       }}
     >
-    <legend style={{ margin: "20px", fontSize: "24px", fontWeight: "bold" }}> Employees Ticket </legend>
+    {/* <legend style={{ margin: "20px", fontSize: "24px", fontWeight: "bold" }}> Employees Ticket </legend> */}
       <summary
         style={{
           padding: "15px",
@@ -360,17 +542,88 @@ const ProjectSection = ({ setConditionalComponent, projectId }) => {
 
       <div className="card-body" style={{ padding: "20px" }}>
 
+        <div className="row mb-2">
+          
+        <div className="col-md-2">
+            <input 
+              type="text"
+              className="form-control"
+              placeholder="Ticket ID"
+              value={filters.ticketId}
+              onChange={(e) => setFilters({...filters, ticketId: e.target.value})}
+            />
+          </div>
+          <div className="col-md-2">
+            <input 
+              type="text"
+              className="form-control"
+              placeholder="Ticket Name"
+              value={filters.ticketName}
+              onChange={(e) => setFilters({...filters, ticketName: e.target.value})}
+            />
+          </div>
+          <div className="col-md-2">
+            <select 
+              className="form-select"
+              value={filters.status}
+              onChange={(e) => setFilters({...filters, status: e.target.value})}
+            >
+              <option value=""> Status</option>
+              <option value="Open">Open</option>
+              <option value="In Progress">In Progress</option>
+              <option value="Completed">Completed</option>
+            </select>
+          </div>
+          
+          <div className="col-md-2">
+            <select 
+              className="form-select"
+              value={filters.saptype}
+              onChange={(e) => setFilters({...filters, saptype: e.target.value})}
+            >
+              <option value="">SAP Module</option>
+              <option value="ABAP">ABAP</option>
+              <option value="Basis">Basis</option>
+              <option value="FICO">FICO</option>
+              <option value="MM">MM</option>
+              <option value="PP">PP</option>
+              <option value="SD">SD</option>
+            </select>
+          </div>
+       
+          {/* <div className="col-md-2">
+            <input 
+              type="date"
+              className="form-control"
+              value={filters.startDate}
+              onChange={(e) => setFilters({...filters, startDate: e.target.value})}
+            />
+          </div> */}
+          <div className="col-md-2">
+            <input 
+              type="date"
+              className="form-control"
+              value={filters.endDate}
+              onChange={(e) => setFilters({...filters, endDate: e.target.value})}
+            />
+          </div>
+       
+        </div>
+
         <div className="table-responsive">
           
           <table
+          
+            
             className="table table-bordered table-hover"
             style={{
               backgroundColor: "#fff",
-              borderRadius: "12px",
+              borderRadius: "20px",
               overflow: "hidden",
             }}
-          > 
+          >
             <thead
+              className="thead-dark"
               style={{
                 backgroundColor: "#007BFF",
                 color: "#fff",
@@ -382,55 +635,88 @@ const ProjectSection = ({ setConditionalComponent, projectId }) => {
                 <th className="border px-4 py-2">Ticket ID</th>
                 <th className="border px-4 py-2">Tickets Name</th>
                 <th className="border px-4 py-2">Priority</th>
-                <th className="border px-4 py-2">SAP Type</th>
+                <th className="border px-4 py-2">SAP Module</th>
+                <th className="border px-4 py-2"> Creation Date</th>
                 <th className="border px-4 py-2">Due Date</th>
                 <th className="border px-4 py-2">Status</th>
              
-                <th className="border px-4 py-2">Assigned By Email</th>
-                <th className="border px-4 py-2">Assigned By Name</th>
-                <th className="border px-4 py-2">Assigned By Number</th>
-                <th className="border px-4 py-2">Tickets Description</th>
-                <th className="border px-4 py-2">Tickets Document</th>
+                <th className="border px-4 py-2">	Spokesperson Email</th>
+                <th className="border px-4 py-2">	Spokesperson Name</th>
+                <th className="border px-4 py-2">	Spokesperson Number</th>
+                
+                <th className="border px-4 py-2">Description</th>
+                <th className="border px-4 py-2">Document</th>
               </tr>
             </thead>
-            <tbody>
-              {tasks.map((task, index) => (
-                <tr key={index}>
-                  <td className="border px-4 py-2">{index + 1}</td>
-                  <td className="border px-4 py-2">{task.ticket ? "Client Ticket" : "Team Lead Task"}</td>
-                  <td  className="border px-4 py-2">{ task.ticket ? task.ticket.ticketId : "-"}</td>
+            {filteredTasks.length > 0 ? (
+              <>
+                <tbody>
+                  {filteredTasks.map((task, index) => (
+                    <tr key={index}>
+                      <td className="border px-4 py-2">{index + 1}</td>
+                      <td className="border px-4 py-2">{task.ticket ? "Client Ticket" : "Team Lead Task"}</td>
+                      <td  className="border px-4 py-2">{ task.ticket ? task.ticket.ticketId : "-"}</td>
 
-                  <td className="border px-4 py-2">{task.ticket ? task.ticket.ticketName : task.taskName}</td>
-                  <td className="border px-4 py-2">{task.ticket ? task.ticket.priority : task.priority}</td>
-                  <td className="border px-4 py-2">{task.ticket ? task.ticket.saptype : "-"}</td>
-                  <td className="border px-4 py-2">{new Date(task.dueDate).toLocaleDateString()}</td>
-                  <td className="border px-4 py-2">{task.ticket ? task.ticket.status : task.status}</td>
-                
-                  <td className="border px-4 py-2">{task.ticket ? task.ticket.assignedByEmail : "-"}</td>
-                  <td className="border px-4 py-2">{task.ticket ? task.ticket.assignedByName : "-"}</td>
-                    <td className="border px-4 py-2">{task.ticket ? task.ticket.assignedTo : "-"}</td>
-                  <td className="border px-4 py-2">{task.ticket ? task.ticket.ticketDescription : task.description}</td>
-                  <td className="border px-4 py-2">
-                    <a href={task?.taskDocument || task?.ticket?.ticketDocument } target="_blank" rel="noreferrer">
-                      <button
-                        className="btn"
-                        style={{
-                          backgroundColor: "transparent",
-                          border: "none",
-                          padding: "8px 16px",
-                          borderRadius: "8px",
-                          color: "#007BFF",
-                          fontWeight: "bold",
-                        }}>
-                        <i className='bi bi-eye-fill'></i>
-                      </button>
-                    </a>
-                  </td>
+                      <td className="border px-4 py-2">{task.ticket ? task.ticket.ticketName : task.taskName}</td>
+                      <td className="border px-4 py-2">{task.ticket ? task.ticket.priority : task.priority}</td>
+                      <td className="border px-4 py-2">{task.ticket ? task.ticket.saptype : "-"}</td>
+                      <td className="border px-4 py-2">{new Date(task.ticket ? task.ticket.createdAt : task.createdAt).toLocaleDateString()}</td>
+                      <td className="border px-4 py-2">{new Date(task.dueDate).toLocaleDateString()}</td>
+                      <td className="border px-4 py-2">{task.ticket ? task.ticket.status : task.status}</td>
+                    
+                      <td className="border px-4 py-2">{task.ticket ? task.ticket.assignedByEmail : "-"}</td>
+                      <td className="border px-4 py-2">{task.ticket ? task.ticket.assignedByName : "-"}</td>
+                        <td className="border px-4 py-2">{task.ticket ? task.ticket.assignedTo : "-"}</td>
+                     
+                      <td className="border px-4 py-2">{task.ticket ? task.ticket.ticketDescription : task.description}</td>
+                      <td className="border px-4 py-2">
+                        <a href={task?.taskDocument || task?.ticket?.ticketDocument } target="_blank" rel="noreferrer">
+                          <button
+                            className="btn"
+                            style={{
+                              backgroundColor: "transparent",
+                              border: "none",
+                              padding: "8px 16px",
+                              borderRadius: "8px",
+                              color: "#007BFF",
+                              fontWeight: "bold",
+                            }}>
+                            <i className='bi bi-eye-fill'></i>
+                          </button>
+                        </a>
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+               
+              </>
+              
+            ) : (
+              <tbody>
+                <tr>
+                  <td colSpan="15" className="text-center">No tasks found.</td>
                 </tr>
-              ))}
-            </tbody>
+              </tbody>
+            )}
           </table>
         </div>
+         <div className="d-flex justify-content-between  mt-3">
+                  <div>
+                  <button
+                    className="btn btn-primary"
+                    onClick={() => setCurrentTaskPage(prev => prev - 1)}
+                    disabled={currentTaskPage === 1}
+                  >
+                    <i className="bi bi-arrow-left "></i>
+                  </button></div>
+                  <div><button
+                    className="btn btn-primary"
+                    onClick={() => setCurrentTaskPage(prev => prev + 1)}
+                    disabled={indexOfLastTask >= filteredTasks.length}
+                  >
+                    <i className="bi bi-arrow-right"></i>
+                  </button></div>
+                </div>
       </div>
     </details>
 

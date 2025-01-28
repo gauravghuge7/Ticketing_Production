@@ -136,24 +136,21 @@ const TeamList = ({ setValue }) => {
                 <Col md={12}>
                     {currentTeams.length > 0 ? (
                         <>
-                            <Table
-                                striped
-                                bordered
-                                hover
-                                responsive
-                                style={{
-                                    backgroundColor: "#fff",
-                                    color: "#333",
-                                    borderRadius: "12px",
-                                    overflow: "hidden",
-                                }}
-                            >
-                                <thead
-                                    style={{
-                                        backgroundColor: "#007BFF",
-                                        color: "#fff",
-                                    }}
-                                >
+                             <Table
+              className="table table-bordered table-hover"
+              style={{
+                backgroundColor: "#fff",
+                borderRadius: "20px",
+                overflow: "hidden",
+              }}
+            >
+              <thead
+                className="thead-dark"
+                style={{
+                  backgroundColor: "#007BFF",
+                  color: "#fff",
+                }}
+              >
                                     <tr>
                                         <th>#</th>
                                         <th>Team Name</th>

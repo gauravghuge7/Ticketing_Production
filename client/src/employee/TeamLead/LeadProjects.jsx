@@ -8,6 +8,7 @@ const LeadProjects = ({ setConditionalComponent, teamId, setProjectId }) => {
   const [projects, setProjects] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
   const [searchTerm, setSearchTerm] = useState("");
+  const [selectedClient, setSelectedClient] = useState("");
 
   const projectsPerPage = 10;
 
@@ -40,8 +41,14 @@ const LeadProjects = ({ setConditionalComponent, teamId, setProjectId }) => {
     // Implement document view logic if needed
   };
 
+  const getUniqueClients = () => {
+    const clients = projects.map(project => project.clientName);
+    return [...new Set(clients)];
+  };
+
   const filteredProjects = projects.filter(project =>
-    project.projectName.toLowerCase().includes(searchTerm.toLowerCase())
+    project.projectName.toLowerCase().includes(searchTerm.toLowerCase()) &&
+    (selectedClient === "" || project.clientName === selectedClient)
   );
 
   const indexOfLastProject = currentPage * projectsPerPage;
@@ -75,26 +82,45 @@ const LeadProjects = ({ setConditionalComponent, teamId, setProjectId }) => {
         <h2 style={{ margin: 0, color: "#333", fontWeight: "bold" }}>
           Projects That You Are Leading
         </h2>
-        <InputGroup style={{ maxWidth: "30%" }}>
-          <FormControl
-            placeholder="Search Project Name"
-            value={searchTerm}
-            onChange={(e) => setSearchTerm(e.target.value)}
-          />
-          
-        </InputGroup>
+        <div style={{ display: 'flex', gap: '10px', maxWidth: '50%' }}>
+          <select
+            className="form-select"
+            value={selectedClient}
+            onChange={(e) => setSelectedClient(e.target.value)}
+            style={{ maxWidth: '200px' }}
+          >
+            <option value="">All Clients</option>
+            {getUniqueClients().map((client, index) => (
+              <option key={index} value={client}>
+                {client}
+              </option>
+            ))}
+          </select>
+          <InputGroup>
+            <FormControl
+              placeholder="Search Project Name"
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
+            />
+          </InputGroup>
+        </div>
       </div>
 
       <table
-        className="table table-striped table-bordered"
-        style={{
-          backgroundColor: "#fff",
-          color: "#333",
-          borderRadius: "12px",
-          overflow: "hidden",
-        }}
-      >
-        <thead style={{ backgroundColor: "#007BFF", color: "#fff" }}>
+              className="table table-bordered table-hover"
+              style={{
+                backgroundColor: "#fff",
+                borderRadius: "20px",
+                overflow: "hidden",
+              }}
+            >
+              <thead
+                className="thead-dark"
+                style={{
+                  backgroundColor: "#007BFF",
+                  color: "#fff",
+                }}
+              >
           <tr>
           <th scope="col">#</th>
             <th scope="col">Client Name</th>

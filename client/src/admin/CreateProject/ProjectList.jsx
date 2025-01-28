@@ -151,11 +151,25 @@ const ProjectList = () => {
                 </InputGroup>
                 </Col>
             </Row>
-            <table className="table table-striped table-bordered" style={{ backgroundColor: "#fff", borderRadius: "12px", overflow: "hidden" }}>
-                <thead style={{ backgroundColor: "#007BFF", color: "#fff" }}>
+            <table
+              className="table table-bordered table-hover"
+              style={{
+                backgroundColor: "#fff",
+                borderRadius: "20px",
+                overflow: "hidden",
+              }}
+            >
+              <thead
+                className="thead-dark"
+                style={{
+                  backgroundColor: "#007BFF",
+                  color: "#fff",
+                }}
+              >
                     <tr>
                         <th>#</th>
-                        <th>Project Name</th>
+                        <th>Client </th>
+                        <th>Project</th>
                     
                         <th>Spokesperson Email</th>
                         <th>Spokesperson Name</th>
@@ -171,6 +185,7 @@ const ProjectList = () => {
                     {currentProjects.map((data, index) => (
                         <tr key={index}>
                             <td>{indexOfFirstProject + index + 1}</td>
+                            <td>{data.clientName}</td>
                             <td>{data.projectName}</td>
 
                             <td>{data.spokePersonEmail}</td>

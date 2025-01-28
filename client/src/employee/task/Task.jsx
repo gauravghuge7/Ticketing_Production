@@ -5,7 +5,8 @@ import { message } from 'react-message-popup';
 
 const TaskList = ({ setConditionalComponent }) => {
   const [tasks, setTasks] = useState([]);
-  const [currentPage, setCurrentPage] = useState(0);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [tasksPerPage] = useState(10);
   const [searchFilters, setSearchFilters] = useState({
     ticketName: '',
     ticketID: '',
@@ -73,8 +74,6 @@ const TaskList = ({ setConditionalComponent }) => {
     }
   };
 
-  const tasksPerPage = 10;
-
   const filteredTasks = tasks.filter((task) => {
     return (
       (searchFilters.ticketName === '' ||
@@ -102,11 +101,11 @@ const TaskList = ({ setConditionalComponent }) => {
     );
   });
   
+  const indexOfLastTask = currentPage * tasksPerPage;
+  const indexOfFirstTask = indexOfLastTask - tasksPerPage;
+  const displayedTasks = filteredTasks.slice(indexOfFirstTask, indexOfLastTask);
 
-  const displayedTasks = filteredTasks.slice(
-    currentPage * tasksPerPage,
-    (currentPage + 1) * tasksPerPage
-  );
+  const paginate = (pageNumber) => setCurrentPage(pageNumber);
 
   useEffect(() => {
     fetchTasks();
@@ -128,6 +127,24 @@ const TaskList = ({ setConditionalComponent }) => {
     }
   };
 
+  const getUniqueValues = (key, subKey = null) => {
+    return [...new Set(tasks.map(task => 
+      subKey ? (task[key]?.[subKey] || task[key]) : (task[key] || task.ticket?.[key])
+    ).filter(Boolean))];
+  };
+
+  const clearAllFilters = () => {
+    setSearchFilters({
+      ticketName: '',
+      ticketID: '',
+      dueDate: '',
+      status: '',
+      priority: '',
+      assignedTo: '',
+      ticketType: '',
+    });
+  };
+
   return (
     <Container
       style={{
@@ -138,94 +155,151 @@ const TaskList = ({ setConditionalComponent }) => {
         color: '#333',
       }}
     >
-      <h2 style={{ marginBottom: '25px', color: '#333', fontWeight: 'bold', textAlign: 'center' }}>
-        Ticket List
-      </h2>
+      <Row className="mb-3">
+        <Col className="d-flex justify-content-between align-items-center">
+          <h2 style={{ marginBottom: '0', color: '#333', fontWeight: 'bold' }}>
+            Ticket List
+          </h2>
+          <Button 
+            variant="secondary"
+            onClick={clearAllFilters}
+            style={{
+              padding: '8px 16px',
+              borderRadius: '5px',
+              fontWeight: 'bold',
+            }}
+          >
+            Clear All Filters
+          </Button>
+        </Col>
+      </Row>
+  
 
       <Row className="mb-4">
         <Col md={2}>
-          <FormControl
-            placeholder="Ticket ID"
-            value={searchFilters.ticketID}
-            onChange={(e) => setSearchFilters({ ...searchFilters, ticketID: e.target.value })}
-          />
+          <InputGroup>
+            <FormControl
+              type="text"
+              placeholder="Ticket ID"
+              value={searchFilters.ticketID}
+              onChange={(e) => setSearchFilters({ ...searchFilters, ticketID: e.target.value })}
+            />
+          </InputGroup>
         </Col>
         <Col md={2}>
-          <FormControl
-            placeholder="Ticket Name"
-            value={searchFilters.ticketName}
-            onChange={(e) => setSearchFilters({ ...searchFilters, ticketName: e.target.value })}
-          />
+          <InputGroup>
+            <FormControl
+              type="text"
+              placeholder="Ticket Name"
+              value={searchFilters.ticketName}
+              onChange={(e) => setSearchFilters({ ...searchFilters, ticketName: e.target.value })}
+            />
+          </InputGroup>
+        </Col>
+        <Col md={2}>
+          <InputGroup>
+            <FormControl
+              as="select"
+              value={searchFilters.ticketType}
+              onChange={(e) => setSearchFilters({ ...searchFilters, ticketType: e.target.value })}
+              style={{ paddingRight: '24px' }}
+            >
+              <option value="">Ticket Type</option>
+              <option value="Client Ticket">Client Ticket</option>
+              <option value="Team Lead Task">Team Lead Task</option>
+            </FormControl>
+            <InputGroup.Text style={{ position: 'absolute', right: 0, background: 'transparent', border: 'none', pointerEvents: 'none', zIndex: 2 }}>
+              <i className="bi bi-chevron-down"></i>
+            </InputGroup.Text>
+          </InputGroup>
+        </Col>
+        <Col md={2}>
+          <InputGroup>
+            <FormControl
+              as="select"
+              value={searchFilters.status}
+              onChange={(e) => setSearchFilters({ ...searchFilters, status: e.target.value })}
+              style={{ paddingRight: '24px' }}
+            >
+              <option value="">Status</option>
+              {getUniqueValues('status').map((status) => (
+                <option key={status} value={status}>{status}</option>
+              ))}
+            </FormControl>
+            <InputGroup.Text style={{ position: 'absolute', right: 0, background: 'transparent', border: 'none', pointerEvents: 'none', zIndex: 2 }}>
+              <i className="bi bi-chevron-down"></i>
+            </InputGroup.Text>
+          </InputGroup>
         </Col>
         
         <Col md={2}>
-          <FormControl
-            as="select"
-            value={searchFilters.status}
-            onChange={(e) => setSearchFilters({ ...searchFilters, status: e.target.value })}
-          >
-            <option value="">Status</option>
-            <option value="Open">Open</option>
-            <option value="In Progress">In Progress</option>
-            <option value="Closed">Closed</option>
-          </FormControl>
-        </Col>
-        
-        <Col md={2}>
-          <FormControl
-            as="select"
-            value={searchFilters.priority}
-            onChange={(e) => setSearchFilters({ ...searchFilters, priority: e.target.value })}
-          >
-            <option value="">Priority</option>
-            <option value="Low">Low</option>
-            <option value="Medium">Medium</option>
-            <option value="High">High</option>
-            <option value="Urgent">Urgent</option>
-          </FormControl>
+          <InputGroup>
+            <FormControl
+              as="select"
+              value={searchFilters.priority}
+              onChange={(e) => setSearchFilters({ ...searchFilters, priority: e.target.value })}
+              style={{ paddingRight: '24px' }}
+            >
+              <option value="">Priority</option>
+              {getUniqueValues('priority').map((priority) => (
+                <option key={priority} value={priority}>{priority}</option>
+              ))}
+            </FormControl>
+            <InputGroup.Text style={{ position: 'absolute', right: 0, background: 'transparent', border: 'none', pointerEvents: 'none', zIndex: 2 }}>
+              <i className="bi bi-chevron-down"></i>
+            </InputGroup.Text>
+          </InputGroup>
         </Col>
 
-        <Col md={2}>
-          <FormControl
-            as="select"
-            value={searchFilters.ticketType}
-            onChange={(e) => setSearchFilters({ ...searchFilters, ticketType: e.target.value })}
-          >
-            <option value="">Ticket Type</option>
-            <option value="Client Ticket">Client Ticket</option>
-            <option value="Team Lead Task">Team Lead Task</option>
-          </FormControl>
-        </Col>
+       
 
         <Col md={2}>
-          <FormControl
-            type="date"
-            value={searchFilters.dueDate}
-            onChange={(e) => setSearchFilters({ ...searchFilters, dueDate: e.target.value })}
-          />
+          <InputGroup>
+            <FormControl
+              type="date"
+              value={searchFilters.dueDate}
+              onChange={(e) => setSearchFilters({ ...searchFilters, dueDate: e.target.value })}
+              style={{ paddingRight: '24px' }}
+            />
+            <InputGroup.Text style={{ position: 'absolute', right: 0, background: 'transparent', border: 'none', pointerEvents: 'none', zIndex: 2 }}>
+             
+            </InputGroup.Text>
+          </InputGroup>
         </Col>
       </Row>
 
       <Row className="justify-content-md-center mt-5">
         <Col md={12} style={{ overflowX: 'auto' }}>
           <Table bordered striped hover responsive
-            style={{
-              backgroundColor: "#fff",
-              color: "#333",
-              borderRadius: "12px",
-            }}>
-            <thead>
+     
+             className="table table-bordered table-hover"
+             style={{
+               backgroundColor: "#fff",
+               borderRadius: "20px",
+               overflow: "hidden",
+             }}
+           >
+             <thead
+               className="thead-dark"
+               style={{
+                 backgroundColor: "#007BFF",
+                 color: "#fff",
+               }}
+             >
               <tr>
                 <th>#</th>
                 <th>Ticket Type</th>
                 <th>Ticket ID</th>
                 <th>Ticket Name</th>
+                
                 <th>Priority</th>
                 <th>SAP Module</th>
+                <th>Creation Date</th>
                 <th>Due Date</th>
-                <th>Number</th>
-                <th>Name</th>
-                <th>Email</th>
+
+                <th>Spokesperson Number</th>
+                <th> Spokesperson Name</th>
+                <th> Spokesperson Email</th>
                 <th>Ticket Detail</th>
                 <th>Document</th>
                 <th>Status</th>
@@ -235,13 +309,16 @@ const TaskList = ({ setConditionalComponent }) => {
             <tbody>
               {displayedTasks.map((task, index) => (
                 <tr key={index}>
-                  <td>{index + 1 + currentPage * tasksPerPage}</td>
+                  <td>{index + 1 + indexOfFirstTask}</td>
                   <td>{task.ticket ? 'Client Ticket' : 'Team Lead Task'}</td>
                   <td>{task.ticket?.ticketId || '-'}</td>
                   <td>{task.taskName || task.ticket?.ticketName}</td>
+                   
+                  
                   <td>{task.priority || task.ticket?.priority}</td>
                   <td>{task.saptype || task.ticket?.saptype}</td>
-                  <td>{new Date(task.dueDate).toLocaleDateString()}</td>
+                  <td>{new Date(task.createdAt || task.ticket?.createdAt).toISOString().split('T')[0]}</td>
+                  <td>{new Date(task.dueDate).toISOString().split('T')[0]}</td>
                   <td>{task.assignedTo || task.ticket?.assignedTo}</td>
                   <td>{task.assignedByName || task.ticket?.assignedByName}</td>
                   <td>{task.assignedByEmail || task.ticket?.assignedByEmail}</td>
@@ -284,6 +361,25 @@ const TaskList = ({ setConditionalComponent }) => {
               ))}
             </tbody>
           </Table>
+        </Col>
+      </Row>
+
+      <Row className="mt-3">
+        <Col className="d-flex justify-content-between">
+          <Button
+            variant="primary"
+            onClick={() => paginate(currentPage - 1)}
+            disabled={currentPage === 1}
+          >
+            <i className="bi bi-arrow-left"></i>
+          </Button>
+          <Button
+            variant="primary"
+            onClick={() => paginate(currentPage + 1)}
+            disabled={indexOfLastTask >= filteredTasks.length}
+          >
+            <i className="bi bi-arrow-right"></i>
+          </Button>
         </Col>
       </Row>
     </Container>

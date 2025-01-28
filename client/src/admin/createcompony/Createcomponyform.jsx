@@ -67,7 +67,7 @@ const CreateCompanyForm = () => {
                                 </Form.Group>
 
                                 <Form.Group controlId="companyEmail" className="mb-3">
-                                    <Form.Label>Client Email</Form.Label>
+                                    <Form.Label>Client Email / ID</Form.Label>
                                     <Form.Control
                                         type="email"
                                         placeholder="Enter company email"

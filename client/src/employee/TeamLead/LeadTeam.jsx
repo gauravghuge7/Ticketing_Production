@@ -32,12 +32,12 @@ const LeadTeam = ({ setConditionalComponent, setTeamId }) => {
     <div
       style={{
         backgroundColor: '#f9fafc',
-        padding: '55px',
+        padding: '100px',
         borderRadius: '12px',
         boxShadow: '0 4px 20px rgba(0, 0, 0, 0.1)',
         marginTop: '30px',
-        
-        height: '100%',
+      
+      
       }}
     >
       <h2 className="text-center" style={{ color: '#1a1a1a', fontWeight: '700', letterSpacing: '1px' }}>
@@ -54,26 +54,46 @@ const LeadTeam = ({ setConditionalComponent, setTeamId }) => {
                   borderRadius: '16px',
                   transition: 'transform 0.3s, box-shadow 0.3s',
                   overflow: 'hidden',
+                  cursor: 'pointer',
+                  border: '1px solid #e0e0e0',
+                }}
+                onMouseOver={(e) => {
+                  e.currentTarget.style.transform = 'translateY(-5px)';
+                  e.currentTarget.style.boxShadow = '0 8px 24px rgba(0, 0, 0, 0.15)';
+                }}
+                onMouseOut={(e) => {
+                  e.currentTarget.style.transform = 'translateY(0)';
+                  e.currentTarget.style.boxShadow = '0 4px 12px rgba(0, 0, 0, 0.1)';
                 }}
               >
                 <div
                   className="card-body"
                   style={{
                     backgroundColor: '#ffffff',
-                    padding: '20px',
+                    padding: '24px',
                     textAlign: 'center',
                     borderRadius: '16px',
                   }}
                 >
                   <h5
                     className="card-title"
-                    style={{ color: '#333', fontWeight: 'bold', fontSize: '1.25rem', marginBottom: '10px' }}
+                    style={{ 
+                      color: '#2c3e50',
+                      fontWeight: '700',
+                      fontSize: '1.3rem',
+                      marginBottom: '12px'
+                    }}
                   >
                     {team.teamName}
                   </h5>
                   <h6
-                    className="card-subtitle text-muted"
-                    style={{ fontSize: '0.875rem', marginBottom: '20px' }}
+                    className="card-subtitle"
+                    style={{ 
+                      color: '#6c757d',
+                      fontSize: '0.95rem',
+                      marginBottom: '24px',
+                      fontWeight: '500'
+                    }}
                   >
                     ID: {team.teamId}
                   </h6>
@@ -81,16 +101,19 @@ const LeadTeam = ({ setConditionalComponent, setTeamId }) => {
                     className="btn btn-primary w-100"
                     onClick={() => setTeamOfProject(team._id)}
                     style={{
-                      borderRadius: '8px',
+                      borderRadius: '10px',
                       fontWeight: '600',
-                      transition: 'background-color 0.3s, transform 0.2s',
+                      padding: '10px 20px',
+                      backgroundColor: '#0066cc',
+                      border: 'none',
+                      transition: 'all 0.3s ease',
                     }}
                     onMouseOver={(e) => {
-                      e.currentTarget.style.backgroundColor = '#0056b3';
-                      e.currentTarget.style.transform = 'scale(1.05)';
+                      e.currentTarget.style.backgroundColor = '#0052a3';
+                      e.currentTarget.style.transform = 'scale(1.02)';
                     }}
                     onMouseOut={(e) => {
-                      e.currentTarget.style.backgroundColor = '#007bff';
+                      e.currentTarget.style.backgroundColor = '#0066cc';
                       e.currentTarget.style.transform = 'scale(1)';
                     }}
                   >

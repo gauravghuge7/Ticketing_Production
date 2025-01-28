@@ -22,6 +22,15 @@ const EmpProjects = () => {
   const [projectsPerPage] = useState(10);
   const [tasksPerPage] = useState(10);
   const [searchQuery, setSearchQuery] = useState('');
+  const [clientFilter, setClientFilter] = useState('all');
+  const [ticketIdFilter, setTicketIdFilter] = useState('');
+  const [ticketNameFilter, setTicketNameFilter] = useState('');
+  const [sapModuleFilter, setSapModuleFilter] = useState('all');
+  const [statusFilter, setStatusFilter] = useState('all');
+  const [dateFilter, setDateFilter] = useState({
+    startDate: '',
+    endDate: ''
+  });
 
   const fetchProjects = async () => {
     try {
@@ -72,15 +81,51 @@ const EmpProjects = () => {
     setSearchQuery(e.target.value);
   };
 
-  const filteredProjects = projects.filter(project =>
-    project.clientName.toLowerCase().includes(searchQuery.toLowerCase()) ||
-    project.projectName.toLowerCase().includes(searchQuery.toLowerCase())
-  );
+  const getUniqueClients = () => {
+    const clients = [...new Set(projects.map(project => project.clientName))];
+    return clients;
+  };
 
-  const filteredTasks = tasks.filter(task =>
-    task.ticket?.ticketName.toLowerCase().includes(searchQuery.toLowerCase()) ||
-    task.taskName.toLowerCase().includes(searchQuery.toLowerCase())
-  );
+  const getUniqueSapModules = () => {
+    const modules = [...new Set(tasks.map(task => task.ticket?.saptype).filter(Boolean))];
+    return modules;
+  };
+
+  const getUniqueStatuses = () => {
+    const statuses = [...new Set(tasks.map(task => 
+      task.ticket ? task.ticket.status : task.status
+    ).filter(Boolean))];
+    return statuses;
+  };
+
+  const filteredProjects = projects.filter(project => {
+    const matchesSearch = 
+      project.clientName.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      project.projectName.toLowerCase().includes(searchQuery.toLowerCase());
+    
+    const matchesClient = clientFilter === 'all' || project.clientName === clientFilter;
+    
+    return matchesSearch && matchesClient;
+  });
+
+  const filteredTasks = tasks.filter(task => {
+    const ticketId = task.ticket?.ticketId?.toLowerCase() || '';
+    const ticketName = (task.ticket ? task.ticket.ticketName : task.taskName).toLowerCase();
+    const sapModule = task.ticket?.saptype || '';
+    const status = task.ticket ? task.ticket.status : task.status;
+    const taskDate = new Date(task.createdAt || task.ticket?.createdAt || task.project?.createdAt);
+
+    const matchesTicketId = !ticketIdFilter || ticketId.includes(ticketIdFilter.toLowerCase());
+    const matchesTicketName = !ticketNameFilter || ticketName.includes(ticketNameFilter.toLowerCase());
+    const matchesSapModule = sapModuleFilter === 'all' || sapModule === sapModuleFilter;
+    const matchesStatus = statusFilter === 'all' || status === statusFilter;
+    
+    const matchesDate = (!dateFilter.startDate || taskDate >= new Date(dateFilter.startDate)) &&
+                       (!dateFilter.endDate || taskDate <= new Date(dateFilter.endDate));
+
+    return matchesTicketId && matchesTicketName && matchesSapModule && 
+           matchesStatus && matchesDate;
+  });
 
   const indexOfLastProject = currentPage * projectsPerPage;
   const indexOfFirstProject = indexOfLastProject - projectsPerPage;
@@ -158,8 +203,16 @@ const EmpProjects = () => {
     }
   }
 
-
-
+  const clearAllFilters = () => {
+    setTicketIdFilter('');
+    setTicketNameFilter('');
+    setSapModuleFilter('all');
+    setStatusFilter('all');
+    setDateFilter({
+      startDate: '',
+      endDate: ''
+    });
+  };
 
   return (
     <Container
@@ -169,7 +222,7 @@ const EmpProjects = () => {
         borderRadius: "12px",
         boxShadow: "0 6px 15px rgba(0, 0, 0, 0.2)",
         color: "#333",
-       
+        maxWidth: "100%",
         marginTop: "30px",
       }}
     >
@@ -178,14 +231,25 @@ const EmpProjects = () => {
   <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "25px" }}>
             
 <h2 style={{ margin: 0, color: "#333", fontWeight: "bold" }}>Projects</h2>
-                <InputGroup style={{ maxWidth: "30%" }}>
+                <div style={{ display: "flex", gap: "15px", maxWidth: "60%" }}>
+                  <Form.Select 
+                    style={{ maxWidth: "200px" }}
+                    value={clientFilter}
+                    onChange={(e) => setClientFilter(e.target.value)}
+                  >
+                    <option value="all">Clients</option>
+                    {getUniqueClients().map(client => (
+                      <option key={client} value={client}>{client}</option>
+                    ))}
+                  </Form.Select>
+                  <InputGroup style={{ maxWidth: "300px" }}>
                     <FormControl
-                        placeholder="Search Project"
-                        value={searchQuery}
-                        onChange={(e) => handleSearch(e.target.value)}
+                      placeholder="Projects"
+                      value={searchQuery}
+                      onChange={handleSearch}
                     />
-                  
-                </InputGroup>
+                  </InputGroup>
+                </div>
           </div>
     
       <div className="table-responsive">
@@ -194,17 +258,19 @@ const EmpProjects = () => {
           bordered
           hover
           className="text-center"
+      
+          className="table table-bordered table-hover"
           style={{
-            borderRadius: "12px",
+            backgroundColor: "#fff",
+            borderRadius: "20px",
             overflow: "hidden",
-            boxShadow: "0 4px 12px rgba(0, 0, 0, 0.1)",
           }}
         >
           <thead
+            className="thead-dark"
             style={{
-              backgroundColor: "#343a40",
+              backgroundColor: "#007BFF",
               color: "#fff",
-              fontSize: "1.1rem",
             }}
           >
             <tr>
@@ -265,48 +331,79 @@ const EmpProjects = () => {
          <i className="bi bi-arrow-right"></i>
         </Button>
       </div>
-      <hr />
+      <hr style={{ margin: "40px 0" }} />
       {tasks.length > 0 && selectedProjectId && (
-        <section>
-          {/* <div className='col-md-12 d-flex justify-content-space-between align-items-center'>
-            <div className='col-md-8'>
-              <h2 className="text-center mt-5" style={{ fontWeight: "bold", color: "#333" }}>Your Tickets for Project</h2>
+        <section style={{ marginTop: "40px" }}>
+          <div style={{ display: "flex", flexDirection: "column", gap: "15px", marginBottom: "25px" }}>
+            <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+              <h2 style={{ margin: 0, color: "#333", fontWeight: "bold" }}>Your Tickets for Project</h2>
+              <Button 
+                variant="outline-secondary"
+                onClick={clearAllFilters}
+                style={{ padding: "5px 15px" }}
+              >
+                Clear All Filters
+              </Button>
             </div>
-            <h2 style={{ margin: 0, color: "#333", fontWeight: "bold" }}></h2>
-                <InputGroup style={{ maxWidth: "30%" }}>
-                    <FormControl
-                        placeholder="Search Ticket Name"
-                        value={searchQuery}
-                        onChange={(e) => handleSearch(e.target.value)}
-                    />
-                    <InputGroup.Text>
-                        <i className="bi bi-search"></i>
-                    </InputGroup.Text>
-                </InputGroup>
-          </div> */}
-
-
-
-
-
-
-
-
-
-
-          <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "25px" }}>
             
-<h2 style={{ margin: 0, color: "#333", fontWeight: "bold" }}>Your Tickets for Project</h2>
-                <InputGroup style={{ maxWidth: "40%" }}>
-                    <FormControl
-                        placeholder="Search Ticket Name"
-                        value={searchQuery}
-                        onChange={(e) => handleSearch(e.target.value)}
-                    />
-                    
-                </InputGroup>
-          </div>
+            <div style={{ display: "flex", gap: "15px", flexWrap: "wrap" }}>
+              <InputGroup style={{ maxWidth: "200px" }}>
+                <FormControl
+                  placeholder="Ticket ID"
+                  value={ticketIdFilter}
+                  onChange={(e) => setTicketIdFilter(e.target.value)}
+                />
+              </InputGroup>
 
+              <InputGroup style={{ maxWidth: "200px" }}>
+                <FormControl
+                  placeholder="Ticket Name"
+                  value={ticketNameFilter}
+                  onChange={(e) => setTicketNameFilter(e.target.value)}
+                />
+              </InputGroup>
+
+              <Form.Select 
+                style={{ maxWidth: "200px" }}
+                value={sapModuleFilter}
+                onChange={(e) => setSapModuleFilter(e.target.value)}
+              >
+                <option value="all"> SAP Modules</option>
+                {getUniqueSapModules().map(module => (
+                  <option key={module} value={module}>{module}</option>
+                ))}
+              </Form.Select>
+
+              <Form.Select 
+                style={{ maxWidth: "200px" }}
+                value={statusFilter}
+                onChange={(e) => setStatusFilter(e.target.value)}
+              >
+                <option value="all">Status</option>
+                {getUniqueStatuses().map(status => (
+                  <option key={status} value={status}>{status}</option>
+                ))}
+              </Form.Select>
+
+              <InputGroup style={{ maxWidth: "200px" }}>
+                <FormControl
+                  type="date"
+                  placeholder="Start Date"
+                  value={dateFilter.startDate}
+                  onChange={(e) => setDateFilter(prev => ({...prev, startDate: e.target.value}))}
+                />
+              </InputGroup>
+
+              {/* <InputGroup style={{ maxWidth: "200px" }}>
+                <FormControl
+                  type="date"
+                  placeholder="End Date"
+                  value={dateFilter.endDate}
+                  onChange={(e) => setDateFilter(prev => ({...prev, endDate: e.target.value}))}
+                />
+              </InputGroup> */}
+            </div>
+          </div>
 
           <Table
           striped
@@ -317,6 +414,7 @@ const EmpProjects = () => {
             borderRadius: "12px",
             overflow: "hidden",
             boxShadow: "0 4px 12px rgba(0, 0, 0, 0.1)",
+            maxWidth: "100%",
           }}
         >
           <thead
@@ -332,6 +430,7 @@ const EmpProjects = () => {
                 <th>Ticket ID</th>
                 <th>Ticket Name</th>
                 <th>SAP Module</th>
+                 <th>Creation Date</th>
                 <th>Due Date</th>
                 <th>Spokesperson</th>
                 <th>Priority</th>
@@ -349,7 +448,8 @@ const EmpProjects = () => {
                   <td>{task.ticket ? task.ticket.ticketId : "-"}</td>
                   <td>{task.ticket ? task.ticket.ticketName : task.taskName}</td>
                   <td>{task.ticket ? task.ticket.saptype : ""}</td>
-                  <td>{new Date(task.dueDate).toISOString().split('T')[0]}</td>
+                  <td>{new Date(task.createdAt || task.ticket?.createdAt || task.project?.createdAt).toISOString().split('T')[0]}</td>
+                  <td>{new Date(task.dueDate).toISOString().split('T')[0] || new Date(task.project?.dueDate).toISOString().split('T')[0]}</td>
                   <td>{task.ticket ? task.ticket.assignedByName : task.teamLead}</td>
                   <td>{task.priority ? task.priority : task.ticket.priority}</td>
                   <td>{task.ticket ? task.ticket.status : task.status}</td>

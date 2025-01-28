@@ -52,8 +52,21 @@ const TaskProjectList = ({ setConditionalComponent, setProjectId }) => {
     }));
   };
 
+  // Function to clear all filters
+  const clearFilters = () => {
+    setSearchFilters({
+      sapType: '',
+      ticketName: '',
+      projectName: '',
+      ticketId: '',
+      status: '',
+      startDate: '',
+      endDate: '',
+    });
+  };
+
   const filteredProjects = projectData.filter((project) => {
-    const ticketDate = new Date(project.tickets.createdDate);
+    const ticketDate = new Date(project.tickets.createdAt);
     const startDate = searchFilters.startDate ? new Date(searchFilters.startDate) : null;
     const endDate = searchFilters.endDate ? new Date(searchFilters.endDate) : null;
 
@@ -63,16 +76,16 @@ const TaskProjectList = ({ setConditionalComponent, setProjectId }) => {
       (!searchFilters.projectName || project.tickets.projectName === searchFilters.projectName) &&
       (!searchFilters.ticketId || project.tickets.ticketId?.toLowerCase().includes(searchFilters.ticketId.toLowerCase())) &&
       (!searchFilters.status || project.tickets.status === searchFilters.status) &&
-      (!startDate || ticketDate >= startDate) && // Check if the ticket's date is after or equal to start date
-      (!endDate || ticketDate <= endDate)        // Check if the ticket's date is before or equal to end date
+      (!startDate || ticketDate >= startDate) &&
+      (!endDate || ticketDate <= endDate)
     );
   });
 
   const indexOfLastProject = currentPage * projectsPerPage;
   const indexOfFirstProject = indexOfLastProject - projectsPerPage;
   const currentProjects = filteredProjects
-    .sort((a, b) => b.tickets.ticketId.localeCompare(a.tickets.ticketId)) // Sort in descending order
-    .slice(indexOfFirstProject, indexOfLastProject); // Apply pagination
+    .sort((a, b) => b.tickets.ticketId.localeCompare(a.tickets.ticketId))
+    .slice(indexOfFirstProject, indexOfLastProject);
 
   const paginate = (pageNumber) => setCurrentPage(pageNumber);
 
@@ -84,7 +97,6 @@ const TaskProjectList = ({ setConditionalComponent, setProjectId }) => {
         "Project Name": data.tickets.projectName,
         "Ticket Name": data.tickets.ticketName,
         "Priority": data.tickets.priority,
-        
         "SAP Type": data.tickets.saptype,
         "Status": data.tickets.status,
         "Spokesperson Email": data.tickets.assignedByEmail,
@@ -92,7 +104,7 @@ const TaskProjectList = ({ setConditionalComponent, setProjectId }) => {
         "Spokesperson Number": data.tickets.assignedTo,
         "Description": data.tickets.ticketDescription,
         "Document": data.tickets.ticketDocument,
-        "Created Date": data.tickets.createdDate || new Date().toLocaleDateString(), // Use the ticket's created date if available
+        "Created Date": data.tickets.createdDate || new Date().toLocaleDateString(),
       }))
     );
     const wb = XLSX.utils.book_new();
@@ -108,18 +120,20 @@ const TaskProjectList = ({ setConditionalComponent, setProjectId }) => {
         borderRadius: '12px',
         boxShadow: '0 6px 15px rgba(0, 0, 0, 0.2)',
         color: '#333',
-      
         marginTop: '30px',
         overflow: 'auto',
-
-
       }}
     >
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '25px' }}>
         <h2 style={{ margin: 0, color: '#333', fontWeight: 'bold' }}>Ticket List</h2>
-        <Button variant="success" onClick={exportToExcel}>
-          Export to Excel
-        </Button>
+        <div>
+          <Button variant="success" onClick={exportToExcel} style={{ marginRight: '10px' }}>
+            Export to Excel
+          </Button>
+          <Button variant="secondary" onClick={clearFilters}>
+            Clear All Filters
+          </Button>
+        </div>
       </div>
 
       {/* Filters Section */}
@@ -148,7 +162,7 @@ const TaskProjectList = ({ setConditionalComponent, setProjectId }) => {
             onChange={handleFilterChange}
             className="custom-select"
           >
-            <option value="">Select Project</option>
+            <option value=""> Projects</option>
             {Array.from(new Set(projectData.map((project) => project.tickets.projectName)))
               .filter(Boolean)
               .map((projectName, index) => (
@@ -203,35 +217,40 @@ const TaskProjectList = ({ setConditionalComponent, setProjectId }) => {
             placeholder="Start Date"
           />
         </Col>
-        
+        {/* <Col>
+          <FormControl
+            type="date"
+            name="endDate"
+            value={searchFilters.endDate}
+            onChange={handleFilterChange}
+            placeholder="End Date"
+          />
+        </Col> */}
       </Row>
 
       {/* Table Section */}
       <Table
-        striped
-        bordered
-        hover
-        responsive
-        style={{
-          backgroundColor: "#fff",
-            color: "#333",
-            borderRadius: "12px",
-            overflow: "hidden",
-        }}
-      >
-        <thead
-          style={{
-            backgroundColor: '#007BFF',
-            color: '#fff',
-          }}
-        >
+              className="table table-bordered table-hover"
+              style={{
+                backgroundColor: "#fff",
+                borderRadius: "20px",
+                overflow: "hidden",
+              }}
+            >
+              <thead
+                className="thead-dark"
+                style={{
+                  backgroundColor: "#007BFF",
+                  color: "#fff",
+                }}
+              >
           <tr>
             <th>#</th>
             <th>Ticket ID</th>
             <th>Project Name</th>
             <th>Ticket Name</th>
             <th>Priority</th>
-            <th>Creation Date</th> {/* New column added */}
+            <th>Creation Date</th>
             <th>SAP Type</th>
             <th>Status</th>
             <th>Spokesperson Email</th>

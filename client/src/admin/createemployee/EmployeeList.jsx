@@ -126,24 +126,21 @@ const EmployeeList = ({ setValue }) => {
 
       {currentEmployees.length > 0 ? (
         <>
-          <Table
-            striped
-            bordered
-            hover
-            responsive
-            style={{
-              backgroundColor: "#fff",
-              color: "#333",
-              borderRadius: "12px",
-              overflow: "hidden",
-            }}
-          >
-            <thead
+            <Table
+              className="table table-bordered table-hover"
               style={{
-                backgroundColor: "#007BFF",
-                color: "#fff",
+                backgroundColor: "#fff",
+                borderRadius: "20px",
+                overflow: "hidden",
               }}
             >
+              <thead
+                className="thead-dark"
+                style={{
+                  backgroundColor: "#007BFF",
+                  color: "#fff",
+                }}
+              >
               <tr>
                 <th>#</th>
                 <th>Full Name</th>
