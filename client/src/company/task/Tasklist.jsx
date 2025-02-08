@@ -66,18 +66,18 @@ const TaskList = ({ setConditionalComponent, projectId }) => {
   };
 
   // Filter tasks based on search term
-  const filteredTasks = tasks.filter(task =>
-    task.ticketName.toLowerCase().includes(searchTerm.toLowerCase()) ||
-    task.ticketId.toLowerCase().includes(searchTerm.toLowerCase()) // Include ticketId in search
+  const filteredTasks = tasks?.filter(task =>
+    task?.ticketName?.toLowerCase()?.includes(searchTerm?.toLowerCase()) ||
+    task?.ticketId?.toLowerCase()?.includes(searchTerm?.toLowerCase()) // Include ticketId in search
   );
 
   const indexOfLastTask = currentPage * tasksPerPage;
   const indexOfFirstTask = indexOfLastTask - tasksPerPage;
-  const currentTasks = filteredTasks.slice(indexOfFirstTask, indexOfLastTask);
+  const currentTasks = filteredTasks?.slice(indexOfFirstTask, indexOfLastTask);
 
   const paginate = (pageNumber) => setCurrentPage(pageNumber);
 
-  if (tasks && tasks.length === 0) {
+  if (tasks && tasks?.length === 0) {
     return (
       <div className="container mt-5">
         <h2 className="text-center">No Tickets found...</h2>
@@ -159,7 +159,7 @@ const TaskList = ({ setConditionalComponent, projectId }) => {
               </tr>
             </thead>
             <tbody>
-              {currentTasks.map((task, index) => (
+              {currentTasks?.map((task, index) => (
                 <tr key={index} style={{ textAlign: "center" }}>
                   <td>{indexOfFirstTask + index + 1}</td>
                   <td>{task.ticketId}</td>
@@ -201,7 +201,7 @@ const TaskList = ({ setConditionalComponent, projectId }) => {
             <Button
               variant="primary"
               onClick={() => paginate(currentPage + 1)}
-              disabled={indexOfLastTask >= filteredTasks.length}
+              disabled={indexOfLastTask >= filteredTasks?.length}
             >
               <i className="bi bi-arrow-right"></i>
             </Button>

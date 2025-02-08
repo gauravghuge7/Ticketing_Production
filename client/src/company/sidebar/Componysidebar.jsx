@@ -4,8 +4,9 @@ import { BiChevronLeft, BiChevronRight } from 'react-icons/bi';
 import { AiOutlineDashboard } from 'react-icons/ai'; // Dashboard icon
 import { FaRegBuilding } from 'react-icons/fa'; // Projects icon
 import { FiList } from 'react-icons/fi'; // Tickets icon
+import { Link } from 'react-router-dom';
 
-const Componysidebar = ({ setConditionalComponent }) => {
+const Componysidebar = () => {
   const [isCollapsed, setIsCollapsed] = useState(false);
 
   const toggleSidebar = () => {
@@ -28,48 +29,48 @@ const Componysidebar = ({ setConditionalComponent }) => {
       {/* Arrow Button */}
       <div
         onClick={toggleSidebar}
-        style={{ cursor: 'pointer', alignSelf: 'center', color: "#007BFF" }}
+        style={{ cursor: 'pointer', alignSelf: 'center', marginBottom: '10px' }}
       >
         {isCollapsed ? (
-         <i class="bi bi-list"></i>
+          <BiChevronRight size={20} color="#1C75BB" />
         ) : (
-          <i class="bi bi-list"></i>
+          <BiChevronLeft size={20} color="#1C75BB" />
         )}
       </div>
 
       <ul className="nav nav-pills flex-column mb-auto">
         <li className="nav-item">
-          <button
-            onClick={() => setConditionalComponent('CompanyDashboard')}
+          <Link
+            to="/company"
             className="nav-link text-#1C75BB"
             style={navButtonStyle}
           >
             <AiOutlineDashboard size={20} className="me-2" />
             {!isCollapsed && 'Dashboard'} {/* Show text only when expanded */}
-          </button>
+          </Link>
         </li>
         <li className="nav-item">
-          <button
+          <Link
             id="project-button"
-            onClick={() => setConditionalComponent('Projectlist')}
+            to="/company/project"
             className="nav-link text-#1C75BB"
             style={navButtonStyle}
             color="#1C75BB"
           >
             <FaRegBuilding size={20} className="me-2" />
             {!isCollapsed && 'Projects'} {/* Show text only when expanded */}
-          </button>
+          </Link>
         </li>
         <li className="nav-item">
-          <button
+          <Link
             id="tasks-button"
-            onClick={() => setConditionalComponent('CompanyTasks')}
+            to="/company/task"
             className="nav-link text-blue"
             style={navButtonStyle}
           >
             <FiList size={20} className="me-2" />
-            {! isCollapsed && 'Tickets'} {/* Show text only when expanded */}
-          </button>
+            {!isCollapsed && 'View Tickets'} {/* Show text only when expanded */}
+          </Link>
         </li>
       </ul>
     </div>

@@ -8,49 +8,43 @@ const Login = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
-  const handleSubmit = async(event) => {
+  const handleSubmit = async (event) => {
     event.preventDefault();
     try {
-      
       const body = {
-        employeeEmail: email, 
-        employeePassword: password 
-      }
+        employeeEmail: email,
+        employeePassword: password,
+      };
 
       const config = {
         headers: {
-          'Content-Type': 'application/json'
-        }
-      }
+          "Content-Type": "application/json",
+        },
+      };
 
-      const response = await axios.post("/api/employee/login",body, config);
+      const response = await axios.post("/api/employee/login", body, config);
 
       console.log(response.data.data);
 
-      if(response.data.success === true){
-
-        // if(response.data.data.userType === "employee") {
-        //   message.success("Employee Logged In Successfully");
-        //   window.location.href = "/employee/dashboard";
-        // }
-
-        // else if(response.data.data.userType === "admin") {
-        //   message.success("Admin Logged In Successfully");
-        //   window.location.href = "/admin/dashboard";
-        // }
-
-        // else if(response.data.data.userType === "client") {
-        //   message.success("Client Logged In Successfully");
-        //   window.location.href = "/company/dashboard";
-        // }
-
-        
+      if (response.data.success === true) {
+        if (response.data.data.userType === "employee") {
+          message.success("Employee Logged In Successfully");
+          toast.success("Employee Logged In Successfully");
+          navigate("/employee/dashboard");
+        } else if (response.data.data.userType === "admin") {
+          message.success("Admin Logged In Successfully");
+          navigate("/admin/dashboard");
+        } else if (response.data.data.userType === "client") {
+          message.success("Client Logged In Successfully");
+          navigate("/client/dashboard");
+        }
       }
     } 
     catch (error) {
-    
       console.log(error);
-      message.error("Invalid Email or Password");
+      const err = extractErrorMessage(error.response.data);
+      toast.error(err);
+      // setError(err);
     }
   };
 

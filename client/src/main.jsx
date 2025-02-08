@@ -8,10 +8,11 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import { store } from './Redux/Store.js';
 import { Provider } from 'react-redux';
 import axios from 'axios';
+import 'react-toastify/dist/ReactToastify.css';
 
 // axios.defaults.baseURL = import.meta.env.VITE_SERVER_URL;
-// axios.defaults.baseURL = "http://localhost:4000";
-axios.defaults.baseURL = "https://ticketing-production-9166.up.railway.app";
+axios.defaults.baseURL = "http://localhost:4000";
+// axios.defaults.baseURL = "https://ticketing-production-9166.up.railway.app";
 axios.defaults.withCredentials = true;
 axios.defaults.proxy = true;
 

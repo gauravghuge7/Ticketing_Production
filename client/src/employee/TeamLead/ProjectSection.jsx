@@ -10,8 +10,9 @@ import axios from 'axios';
 import { Button } from 'react-bootstrap';
 
 import AssignTask from './AssignTask';
+import { useNavigate, useParams } from 'react-router-dom';
 
-const ProjectSection = ({ setConditionalComponent, projectId }) => {
+const ProjectSection = () => {
 
   const [projects, setProjects] = useState({
     projectName: "Project Name",
@@ -80,6 +81,8 @@ const ProjectSection = ({ setConditionalComponent, projectId }) => {
   const [currentEmployeePage, setCurrentEmployeePage] = useState(1);
   const [currentTaskPage, setCurrentTaskPage] = useState(1);
   const itemsPerPage = 10;
+
+  const projectId = useParams().projectId;
 
   const [filters, setFilters] = useState({
     status: '',
@@ -216,6 +219,8 @@ const ProjectSection = ({ setConditionalComponent, projectId }) => {
            (!filters.ticketName || (task.ticket && task.ticket.ticketName.toLowerCase().includes(filters.ticketName.toLowerCase())));
   });
 
+  const navigate = useNavigate();
+
   return (
 
     <div className="container mt-4"
@@ -231,7 +236,7 @@ const ProjectSection = ({ setConditionalComponent, projectId }) => {
       {/**  back Button  */}
       <button 
         className="btn btn-primary mb-3" 
-        onClick={() => setConditionalComponent("teamLead")}
+        onClick={() => navigate("/employee/teamlead")}
       >
         Back
       </button>

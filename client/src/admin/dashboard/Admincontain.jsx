@@ -1,17 +1,20 @@
+
 import { useEffect, useState } from 'react';
 import { Card, Container, Row, Col } from 'react-bootstrap';
 import { FaUserPlus, FaUsers, FaBuilding, FaProjectDiagram } from 'react-icons/fa';
-import { useSelector } from 'react-redux';
+import {  useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
-import  axios  from 'axios';
+
 
 const AdminContain = () => {
+
   const navigate = useNavigate();
+
+
 
   const employee = useSelector((state) => state.employeeReducer?.employee);
   const teams = useSelector((state) => state.teamReducer?.team);
   const client = useSelector((state) => state.clientReducer?.client.clientList);
-  const project = useSelector((state) => state.projectReducer?.project);
 
 
   const [projects, setProjects] = useState(0);
@@ -41,7 +44,10 @@ const AdminContain = () => {
 
   useEffect(() => {
     fetchProjects();
-  }, [project]);
+  }, []);
+
+
+
 
   const cardStyle = {
     borderRadius: '12px',
@@ -92,7 +98,7 @@ const AdminContain = () => {
               e.currentTarget.style.boxShadow = cardStyle.boxShadow;
               e.currentTarget.style.transform = 'translateY(0)';
             }}
-            
+            onClick={() => handleCardClick('/admin/employee')} // navigate to Employees page
           >
             <div className="card-header text-center" style={headerStyle}>Employees</div>
             <Card.Body>
@@ -116,7 +122,7 @@ const AdminContain = () => {
               e.currentTarget.style.boxShadow = cardStyle.boxShadow;
               e.currentTarget.style.transform = 'translateY(0)';
             }}
-          
+            onClick={() => handleCardClick('/admin/team')} // navigate to Teams page
           >
             <div className="card-header text-center" style={headerStyle}>Teams</div>
             <Card.Body>
@@ -140,7 +146,7 @@ const AdminContain = () => {
               e.currentTarget.style.boxShadow = cardStyle.boxShadow;
               e.currentTarget.style.transform = 'translateY(0)';
             }}
-         
+            onClick={() => handleCardClick('/admin/company')} // navigate to Clients page
           >
             <div className="card-header text-center" style={headerStyle}>Clients</div>
             <Card.Body>
@@ -164,14 +170,14 @@ const AdminContain = () => {
               e.currentTarget.style.boxShadow = cardStyle.boxShadow;
               e.currentTarget.style.transform = 'translateY(0)';
             }}
-           
+            onClick={() => handleCardClick('/admin/project')} // navigate to Projects page
           >
             <div className="card-header text-center" style={headerStyle}>Projects</div>
             <Card.Body>
               <div className="d-flex justify-content-center mb-3">
                 <FaProjectDiagram size={40} className="text-info mb-2" />
               </div>
-              <h5 className="card-title text-center" style={titleStyle}>{projects?.length}</h5>
+              <h5 className="card-title text-center" style={titleStyle}>{projects && projects?.length}</h5>
               <p className="card-text text-center" style={textStyle}>Total number of projects.</p>
             </Card.Body>
           </Card>

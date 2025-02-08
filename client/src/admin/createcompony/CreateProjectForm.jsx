@@ -3,8 +3,9 @@ import axios from 'axios';
 import { useSelector } from 'react-redux';
 import { message } from 'react-message-popup';
 import { Container, Row, Col, Card, Form, Button } from 'react-bootstrap';
+import { useNavigate, useParams } from 'react-router-dom';
 
-const CreateProjectForm = ({ clientId, clientName }) => {
+const CreateProjectForm = () => {
     const [formData, setFormData] = useState({
         projectName: '',
         companyName: '',
@@ -20,6 +21,10 @@ const CreateProjectForm = ({ clientId, clientName }) => {
 
     // Get data from the redux store
     const teams = useSelector(state => state.teamReducer.team);
+
+    const clientId = useParams().clientId;
+    const clientName = useParams().clientName;
+    const navigate = useNavigate();
 
     const handleChange = (e) => {
         const { name, value } = e.target;
@@ -57,10 +62,16 @@ const CreateProjectForm = ({ clientId, clientName }) => {
             withCredentials: true,
         };
 
-        const response = await axios.post("/api/admin/project", body, config);
-
-        if (response.data.success) {
-            message.success(response.data.message);
+        try {
+            const response = await axios.post("/api/admin/project", body, config);
+    
+            if (response.data.success) {
+                message.success(response.data.message);
+                navigate('/admin/company');
+            }
+        } 
+        catch (error) {
+            message.error(error.message);
         }
     };
 

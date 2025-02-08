@@ -2,6 +2,7 @@ import axios from 'axios';
 import { useEffect, useState } from 'react';
 import { Container, Row, Col, Table, Button, FormControl, InputGroup , Modal, Form } from 'react-bootstrap';
 import { message } from 'react-message-popup';
+import { useNavigate } from 'react-router-dom';
 
 const CompanyList = ({ setValue, setClientId, setClientName}) => {
     const [companies, setCompanies] = useState([]);
@@ -91,15 +92,11 @@ const CompanyList = ({ setValue, setClientId, setClientName}) => {
 
 
 
-
+    const navigate = useNavigate();
 
     
     
-    const setDetails = (clientId, clientName) => {
-        setValue("addproject");
-        setClientId(clientId);
-        setClientName(clientName);
-    };
+
 
     useEffect(() => {
         fetchCompanies();
@@ -145,7 +142,7 @@ const CompanyList = ({ setValue, setClientId, setClientName}) => {
                         style={{ backgroundColor: "#007BFF", border: "none", whiteSpace: "nowrap", borderRadius: "8px", color: "#fff", fontWeight: "bold", transition: "background-color 0.3s ease", }}
                         onMouseEnter={(e) => (e.target.style.backgroundColor = "#0056b3")}
                         onMouseLeave={(e) => (e.target.style.backgroundColor = "#007BFF")}
-                        onClick={() => setValue("createcompany")}
+                        onClick={() => navigate("/admin/createcompany")}
                     >
                         Add New Client
                     </Button>
@@ -189,7 +186,7 @@ const CompanyList = ({ setValue, setClientId, setClientName}) => {
                                             {company.clientPassword}
                                         </td>
                                         <td style={{ textAlign: "center" }}>
-                                            <Button style={{ background: "transparent", border: "none", textAlign: "center" }} onClick={() => setDetails(company._id, company.clientName)}>
+                                            <Button style={{ background: "transparent", border: "none", textAlign: "center" }} onClick={() => navigate(`/admin/addproject/${company._id}/${company.clientName}`)}>
                                                 <i className="bi bi-plus-square-fill" style={{ fontSize: "16px", color: "#007BFF" }}></i>
                                             </Button>
                                         </td>

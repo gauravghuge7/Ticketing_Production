@@ -3,8 +3,9 @@ import { Container, Row, Col, Card, Form, Button } from "react-bootstrap";
 import "bootstrap/dist/css/bootstrap.min.css";
 import { message } from "react-message-popup";
 import axios from "axios";
+import { useNavigate } from "react-router-dom";
 
-const NewEmployeeForm = ({ fetchEmployees }) => {
+const NewEmployeeForm = () => {
   const [formData, setFormData] = useState({
     fullName: "",
     email: "",
@@ -12,6 +13,8 @@ const NewEmployeeForm = ({ fetchEmployees }) => {
     confirmPassword: "",
     designation: "",
   });
+
+  const navigate = useNavigate();
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -52,7 +55,9 @@ const NewEmployeeForm = ({ fetchEmployees }) => {
           designation: "",
         });
 
-        fetchEmployees(); // Fetch updated employee list
+        // Redirect to the employee list page
+        navigate("/admin/employee");
+
       }
     } catch (error) {
       message.error(error.message);

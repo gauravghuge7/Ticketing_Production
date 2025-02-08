@@ -3,6 +3,7 @@ import { Form, Button, Container, Row, Col, Card } from 'react-bootstrap';
 import axios from 'axios';
 import {message} from "react-message-popup"
 import { useSelector } from 'react-redux';
+import { useNavigate } from 'react-router-dom';
 
 const CreateTeamForm = () => {
 
@@ -17,7 +18,7 @@ const CreateTeamForm = () => {
 
     /// get data from the central store
     const emp = useSelector((state) => state.employeeReducer.employee);
-
+    const navigate = useNavigate();
     const [employees, setEmployees] = useState([]);
 
     /// set the employees in above state 
@@ -88,7 +89,7 @@ const CreateTeamForm = () => {
 
             if(response.data.success) {
                 message.success('Team created successfully');
-                
+                navigate('/admin/team');
             }
             
         } 

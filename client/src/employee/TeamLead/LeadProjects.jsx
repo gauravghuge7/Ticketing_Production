@@ -3,14 +3,16 @@ import { useEffect, useState } from "react";
 import { InputGroup, FormControl } from "react-bootstrap";
 import { message } from "react-message-popup";
 import 'bootstrap/dist/css/bootstrap.min.css';
+import { useNavigate, useParams } from "react-router-dom";
 
-const LeadProjects = ({ setConditionalComponent, teamId, setProjectId }) => {
+const LeadProjects = () => {
   const [projects, setProjects] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
   const [searchTerm, setSearchTerm] = useState("");
   const [selectedClient, setSelectedClient] = useState("");
 
   const projectsPerPage = 10;
+  const { teamId } = useParams();
 
   const fetchProjects = async () => {
     try {
@@ -31,10 +33,12 @@ const LeadProjects = ({ setConditionalComponent, teamId, setProjectId }) => {
     fetchProjects();
   }, [teamId]);
 
+  const navigate = useNavigate();
+
   const handleProject = (projectId) => {
-    setConditionalComponent("viewTeamLeadProject");
-    setProjectId(projectId);
+    navigate(`/employee/viewteamleadproject/${teamId}/${projectId}`);
   };
+
 
   const handleDocumentView = (projectId) => {
     console.log("View document for project:", projectId);

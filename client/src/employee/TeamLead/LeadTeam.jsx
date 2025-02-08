@@ -1,8 +1,9 @@
 import axios from 'axios';
 import { useEffect, useState } from 'react';
 import 'bootstrap/dist/css/bootstrap.min.css';
+import { useNavigate } from 'react-router-dom';
 
-const LeadTeam = ({ setConditionalComponent, setTeamId }) => {
+const LeadTeam = () => {
   const [teams, setTeams] = useState([]);
 
   const fetchTeams = async () => {
@@ -23,10 +24,15 @@ const LeadTeam = ({ setConditionalComponent, setTeamId }) => {
     fetchTeams();
   }, []);
 
+  
+  const navigate = useNavigate();
+
   const setTeamOfProject = (teamId) => {
-    setTeamId(teamId);
-    setConditionalComponent("teamLeadProjects");
+    navigate(`/employee/leadprojects/${teamId}`);
   };
+  
+
+
 
   return (
     <div

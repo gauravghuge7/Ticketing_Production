@@ -3,6 +3,7 @@ import { useSelector } from "react-redux";
 import { Container, Table, Button, FormControl, InputGroup, Modal, Form } from 'react-bootstrap';
 import 'bootstrap-icons/font/bootstrap-icons.css';
 import axios from 'axios';
+import { useNavigate } from 'react-router-dom';
 
 const EmployeeList = ({ setValue }) => {
   const [employees, setEmployees] = useState([]);
@@ -19,7 +20,7 @@ const EmployeeList = ({ setValue }) => {
   }, [data]);
 
   const filteredEmployees = employees.filter((employee) =>
-    employee.employeeName.toLowerCase().includes(searchQuery.toLowerCase())
+    employee?.employeeName?.toLowerCase()?.includes(searchQuery?.toLowerCase())
   );
 
   const indexOfLastEmployee = currentPage * employeesPerPage;
@@ -88,6 +89,8 @@ const EmployeeList = ({ setValue }) => {
     }
   };
 
+  const navigate = useNavigate();
+
   return (
     <Container
       style={{
@@ -117,7 +120,7 @@ const EmployeeList = ({ setValue }) => {
             style={{ backgroundColor: "#007BFF", border: "none", whiteSpace: "nowrap", borderRadius: "8px", color: "#fff", fontWeight: "bold", transition: "background-color 0.3s ease" }}
             onMouseEnter={(e) => (e.target.style.backgroundColor = "#0056b3")}
             onMouseLeave={(e) => (e.target.style.backgroundColor = "#007BFF")}
-            onClick={() => setValue("createEmployee")}
+            onClick={() => navigate("/admin/createEmployee")}
           >
             Add New Employee
           </Button>
